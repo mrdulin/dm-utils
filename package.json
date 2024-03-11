@@ -1,5 +1,5 @@
 {
-  "name": "dm-utils",
+  "name": "@d-matrix/utils",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
