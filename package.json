@@ -4,7 +4,9 @@
   "description": "A dozen of utils for Front-End Development",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "clean": "tsc --build --clean",
+    "prepublish": "npm run clean && npm run build"
   },
   "engines": {
     "node": ">=16.20.0"
