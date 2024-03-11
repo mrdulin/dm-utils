@@ -1,7 +1,7 @@
 {
   "name": "@d-matrix/utils",
   "version": "1.0.0",
-  "description": "",
+  "description": "A dozen of utils for Front-End Development",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc"

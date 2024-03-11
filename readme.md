@@ -1,5 +1,7 @@
 # dm-utils
 
+A dozen of utils for Front-End Development
+
 ## 注意
 
 [Before Publishing: Make Sure Your Package Installs and Works](https://docs.npmjs.com/cli/v10/using-npm/developers/#before-publishing-make-sure-your-package-installs-and-works)
