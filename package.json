@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "clean": "tsc --build --clean",
-    "prepublish": "npm run clean && npm run build"
+    "prepublish": "npm run clean && npm run build",
+    "publish": "npm publish --access public"
   },
   "engines": {
     "node": ">=16.20.0"
