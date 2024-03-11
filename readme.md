@@ -5,12 +5,23 @@ A dozen of utils for Front-End Development
 ## API
 
 - [clipboard](#clipboard)
+- [react](#react)
 
 ### clipboard
 
-`clipboard.writeImage(element: HTMLImageElement)`
+`clipboard.writeImage(element: HTMLImageElement): void`
 
-复制图片到剪贴板
+复制图片到剪贴板。
+
+### react
+
+`render<P>(element: ReactElement<P>): Promise<string>`
+
+渲染`React`组件，返回HTML字符串。
+
+`cleanup(): void`
+
+清理函数，需要在调用`render()`函数后调用。
 
 ## 注意事项
 
