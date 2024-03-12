@@ -6,22 +6,29 @@ A dozen of utils for Front-End Development
 
 - [clipboard](#clipboard)
 - [react](#react)
+- [dom](#dom)
 
 ### clipboard
 
-`clipboard.writeImage(element: HTMLImageElement): void`
+- `clipboard.writeImage(element: HTMLImageElement): void`
 
 复制图片到剪贴板。
 
 ### react
 
-`render<P>(element: ReactElement<P>): Promise<string>`
+- `render<P>(element: ReactElement<P>): Promise<string>`
 
 渲染`React`组件，返回HTML字符串。
 
-`cleanup(): void`
+- `cleanup(): void`
 
 清理函数，需要在调用`render()`函数后调用。
+
+### dom
+
+- `scrollToTop(element: Element | null | undefined): void`
+
+元素滚动条滚动到顶部，对老旧浏览器做了兼容，见[浏览器兼容性](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollTop#browser_compatibility)。
 
 ## 注意事项
 
