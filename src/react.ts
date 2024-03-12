@@ -2,7 +2,7 @@ import { ReactElement } from 'react';
 import ReactDOM from 'react-dom';
 
 let container: HTMLDivElement | null;
-export const render = <P>(element: ReactElement<P>) => {
+export const render = <P>(element: ReactElement<P>): Promise<string> => {
   return new Promise((resolve, reject) => {
     if (document === undefined) {
       return reject('只支持浏览器环境');
