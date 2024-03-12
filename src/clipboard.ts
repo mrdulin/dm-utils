@@ -1,5 +1,6 @@
-export async function writeImage(element: HTMLImageElement) {
+export async function writeImage(element: HTMLImageElement | null) {
   return new Promise((resolve, reject) => {
+    if (!element) return reject('element is not defined');
     const testImg = element;
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
