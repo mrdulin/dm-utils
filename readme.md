@@ -1,4 +1,7 @@
-# dm-utils
+# @d-matrix/utils
+
+![NPM Downloads](https://img.shields.io/npm/dw/%40d-matrix%2Futils)
+![npm bundle size](https://img.shields.io/bundlephobia/min/%40d-matrix%2Futils)
 
 A dozen of utils for Front-End Development
 
