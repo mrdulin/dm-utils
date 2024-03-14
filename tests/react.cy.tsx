@@ -1,5 +1,5 @@
 import React from 'react';
-import { cleanup, render } from '../react';
+import { cleanup, render } from '../src/react';
 
 describe('react', () => {
   it('should render component and return HTML string ', async () => {

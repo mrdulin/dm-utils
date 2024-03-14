@@ -1,10 +1,10 @@
 import { useRef } from 'react';
-import { clipboard } from '../';
+import { clipboard } from '../src';
 
 describe('clipboard', { viewportHeight: 600, viewportWidth: 800 }, () => {
   it('should write image to clipboard', () => {
     const Test = () => {
-      const ref = useRef();
+      const ref = useRef<HTMLImageElement>(null);
       return (
         <div>
           <img ref={ref} src="../../cypress/fixtures/logo.png" alt="logo" />

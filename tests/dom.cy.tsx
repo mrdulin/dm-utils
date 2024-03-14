@@ -1,11 +1,11 @@
 import { useRef } from 'react';
-import { dom } from '../';
+import { dom } from '../src';
 
 describe('dom', () => {
   it('should scroll to top of a container', () => {
     const data = Array.from({ length: 10 }).map(() => Math.random());
     const Test = () => {
-      const ref = useRef();
+      const ref = useRef<HTMLImageElement>(null);
       return (
         <div data-cy="scrollable-container" ref={ref} style={{ height: 300, width: 200, overflow: 'auto' }}>
           <ul>

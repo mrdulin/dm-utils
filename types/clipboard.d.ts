@@ -1,7 +1,7 @@
 interface ClipboardItem {
   readonly types: string[];
   readonly presentationStyle: 'unspecified' | 'inline' | 'attachment';
-  getType(): Promise<Blob>;
+  getType(type: string): Promise<Blob>;
 }
 
 interface ClipboardItemData {
@@ -16,4 +16,5 @@ const ClipboardItem: {
 // TS 4.3.2没有write()方法定义，扩展
 interface Clipboard {
   write(data: ClipboardItem[]): Promise<void>;
+  read(): Promise<ClipboardItem[]>;
 }

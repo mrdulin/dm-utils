@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "clean": "tsc --build --clean",
+    "prebuild": "npm run clean",
+    "clean": "rimraf dist",
     "prepublish": "npm run clean && npm run build",
     "cy:open": "cypress open"
   },
@@ -36,6 +37,7 @@
   "devDependencies": {
     "@vitejs/plugin-react": "^4.2.1",
     "cypress": "^13.6.6",
+    "rimraf": "^5.0.5",
     "vite": "^4.5.2"
   }
 }
