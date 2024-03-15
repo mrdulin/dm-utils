@@ -8,6 +8,8 @@ export default defineConfig({
       framework: 'react',
       bundler: 'vite',
     },
+    specPattern: 'tests/**/*.cy.{js,jsx,ts,tsx}',
+    screenshotOnRunFailure: false,
   },
 
   e2e: {

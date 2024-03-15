@@ -10,6 +10,7 @@ A dozen of utils for Front-End Development
 - [clipboard](#clipboard)
 - [react](#react)
 - [dom](#dom)
+- [date](#date)
 
 ### clipboard
 
@@ -32,6 +33,26 @@ A dozen of utils for Front-End Development
 - `scrollToTop(element: Element | null | undefined): void`
 
 元素滚动条滚动到顶部，对老旧浏览器做了兼容，见[浏览器兼容性](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollTop#browser_compatibility)。
+
+### date
+
+- `rangeOfYears(start: number, end: number = new Date().getFullYear()): number[]`
+
+创建`start`和`end`之间的年份数组。
+
+## 测试
+
+运行全部组件测试
+
+```bash
+npm run cy:run -- --component
+```
+
+运行单个组件测试
+
+```bash
+npm run cy:run -- --component --spec tests/date.cy.ts
+```
 
 ## 注意事项
 
