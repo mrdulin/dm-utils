@@ -28,6 +28,10 @@ A dozen of utils for Front-End Development
 
 清理函数，需要在调用`render()`函数后调用。
 
+- `function useDisableContextMenu(target: ContextMenuTarget = defaultContextMenuTarget): void`
+
+在`target`函数返回的元素上禁用右键菜单。
+
 ### dom
 
 - `scrollToTop(element: Element | null | undefined): void`
