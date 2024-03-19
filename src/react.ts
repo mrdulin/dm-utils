@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { ReactElement, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 
 let container: HTMLDivElement | null;
@@ -28,4 +28,22 @@ export const cleanup = () => {
     document.body.removeChild(container);
     container = null;
   }
+};
+
+const defaultContextMenuTarget = () => document;
+type ContextMenuTarget = () => Element | Document | undefined | null;
+export const useDisableContextMenu = (target: ContextMenuTarget = defaultContextMenuTarget) => {
+  const targetFn = useRef(target).current;
+  useEffect(() => {
+    const el = targetFn();
+    if (!el) return;
+    const onContextMenu = (e: Event) => {
+      e.preventDefault();
+    };
+    el.addEventListener('contextmenu', onContextMenu);
+    return () => {
+      if (!el) return;
+      el.removeEventListener('contextmenu', onContextMenu);
+    };
+  }, []);
 };
