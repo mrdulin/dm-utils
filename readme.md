@@ -28,9 +28,35 @@ A dozen of utils for Front-End Development
 
 清理函数，需要在调用`render()`函数后调用。
 
-- `function useDisableContextMenu(target: ContextMenuTarget = defaultContextMenuTarget): void`
+- `useDisableContextMenu(target: ContextMenuTarget = defaultContextMenuTarget): void`
 
-在`target`函数返回的元素上禁用右键菜单。
+在`target`函数返回的元素上禁用右键菜单，默认的`target`是`() => document`
+
+例1：在`id`是`test`的元素上禁用右键菜单
+
+```tsx
+import { react } from '@d-matrix/utils';
+
+const TestComp = () => {
+  react.useDisableContextMenu(() => document.getElementById('test'));
+
+  return (
+    <div>
+      <div id='test'>此元素的右键菜单被禁用</div>
+    </div>
+  )
+}
+```
+
+例2：在`document`上禁用右键菜单
+
+```tsx
+const TestComp = () => {
+  react.useDisableContextMenu();
+
+  return <div>内容</div>
+}
+```
 
 ### dom
 
