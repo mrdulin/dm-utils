@@ -11,6 +11,7 @@ A dozen of utils for Front-End Development
 - [react](#react)
 - [dom](#dom)
 - [date](#date)
+- [types](#types)
 
 ### clipboard
 
@@ -69,6 +70,15 @@ const TestComp = () => {
 - `rangeOfYears(start: number, end: number = new Date().getFullYear()): number[]`
 
 创建`start`和`end`之间的年份数组。
+
+### types
+
+- `WithOptional<T, K extends keyof T>`
+
+```ts
+type A = { a: number; b: number; c: number; };
+type T0 = WithOptional<A, 'b' | 'c'>;  // { a: number; b?: number; c?: number }
+```
 
 ## 测试
 
