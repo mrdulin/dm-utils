@@ -60,6 +60,10 @@ const TestComp = () => {
 }
 ```
 
+- `useStateCallback<T>(initialState: T): [T, (state: T, cb?: (state: T) => void) => void]`
+
+返回值`setState()`函数类似类组件中的`setState(updater[, callback])`,可以在`callback`中获取更新后的`state`
+
 ### dom
 
 - `scrollToTop(element: Element | null | undefined): void`
