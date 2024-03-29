@@ -83,9 +83,9 @@ type T0 = WithOptional<A, 'b' | 'c'>;  // { a: number; b?: number; c?: number }
 
 ### algorithm
 
-- `moveMulti = <T extends any[]>(arr: T, indexes: number[], start: number): T`
+- `moveMulti = <T extends unknown>(arr: T[], indexes: number[], start: number): T[]`
 
-用法,见[测试用例](tests/algorithm.cy.ts)
+移动多个元素到数组中指定的位置,用法,见[测试用例](tests/algorithm.cy.ts)
 
 ## 测试
 
