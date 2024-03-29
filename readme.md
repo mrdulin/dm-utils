@@ -12,6 +12,7 @@ A dozen of utils for Front-End Development
 - [dom](#dom)
 - [date](#date)
 - [types](#types)
+- [algorithm]($algorithm)
 
 ### clipboard
 
@@ -79,6 +80,12 @@ const TestComp = () => {
 type A = { a: number; b: number; c: number; };
 type T0 = WithOptional<A, 'b' | 'c'>;  // { a: number; b?: number; c?: number }
 ```
+
+### algorithm
+
+- `moveMulti = <T extends any[]>(arr: T, indexes: number[], start: number): T`
+
+用法,见[测试用例](tests/algorithm.cy.ts)
 
 ## 测试
 
