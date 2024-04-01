@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { cleanup, render, useStateCallback } from '../src/react';
+import React, { useEffect, useState } from 'react';
+import { cleanup, render, useMountedRef, useStateCallback } from '../src/react';
 
 describe('react', () => {
   describe('render', () => {
@@ -32,6 +32,29 @@ describe('react', () => {
       cy.mount(<Test />);
 
       cy.get('[data-cy=test]').should('have.text', 'bar!');
+    });
+  });
+
+  describe('useMountedRef', () => {
+    it('should return true if component is mounted', () => {
+      const Test = () => {
+        const mountedRef = useMountedRef();
+        const [isMount, setIsMount] = useState<boolean>();
+
+        useEffect(() => {
+          setTimeout(() => {
+            if (mountedRef.current) {
+              setIsMount(true);
+            }
+          }, 1000);
+        }, []);
+
+        return <div data-cy="test">{isMount ? 'mount' : 'unmount'}</div>;
+      };
+
+      cy.mount(<Test />);
+
+      cy.get('[data-cy=test]').should('have.text', 'mount');
     });
   });
 });

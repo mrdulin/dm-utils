@@ -73,3 +73,15 @@ export function useStateCallback<T>(initialState: T): [T, (state: T, cb?: (state
 
   return [state, setStateCallback];
 }
+
+/** 用于判断组件是否挂载 */
+export function useMountedRef(): React.MutableRefObject<boolean> {
+  const mountedRef = useRef(false);
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
+  return mountedRef;
+}

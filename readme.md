@@ -64,6 +64,10 @@ const TestComp = () => {
 
 返回值`setState()`函数类似类组件中的`setState(updater[, callback])`,可以在`callback`中获取更新后的`state`
 
+- `useMountedRef(): React.MutableRefObject<boolean>`
+
+获取当前组件是否已挂载的 Hook
+
 ### dom
 
 - `scrollToTop(element: Element | null | undefined): void`
