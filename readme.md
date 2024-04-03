@@ -16,7 +16,7 @@ A dozen of utils for Front-End Development
 
 ### clipboard
 
-- `clipboard.writeImage(element: HTMLImageElement): void`
+- `clipboard.writeImage(element: HTMLImageElement | null | string): void`
 
 复制图片到剪贴板。
 
