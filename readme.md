@@ -153,6 +153,12 @@ npm publish --access public
 
 [npm镜像站](https://npmmirror.com/package/@d-matrix/utils)
 
+通过`git log`命令获取changelogs，用于填写GitHub Release内容:
+
+```bash
+git log --oneline --decorate
+```
+
 ## 注意事项
 
 - [Before Publishing: Make Sure Your Package Installs and Works](https://docs.npmjs.com/cli/v10/using-npm/developers/#before-publishing-make-sure-your-package-installs-and-works)
