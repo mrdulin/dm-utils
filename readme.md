@@ -91,9 +91,29 @@ type T0 = WithOptional<A, 'b' | 'c'>;  // { a: number; b?: number; c?: number }
 
 ### algorithm
 
-- `moveMulti = <T extends unknown>(arr: T[], indexes: number[], start: number): T[]`
+- `moveMulti<T extends unknown>(arr: T[], indexes: number[], start: number): T[]`
 
 移动多个元素到数组中指定的位置,用法,见[测试用例](tests/algorithm.cy.ts)
+
+### file
+
+- `toImage(file: BlobPart | FileURL, options?: BlobPropertyBag): Promise<HTMLImageElement>`
+
+转换BlobPart或者文件地址为图片对象
+
+- `validateImageSize(file: BlobPart | FileURL, limitSize: { width: number; height: number }, options?: BlobPropertyBag): Promise<ImageSizeValidationResult>`
+
+返回值:
+
+```ts
+interface ImageSizeValidationResult {
+  isOk: boolean;
+  width: number;
+  height: number;
+}
+```
+
+图片宽，高校验
 
 ## 测试
 
