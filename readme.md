@@ -129,6 +129,30 @@ npm run cy:run -- --component
 npm run cy:run -- --component --spec tests/date.cy.ts
 ```
 
+## 发布
+
+更新package version:
+
+```bash
+npm version <minor> or <major>...
+```
+
+构建:
+
+```bash
+npm build
+```
+
+发布：
+
+```bash
+npm publish --access public
+```
+
+镜像站查询版本与手动同步:
+
+[npm镜像站](https://npmmirror.com/package/@d-matrix/utils)
+
 ## 注意事项
 
 - [Before Publishing: Make Sure Your Package Installs and Works](https://docs.npmjs.com/cli/v10/using-npm/developers/#before-publishing-make-sure-your-package-installs-and-works)
