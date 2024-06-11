@@ -12,7 +12,8 @@ A dozen of utils for Front-End Development
 - [dom](#dom)
 - [date](#date)
 - [types](#types)
-- [algorithm]($algorithm)
+- [algorithm](#algorithm)
+- [file](#file)
 
 ### clipboard
 
