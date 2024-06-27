@@ -51,3 +51,18 @@ export const validateImageSize = async (
   const image = await toImage(file, options);
   return { isOk: image.width <= limitSize.width && image.height <= limitSize.height, width: image.width, height: image.height };
 };
+
+/**
+ * 检测图片地址是否可用
+ * @param src 图片地址
+ * @param img HTMLImageElement
+ * @returns Promise<boolean>
+ */
+export async function isImageExists(src: string, img: HTMLImageElement = new Image()): Promise<boolean> {
+  if (!src) return false;
+  return new Promise((resolve) => {
+    img.src = src;
+    img.onload = () => resolve(true);
+    img.onerror = () => resolve(false);
+  });
+}

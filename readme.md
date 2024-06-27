@@ -14,6 +14,7 @@ A dozen of utils for Front-End Development
 - [types](#types)
 - [algorithm](#algorithm)
 - [file](#file)
+- [support](#support)
 
 ### clipboard
 
@@ -115,6 +116,40 @@ interface ImageSizeValidationResult {
 ```
 
 图片宽，高校验
+
+- `isImageExists(src: string, img: HTMLImageElement = new Image()): Promise<boolean>`
+
+检测图片地址是否可用
+
+```ts
+import { file } from '@d-matrix/utils';
+
+const url = 'https://picsum.photos/200/300';
+const res = await file.isImageExists(url);
+```
+
+传入HTML中已经存在的`img`元素
+
+```js
+import { file } from '@d-matrix/utils';
+
+const $img = document.getElementById('img');
+const res = await file.isImageExists(url, $img);
+```
+
+## support
+
+- `isBrowserEnv(): boolean`
+
+是否是浏览器环境
+
+- `isWebSocket(): boolean`
+
+是否支持WebSocket
+
+- `isSharedWorker(): boolean`
+
+是否支持SharedWorker
 
 ## 测试
 

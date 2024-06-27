@@ -19,9 +19,12 @@
     "url": "git+https://github.com/mrdulin/dm-utils.git"
   },
   "files": [
-    "dist"
+    "dist",
+    "readme.md"
   ],
-  "keywords": [],
+  "keywords": [
+    "utils"
+  ],
   "author": "Lin Du",
   "license": "MIT",
   "bugs": {
