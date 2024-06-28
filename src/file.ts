@@ -66,3 +66,16 @@ export async function isImageExists(src: string, img: HTMLImageElement = new Ima
     img.onerror = () => resolve(false);
   });
 }
+
+/**
+ * 从Content-Disposition中获取文件名
+ * @param header 包含Content-Disposition, 值为'attachment;filename=%E5%A4%A7%E8%A1%8C%E6%8C%87%E5%AF%BC2024-06-27-2024-06-28.xlsx'
+ * @returns string
+ *
+ */
+export function getFilenameFromContentDispositionHeader(header: { ['content-disposition']: string }): string {
+  const contentDisposition = header['content-disposition'];
+  if (!contentDisposition) return '';
+  const filename = contentDisposition.split('filename=')[1].split(';')[0];
+  return decodeURIComponent(filename);
+}

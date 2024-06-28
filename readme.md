@@ -137,6 +137,20 @@ const $img = document.getElementById('img');
 const res = await file.isImageExists(url, $img);
 ```
 
+- `getFilenameFromContentDispositionHeader(header: { ['content-disposition']: string }): string`
+
+从`Content-Disposition` response header中获取`filename`
+
+```ts
+import { file } from '@d-matrix/utils';
+
+const header = {
+  'content-disposition': 'attachment;filename=%E5%A4%A7%E8%A1%8C%E6%8C%87%E5%AF%BC2024-06-27-2024-06-28.xlsx'
+};
+const filename = file.getFilenameFromContentDispositionHeader(header);
+// '大行指导2024-06-27-2024-06-28.xlsx'
+```
+
 ## support
 
 - `isBrowserEnv(): boolean`
