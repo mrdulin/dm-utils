@@ -86,7 +86,7 @@ const Test = () => {
 
 - `useCopyToClipboard(props?: UseCopyToClipboardProps)`
 
-复制文本到剪切板, 用法见[测试]('./tests/react.cy.tsx)
+复制文本到剪切板, 用法见[测试](./tests/react.cy.tsx)
 
 ### dom
 
