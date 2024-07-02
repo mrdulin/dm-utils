@@ -8,7 +8,8 @@
     "prebuild": "npm run clean",
     "clean": "rimraf dist",
     "cy:open": "cypress open",
-    "cy:run": "cypress run",
+    "cy:component": "cypress run --component --spec",
+    "cy:component:all": "cypress run --component",
     "test:tsd": "tsd",
     "postversion": "git push && git push --tags"
   },
