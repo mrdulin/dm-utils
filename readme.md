@@ -66,9 +66,27 @@ const TestComp = () => {
 
 返回值`setState()`函数类似类组件中的`setState(updater[, callback])`,可以在`callback`中获取更新后的`state`
 
-- `useMountedRef(): React.MutableRefObject<boolean>`
+- `useIsMounted(): () => boolean`
 
 获取当前组件是否已挂载的 Hook
+
+```ts
+const Test = () => {
+  const isMounted = useIsMounted();
+
+  useEffect(() => {
+      if (isMounted()) {
+       console.log('component mounted')
+      }
+  }, [isMounted]);
+
+  return null
+};
+```
+
+- `useCopyToClipboard(props?: UseCopyToClipboardProps)`
+
+复制文本到剪切板, 用法见[测试]('./tests/react.cy.tsx)
 
 ### dom
 
