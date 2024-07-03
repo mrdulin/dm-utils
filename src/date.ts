@@ -23,7 +23,7 @@ export interface RecentYearOption {
  */
 export function getRecentYears(recentYears: number, type: 'number[]'): number[];
 export function getRecentYears(recentYears: number, type: 'object[]'): RecentYearOption[];
-export function getRecentYears(recentYears: number, type: 'number[]' | 'object[]', suffix = '年') {
+export function getRecentYears(recentYears: number, type: 'number[]' | 'object[]', suffix = '年'): number[] | RecentYearOption[] {
   const thisYear = new Date().getFullYear();
   if (type === 'number[]') {
     const result: number[] = [];

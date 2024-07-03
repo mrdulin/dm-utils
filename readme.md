@@ -100,6 +100,31 @@ const Test = () => {
 
 创建`start`和`end`之间的年份数组。
 
+- `getRecentYears()`
+
+```ts
+export function getRecentYears(recentYears: number, type: 'number[]'): number[];
+export function getRecentYears(recentYears: number, type: 'object[]'): RecentYearOption[];
+export function getRecentYears(recentYears: number, type: 'number[]' | 'object[]', suffix = '年'): number[] | RecentYearOption[]
+```
+
+获取最近n年
+
+```ts
+import { date } from '@d-matrix/utils';
+
+getRecentYears(5, 'number[]'); // [2024, 2023, 2022, 2021, 2020]
+getRecentYears(5, 'object[]');
+// [
+//   { value: 2024, label: '2024年' },
+//   { value: 2023, label: '2023年' },
+//   { value: 2022, label: '2022年' },
+//   { value: 2021, label: '2021年' },
+//   { value: 2020, label: '2020年' },
+// ]
+```
+
+
 ### types
 
 - `WithOptional<T, K extends keyof T>`
