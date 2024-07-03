@@ -59,7 +59,7 @@ export function useCopyToClipboard(props?: UseCopyToClipboardProps) {
         }, timeout);
       })
       .catch((error) => onError?.(error));
-  }, []);
+  }, [onCopy, onError, timeout]);
 
   return { isCopied, copyToClipboard };
 }
