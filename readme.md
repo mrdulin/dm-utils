@@ -94,6 +94,16 @@ const Test = () => {
 
 元素滚动条滚动到顶部，对老旧浏览器做了兼容，见[浏览器兼容性](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollTop#browser_compatibility)。
 
+- `strip(html: string): string`
+
+从字符串中去除 HTML 标签并返回纯文本内容。
+
+```ts
+import { dom } from '@d-matrix/utils';
+
+dom.strip('测试<em>高亮</em>测试'); // '测试高亮测试'
+```
+
 ### date
 
 - `rangeOfYears(start: number, end: number = new Date().getFullYear()): number[]`
@@ -123,7 +133,6 @@ getRecentYears(5, 'object[]');
 //   { value: 2020, label: '2020年' },
 // ]
 ```
-
 
 ### types
 
