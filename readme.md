@@ -88,6 +88,33 @@ const Test = () => {
 
 复制文本到剪切板, 用法见[测试](./tests/react.cy.tsx)
 
+- `EnhancedComponent.prototype.setStateAsync(state)`
+
+setState 方法的同步版本
+
+```ts
+import { react } from '@d-matrix/utils';
+
+ class TestComponent extends EnhancedComponent<unknown, { pageIndex: number }> {
+  state = {
+    pageIndex: 1,
+  };
+
+  async onClick() {
+    await this.setStateAsync({ pageIndex: 2 });
+    console.log(this.state.pageIndex); // 2
+  }
+
+  render() {
+    return (
+      <button data-cy="test-button" onClick={() => this.onClick()}>
+        click
+      </button>
+    );
+  }
+}
+```
+
 ### dom
 
 - `scrollToTop(element: Element | null | undefined): void`

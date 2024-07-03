@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { UseCopyToClipboardProps, cleanup, render, useCopyToClipboard, useIsMounted, useStateCallback } from '../src/react';
+import {
+  EnhancedComponent,
+  UseCopyToClipboardProps,
+  cleanup,
+  render,
+  useCopyToClipboard,
+  useIsMounted,
+  useStateCallback,
+} from '../src/react';
 
 describe('react', () => {
   describe('render', () => {
@@ -127,6 +135,36 @@ describe('react', () => {
           Cypress.sinon.match.instanceOf(Error).and(Cypress.sinon.match.has('message', 'Cannot copy empty string to clipboard.')),
         ),
       );
+    });
+  });
+
+  describe('EnhancedComponent', () => {
+    it('should set the state correctly and get the nextState in callback', () => {
+      class TestComponent extends EnhancedComponent<{ onClick: () => void }, { pageIndex: number }> {
+        state = {
+          pageIndex: 1,
+        };
+
+        async onClick() {
+          await this.setStateAsync({ pageIndex: 2 });
+          onClickSpy(this.state.pageIndex);
+        }
+
+        render() {
+          return (
+            <button data-cy="test-button" onClick={() => this.onClick()}>
+              click
+            </button>
+          );
+        }
+      }
+
+      const onClickSpy = cy.spy().as('onClickSpy');
+
+      cy.mount(<TestComponent onClick={onClickSpy} />);
+
+      cy.get('[data-cy=test-button]').click();
+      cy.get('@onClickSpy').should('have.been.calledWith', 2);
     });
   });
 });
