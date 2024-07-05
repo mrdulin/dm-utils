@@ -15,6 +15,7 @@ A dozen of utils for Front-End Development
 - [algorithm](#algorithm)
 - [file](#file)
 - [support](#support)
+- [timer](#timer)
 
 ### clipboard
 
@@ -114,6 +115,10 @@ import { react } from '@d-matrix/utils';
   }
 }
 ```
+
+- `useDeepCompareRef(deps: DependencyList): React.MutableRefObject<number>`
+
+深比较`deps`。返回`ref`，`ref.current`是一个自增数字，每次`deps`变化，`ref.current`加`1`。用法见[测试](./tests/react.cy.tsx)
 
 ### dom
 
@@ -243,6 +248,17 @@ const filename = file.getFilenameFromContentDispositionHeader(header);
 - `isSharedWorker(): boolean`
 
 是否支持SharedWorker
+
+## timer
+
+- `sleep(ms?: number): Promise<unknown>`
+
+使用`setTimeout`与`Promise`实现，暂停执行`ms`毫秒
+
+```
+await sleep(3000); // 暂停3秒
+console.log('continue'); // 继续执行
+```
 
 ## 测试
 
