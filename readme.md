@@ -235,6 +235,14 @@ const filename = file.getFilenameFromContentDispositionHeader(header);
 // '大行指导2024-06-27-2024-06-28.xlsx'
 ```
 
+- `download(source: string | Blob, fileName = '', target?: HyperLinkTarget): void`
+
+文件下载，`source`是文件地址或`blob`对象。
+
+```ts
+type HyperLinkTarget = "_self" | "_black" | "_parent" | "_top"
+```
+
 ## support
 
 - `isBrowserEnv(): boolean`

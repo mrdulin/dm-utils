@@ -79,3 +79,35 @@ export function getFilenameFromContentDispositionHeader(header: { ['content-disp
   const filename = contentDisposition.split('filename=')[1].split(';')[0];
   return decodeURIComponent(filename);
 }
+
+const HyperLinkTargets = ['_self', '_black', '_parent', '_top'] as const;
+export type HyperLinkTarget = (typeof HyperLinkTargets)[number];
+/**
+ * 文件下载
+ * @param source 文件地址或blob对象
+ * @param fileName 文件名
+ * @param isPreview 是否
+ */
+
+export function download(source: Blob, fileName?: string): void;
+export function download(source: string, fileName?: string, target?: HyperLinkTarget): void;
+export function download(source: string | Blob, fileName = '', target?: HyperLinkTarget): void {
+  const link = document.createElement('a');
+  if (typeof source === 'string') {
+    if (typeof target === 'string' && HyperLinkTargets.includes(target)) {
+      link.target = target;
+    } else {
+      link.download = fileName;
+    }
+    link.href = source;
+  }
+  if (source instanceof Blob) {
+    const url = window.URL.createObjectURL(source);
+    link.href = url;
+    link.download = fileName;
+  }
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
