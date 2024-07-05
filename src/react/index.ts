@@ -4,3 +4,4 @@ export * from './renderToString';
 export * from './useIsMounted';
 export * from './useCopyToClipboard';
 export * from './enhancedComponent';
+export * from './useDeepCompareRef';

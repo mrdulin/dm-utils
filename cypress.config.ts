@@ -10,6 +10,14 @@ export default defineConfig({
     },
     specPattern: 'tests/**/*.cy.{js,jsx,ts,tsx}',
     screenshotOnRunFailure: false,
+    setupNodeEvents(on, config) {
+      on('task', {
+        log(message) {
+          console.log(message);
+          return null;
+        },
+      });
+    },
   },
 
   e2e: {
