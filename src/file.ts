@@ -105,6 +105,12 @@ export function download(source: string, fileName?: string, target?: HyperLinkTa
 export function download(source: string | Blob, fileName = '', target?: HyperLinkTarget): void {
   const link = document.createElement('a');
   if (typeof source === 'string') {
+    if (!source.length) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('下载失败，原因：source为空字符串');
+        return;
+      }
+    }
     if (typeof target === 'string' && HyperLinkTargets.includes(target)) {
       link.target = target;
     } else {
@@ -128,4 +134,30 @@ export function download(source: string | Blob, fileName = '', target?: HyperLin
     }
     document.body.removeChild(link);
   }, 4e4); // 40S
+}
+
+
+/**
+ * 通过创建iframe进行文件下载
+ * @param source
+ * @returns
+ */
+export function downloadFileByIframe(source: string): boolean {
+  const httpsPath = source.replace(/http:\/\//, "https://");
+  const iframes = document.getElementsByTagName("iframe");
+  if (
+    iframes.length === 0 ||
+    (iframes.length > 0 && iframes[0].className === "fill" && iframes[iframes.length - 1].className === "fill")
+  ) {
+    const element = document.createElement("iframe");
+    element.style.display = "none";
+    element.src = httpsPath;
+    document.body.appendChild(element);
+    return true;
+  }
+  if (iframes.length > 0 && iframes[iframes.length - 1].className !== "fill") {
+    iframes[0].src = httpsPath;
+    return true;
+  }
+  return false;
 }

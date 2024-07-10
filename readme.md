@@ -16,6 +16,7 @@ A dozen of utils for Front-End Development
 - [file](#file)
 - [support](#support)
 - [timer](#timer)
+- [operator](#operator)
 
 ### clipboard
 
@@ -243,6 +244,10 @@ const filename = file.getFilenameFromContentDispositionHeader(header);
 type HyperLinkTarget = "_self" | "_blank" | "_parent" | "_top"
 ```
 
+- `downloadFileByIframe(source: string): boolean`
+
+通过创建`iframe`进行文件下载
+
 ## support
 
 - `isBrowserEnv(): boolean`
@@ -266,6 +271,25 @@ type HyperLinkTarget = "_self" | "_blank" | "_parent" | "_top"
 ```ts
 await sleep(3000); // 暂停3秒
 console.log('continue'); // 继续执行
+```
+
+## operator
+
+- `trueTypeOf = (obj: unknown): string`
+
+检查数据类型
+
+```ts
+trueTypeOf([]); // array
+trueTypeOf({}); // object
+trueTypeOf(''); // string
+trueTypeOf(new Date()); // date
+trueTypeOf(1); // number
+trueTypeOf(function () {}); // function
+trueTypeOf(/test/i); // regexp
+trueTypeOf(true); // boolean
+trueTypeOf(null); // null
+trueTypeOf(undefined); // undefined
 ```
 
 ## 测试
