@@ -7,12 +7,14 @@
   "scripts": {
     "build": "tsc",
     "prebuild": "npm run clean",
+    "postpublish": "echo \"wait for 3 seconds, then sync cnpm\" && npm run wait3s && npm run cnpm:sync",
     "clean": "rimraf dist",
     "cy:open": "cypress open",
     "cy:component": "cypress run --component --spec",
     "cy:component:all": "cypress run --component",
     "test:tsd": "tsd",
     "postversion": "git push && git push --tags",
+    "wait3s": "node -e \"setTimeout(() => process.exit(0), 3000)\"",
     "cnpm:sync": "cnpm sync %npm_package_name%"
   },
   "engines": {
