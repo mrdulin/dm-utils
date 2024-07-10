@@ -89,6 +89,17 @@ export type HyperLinkTarget = (typeof HyperLinkTargets)[number];
  * @param isPreview 是否
  */
 
+// `a.click()` doesn't work for all browsers (#465)
+function click(node: HTMLAnchorElement) {
+  try {
+    node.dispatchEvent(new MouseEvent('click'));
+  } catch (e) {
+    var evt = document.createEvent('MouseEvents');
+    evt.initMouseEvent('click', true, true, window, 0, 0, 0, 80, 20, false, false, false, false, 0, null);
+    node.dispatchEvent(evt);
+  }
+}
+
 export function download(source: Blob, fileName?: string): void;
 export function download(source: string, fileName?: string, target?: HyperLinkTarget): void;
 export function download(source: string | Blob, fileName = '', target?: HyperLinkTarget): void {
@@ -101,13 +112,20 @@ export function download(source: string | Blob, fileName = '', target?: HyperLin
     }
     link.href = source;
   }
+  let objectURL: string | undefined;
   if (source instanceof Blob) {
-    const url = window.URL.createObjectURL(source);
-    link.href = url;
+    const objectURL = window.URL.createObjectURL(source);
+    link.href = objectURL;
     link.download = fileName;
   }
 
   document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  click(link);
+
+  setTimeout(() => {
+    if (typeof objectURL === 'string') {
+      window.URL.revokeObjectURL(objectURL);
+    }
+    document.body.removeChild(link);
+  }, 4e4); // 40S
 }

@@ -240,7 +240,7 @@ const filename = file.getFilenameFromContentDispositionHeader(header);
 文件下载，`source`是文件地址或`blob`对象。
 
 ```ts
-type HyperLinkTarget = "_self" | "_black" | "_parent" | "_top"
+type HyperLinkTarget = "_self" | "_blank" | "_parent" | "_top"
 ```
 
 ## support
