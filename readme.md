@@ -263,7 +263,7 @@ type HyperLinkTarget = "_self" | "_black" | "_parent" | "_top"
 
 使用`setTimeout`与`Promise`实现，暂停执行`ms`毫秒
 
-```
+```ts
 await sleep(3000); // 暂停3秒
 console.log('continue'); // 继续执行
 ```
