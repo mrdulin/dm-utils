@@ -80,7 +80,7 @@ export function getFilenameFromContentDispositionHeader(header: { ['content-disp
   return decodeURIComponent(filename);
 }
 
-const HyperLinkTargets = ['_self', '_black', '_parent', '_top'] as const;
+const HyperLinkTargets = ['_self', '_blank', '_parent', '_top'] as const;
 export type HyperLinkTarget = (typeof HyperLinkTargets)[number];
 /**
  * 文件下载
