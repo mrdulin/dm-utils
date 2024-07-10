@@ -146,26 +146,33 @@ dom.strip('测试<em>高亮</em>测试'); // '测试高亮测试'
 - `getRecentYears()`
 
 ```ts
-export function getRecentYears(recentYears: number, type: 'number[]'): number[];
-export function getRecentYears(recentYears: number, type: 'object[]'): RecentYearOption[];
-export function getRecentYears(recentYears: number, type: 'number[]' | 'object[]', suffix = '年'): number[] | RecentYearOption[]
+export type GetRecentYearsOptions = {
+  // 开始年份
+  startYear?: number;
+  // 最近几年
+  recentYears?: number;
+  // 截止年份
+  endYear?: number;
+  // 后缀，默认为'年'
+  suffix?: string;
+};
+
+export function getYears(options: GetRecentYearsOptions & { type: 'number[]' }): number[];
+export function getYears(options: GetRecentYearsOptions & { type: 'object[]' }): RecentYearOption[];
+export function getYears(options: GetRecentYearsOptions & { type: 'object[]' | 'number[]' }): number[] | RecentYearOption[]
 ```
 
-获取最近n年
+获取n年，`type`传`number[]`，返回`[2023, 2022, 2021]`数字数组；`type`传`object[]`，返回如下的对象数组
 
-```ts
-import { date } from '@d-matrix/utils';
-
-getRecentYears(5, 'number[]'); // [2024, 2023, 2022, 2021, 2020]
-getRecentYears(5, 'object[]');
-// [
-//   { value: 2024, label: '2024年' },
-//   { value: 2023, label: '2023年' },
-//   { value: 2022, label: '2022年' },
-//   { value: 2021, label: '2021年' },
-//   { value: 2020, label: '2020年' },
-// ]
+```sh
+[
+  { value: 2023, label: '2023年' },
+  { value: 2022, label: '2022年' },
+  { value: 2021, label: '2021年' },
+]
 ```
+
+更多用法，见[测试用例](./tests/date.cy.ts)
 
 ### types
 
