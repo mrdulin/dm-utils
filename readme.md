@@ -143,7 +143,7 @@ dom.strip('测试<em>高亮</em>测试'); // '测试高亮测试'
 
 创建`start`和`end`之间的年份数组。
 
-- `getRecentYears()`
+- `getYears()`
 
 ```ts
 export type GetRecentYearsOptions = {
