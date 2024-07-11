@@ -74,7 +74,7 @@ describe('clipboard', { viewportHeight: 600, viewportWidth: 800 }, () => {
 
     it('falls back to document.execCommand if navigator does not support clipboard', () => {
       cy.window().then((win) => {
-        delete (win.navigator as any).__proto__.clipboard;
+        delete Object.getPrototypeOf(win.navigator).clipboard;
       });
       const TestComp = () => {
         return (
@@ -103,7 +103,7 @@ describe('clipboard', { viewportHeight: 600, viewportWidth: 800 }, () => {
 
     it('print error log if execCommand fails', () => {
       cy.window().then((win) => {
-        delete (win.navigator as any).__proto__.clipboard;
+        delete Object.getPrototypeOf(win.navigator).clipboard;
         cy.spy(win.console, 'error').as('consoleError');
       });
       const TestComp = () => {
@@ -126,7 +126,7 @@ describe('clipboard', { viewportHeight: 600, viewportWidth: 800 }, () => {
 
     it('print error log if document.execCommand throws error', () => {
       cy.window().then((win) => {
-        delete (win.navigator as any).__proto__.clipboard;
+        delete Object.getPrototypeOf(win.navigator).clipboard;
         cy.spy(win.console, 'error').as('consoleError');
       });
       const TestComp = () => {
