@@ -20,9 +20,13 @@ A dozen of utils for Front-End Development
 
 ### clipboard
 
-- `clipboard.writeImage(element: HTMLImageElement | null | string): void`
+- `writeImage(element: HTMLImageElement | null | string): Promise<void>`
 
-复制图片到剪贴板。
+复制图片到剪贴板
+
+- `writeText(text: string): Promise<void>`
+
+复制文本到剪切板
 
 ### react
 

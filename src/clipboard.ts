@@ -1,3 +1,8 @@
+/**
+ * 复制图片到剪贴板
+ * @param element
+ * @returns
+ */
 export async function writeImage(element: HTMLImageElement | null | string) {
   return new Promise((resolve, reject) => {
     if (!element) return reject('element is not defined');
@@ -44,5 +49,45 @@ export async function writeImage(element: HTMLImageElement | null | string) {
           .then(resolve, reject);
       });
     };
+  });
+}
+
+const legacyWriteText = (text: string) => {
+  const $textarea = document.createElement('textarea');
+  $textarea.value = text;
+  $textarea.id = '__textarea_for_clipboard__';
+  $textarea.style.cssText = 'position: fixed; width: 20px; height: 20px; opacity: 0; top: -20px;';
+  document.body.appendChild($textarea);
+  $textarea.select();
+  try {
+    const isSuccess = document.execCommand('copy');
+    if (!isSuccess && process.env.NODE_ENV === 'development') {
+      console.error('复制文本失败, 操作不被支持或未被启用');
+    }
+  } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('复制文本失败', error);
+    }
+  } finally {
+    document.body.removeChild($textarea);
+  }
+};
+
+/**
+ * 复制文本到剪贴板
+ * @param text
+ * @returns
+ */
+export async function writeText(text: string) {
+  if (!navigator.clipboard) {
+    legacyWriteText(text);
+    return;
+  }
+
+  return navigator.clipboard.writeText(text).catch((error) => {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('复制文本失败', error);
+    }
+    return Promise.reject(error);
   });
 }
