@@ -68,6 +68,7 @@ const legacyWriteText = (text: string) => {
     if (process.env.NODE_ENV === 'development') {
       console.error('复制文本失败', error);
     }
+    throw error;
   } finally {
     document.body.removeChild($textarea);
   }

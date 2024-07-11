@@ -123,5 +123,32 @@ describe('clipboard', { viewportHeight: 600, viewportWidth: 800 }, () => {
 
       cy.get('@consoleError').should('have.been.calledWith', '复制文本失败, 操作不被支持或未被启用');
     });
+
+    it('print error log if document.execCommand throws error', () => {
+      cy.window().then((win) => {
+        delete (win.navigator as any).__proto__.clipboard;
+        cy.spy(win.console, 'error').as('consoleError');
+      });
+      const TestComp = () => {
+        return (
+          <button data-cy="copy" onClick={() => clipboard.writeText('foo').catch(alert)}>
+            copy
+          </button>
+        );
+      };
+
+      const NotSupportError = new Error('not supported');
+      cy.document().then((doc) => cy.stub(doc, 'execCommand').as('execCommand').throws(NotSupportError));
+
+      cy.mount(<TestComp />);
+
+      cy.get('[data-cy=copy]').click();
+      cy.get('@execCommand').should('have.been.calledOnceWith', 'copy');
+
+      cy.get('@consoleError').should('have.been.calledWith', '复制文本失败', NotSupportError);
+      cy.on('window:alert', (error: Error) => {
+        expect(error.message).to.be.equal(NotSupportError.message);
+      });
+    });
   });
 });
