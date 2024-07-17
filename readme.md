@@ -355,6 +355,12 @@ npm build
 npm publish --access public
 ```
 
+网络原因导致连接registry服务器超时,可指定proxy
+
+```bash
+npm --proxy http://127.0.0.1:7890 publish
+```
+
 镜像站查询版本与手动同步:
 
 [npm镜像站](https://npmmirror.com/package/@d-matrix/utils)
