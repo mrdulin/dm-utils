@@ -150,7 +150,17 @@ dom.strip('测试<em>高亮</em>测试'); // '测试高亮测试'
 - `getYears()`
 
 ```ts
-export type GetRecentYearsOptions = {
+export interface YearOption {
+  label: string;
+  value: number;
+}
+
+export enum YearOptionKind {
+  Numbers,
+  Objects,
+}
+
+export type GetYearsOptions = {
   // 开始年份
   startYear?: number;
   // 最近几年
@@ -161,12 +171,12 @@ export type GetRecentYearsOptions = {
   suffix?: string;
 };
 
-export function getYears(options: GetRecentYearsOptions & { type: 'number[]' }): number[];
-export function getYears(options: GetRecentYearsOptions & { type: 'object[]' }): RecentYearOption[];
-export function getYears(options: GetRecentYearsOptions & { type: 'object[]' | 'number[]' }): number[] | RecentYearOption[]
+export function getYears(options: GetYearsOptions & { type: YearOptionKind.Numbers }): number[];
+export function getYears(options: GetYearsOptions & { type: YearOptionKind.Objects }): YearOption[];
+export function getYears(options: GetYearsOptions & { type: YearOptionKind }): number[] | YearOption[]
 ```
 
-获取n年，`type`传`number[]`，返回`[2023, 2022, 2021]`数字数组；`type`传`object[]`，返回如下的对象数组
+获取n年，`type`传`YearOptionKind.Numbers`，返回`[2023, 2022, 2021]`数字数组；`type`传`YearOptionKind.Objects`，返回如下的对象数组
 
 ```sh
 [
@@ -177,6 +187,14 @@ export function getYears(options: GetRecentYearsOptions & { type: 'object[]' | '
 ```
 
 更多用法，见[测试用例](./tests/date.cy.ts)
+
+- `dayOfWeek(num: number, lang: keyof typeof i18n = 'zh'): string`
+
+返回星期几, `lang`仅支持`zh`和`en`, `num`必须为正整数,否则报错
+
+```js
+dayOfWeek(0) // "日"
+```
 
 ### types
 

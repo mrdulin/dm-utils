@@ -12,3 +12,5 @@ export const isWebSocket = () => typeof WebSocket !== 'undefined';
  * 是否支持SharedWorker
  */
 export const isSharedWorker = () => typeof SharedWorker !== 'undefined';
+
+

@@ -1,7 +1,4 @@
-export interface RecentYearOption {
-  label: string;
-  value: number;
-}
+import { i18n } from './i18n';
 
 /**
  * Generates an array of numbers representing a range of years between the start year and the end year.
@@ -16,7 +13,17 @@ export function rangeOfYears(start: number, end: number = new Date().getFullYear
     .map((year, index) => year + index);
 }
 
-export type GetRecentYearsOptions = {
+export enum YearOptionKind {
+  Numbers,
+  Objects,
+}
+
+export interface YearOption {
+  label: string;
+  value: number;
+}
+
+export type GetYearsOptions = {
   // 开始年份
   startYear?: number;
   // 最近几年
@@ -30,10 +37,10 @@ export type GetRecentYearsOptions = {
  * 获取n年, 从大到小
  * @param options
  */
-//TODO: TS限制只有当type参数是"object[]"时，才支持传suffix参数
-export function getYears(options: GetRecentYearsOptions & { type: 'number[]' }): number[];
-export function getYears(options: GetRecentYearsOptions & { type: 'object[]' }): RecentYearOption[];
-export function getYears(options: GetRecentYearsOptions & { type: 'object[]' | 'number[]' }): number[] | RecentYearOption[] {
+//TODO: TS限制只有当type参数是YearOptionKind.Objects时，才支持传suffix参数
+export function getYears(options: GetYearsOptions & { type: YearOptionKind.Numbers }): number[];
+export function getYears(options: GetYearsOptions & { type: YearOptionKind.Objects }): YearOption[];
+export function getYears(options: GetYearsOptions & { type: YearOptionKind }): number[] | YearOption[] {
   const { recentYears = 0, startYear, endYear, suffix = '年', type } = options;
   const endY = endYear ? endYear : new Date().getFullYear();
   let ranges = recentYears;
@@ -52,7 +59,7 @@ export function getYears(options: GetRecentYearsOptions & { type: 'object[]' | '
     }
   }
 
-  if (type === 'number[]') {
+  if (type === YearOptionKind.Numbers) {
     const result: number[] = [];
     for (let i = 0; i < ranges; i++) {
       result.push(endY - i);
@@ -60,8 +67,8 @@ export function getYears(options: GetRecentYearsOptions & { type: 'object[]' | '
     return result;
   }
 
-  if (type === 'object[]') {
-    const result: RecentYearOption[] = [];
+  if (type === YearOptionKind.Objects) {
+    const result: YearOption[] = [];
     for (let i = 0; i < ranges; i++) {
       result.push({
         value: endY - i,
@@ -71,5 +78,12 @@ export function getYears(options: GetRecentYearsOptions & { type: 'object[]' | '
     return result;
   }
 
-  throw new Error('type must be "number[]" or "object[]"');
+  throw new Error('type must be enum: YearOptionKind.Numbers or YearOptionKind.Objects');
 }
+
+export const dayOfWeek = (num: number, lang: keyof typeof i18n = 'zh'): string => {
+  if (!Number.isInteger(num)) {
+    throw new Error('请输入一个整数');
+  }
+  return i18n[lang].dayOfWeek[num % 7];
+};
