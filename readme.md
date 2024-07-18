@@ -125,6 +125,42 @@ import { react } from '@d-matrix/utils';
 
 深比较`deps`。返回`ref`，`ref.current`是一个自增数字，每次`deps`变化，`ref.current`加`1`。用法见[测试](./tests/react.cy.tsx)
 
+- `InferRef<T>`
+
+推导子组件的`ref`类型，适用于组件没有导出其`ref`类型的场景, 更多用法见[测试](./tests/react-types.tsx)
+
+```tsx
+interface ChildRefProps {
+  prop1: () => void;
+  prop2: () => void;
+}
+
+interface ChildProps {
+  otherProp: string;
+}
+
+const Child = React.forwardRef<ChildRefProps, ChildProps>((props, ref) => {
+  React.useImperativeHandle(
+    ref,
+    () => ({
+      prop1() {},
+      prop2() {},
+    }),
+    [],
+  );
+
+  return null;
+});
+
+type InferredChildRef = InferRef<typeof Child>;  // 等价于ChildRefProps
+
+const Parent = () => {
+  const childRef = React.useRef<InferredChildRef>(null);
+
+  return <Child ref={childRef} otherProp="a" />;
+};
+```
+
 ### dom
 
 - `scrollToTop(element: Element | null | undefined): void`
@@ -203,6 +239,50 @@ dayOfWeek(0) // "日"
 ```ts
 type A = { a: number; b: number; c: number; };
 type T0 = WithOptional<A, 'b' | 'c'>;  // { a: number; b?: number; c?: number }
+```
+
+- `MeFunctionPropertyNamesthods<T>`
+
+获取对象中的方法名称，返回union type
+
+```ts
+class A {
+  add() {}
+  minus() {}
+  div() {}
+  public result: number = 0;
+}
+type T0 = FunctionPropertyNames<A>; // 'add' | 'minus' | 'div'
+
+const t1 = {
+  add() {},
+  minus() {},
+  div() {},
+  result: 0,
+};
+type T1 =  FunctionPropertyNames<typeof t1>; // 'add' | 'minus' | 'div'
+```
+
+- `NonFunctionPropertyNames<T>`
+
+获取对象中非函数属性名称，返回union type
+
+```ts
+class A {
+  add() {}
+  minus() {}
+  div() {}
+  public result: number = 0;
+}
+type T0 = FunctionPropertyNames<A>; // 'result'
+
+const t1 = {
+  add() {},
+  minus() {},
+  div() {},
+  result: 0,
+};
+type T1 =  FunctionPropertyNames<typeof t1>; // 'result'
 ```
 
 ### algorithm
