@@ -402,6 +402,8 @@ trueTypeOf(null); // null
 trueTypeOf(undefined); // undefined
 ```
 
+## decimal
+
 - `format(value: number | string | undefined | null, options?: FormatOptions): string`
 
 格式化数字，默认保留3位小数，可添加前缀，后缀，默认值为'--'，用法见[测试](./tests//decimal.cy.ts)
