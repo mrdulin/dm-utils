@@ -19,7 +19,7 @@ export type FormatOptions = {
 export function format(value: number | string | undefined | null, options?: FormatOptions): string {
   const { decimalPlaces = 3, suffix = '', defaultValue = '--', prefix = '', operation } = options ?? {};
 
-  if (value === null || value === undefined || isNaN(Number(value))) {
+  if (value === null || value === undefined || isNaN(Number(value)) || value === '') {
     return defaultValue;
   }
 

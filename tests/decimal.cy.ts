@@ -18,6 +18,7 @@ describe('decimal', () => {
     expect(format(null)).to.be.equal('--');
     expect(format(NaN)).to.be.equal('--');
     expect(format('abc')).to.be.equal('--');
+    expect(format('')).to.be.equal('--');
   });
 
   it('should return string with operation result', () => {

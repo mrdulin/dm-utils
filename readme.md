@@ -18,6 +18,7 @@ A dozen of utils for Front-End Development
 - [timer](#timer)
 - [operator](#operator)
 - [decimal](#decimal)
+- [object](#object)
 
 ### clipboard
 
@@ -419,6 +420,17 @@ type FormatOptions = {
     value: number;
   }[];
 };
+```
+
+## object
+
+- `removeZeroValueKeys = <T extends Record<string, any>>(obj: T, zeroValues = ZeroValues): T`
+
+移除零值的键, 默认的零值是：`undefined`、`null`, `''`, `NaN`, `[]`, `{}`
+
+```ts
+removeZeroValueKeys({ a: '', b: 'abc', c: undefined, d: null, e: NaN, f: -1, g: [], h: {} })
+// { b: 'abc', f: -1 }
 ```
 
 ## 测试
