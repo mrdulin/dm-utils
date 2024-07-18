@@ -8,3 +8,4 @@ export * as file from './file';
 export * as support from './support';
 export * as timer from './timer';
 export * as operator from './operator';
+export * as decimal from './decimal';

@@ -17,6 +17,7 @@ A dozen of utils for Front-End Development
 - [support](#support)
 - [timer](#timer)
 - [operator](#operator)
+- [decimal](#decimal)
 
 ### clipboard
 
@@ -399,6 +400,23 @@ trueTypeOf(/test/i); // regexp
 trueTypeOf(true); // boolean
 trueTypeOf(null); // null
 trueTypeOf(undefined); // undefined
+```
+
+- `format(value: number | string | undefined | null, options?: FormatOptions): string`
+
+格式化数字，默认保留3位小数，可添加前缀，后缀，默认值为'--'，用法见[测试](./tests//decimal.cy.ts)
+
+```ts
+type FormatOptions = {
+  decimalPlaces?: number | false;
+  suffix?: string;
+  prefix?: string;
+  defaultValue?: string;
+  operation?: {
+    operator: 'add' | 'sub' | 'mul' | 'div' | 'toDecimalPlaces';
+    value: number;
+  }[];
+};
 ```
 
 ## 测试
