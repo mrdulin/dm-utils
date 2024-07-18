@@ -241,7 +241,7 @@ type A = { a: number; b: number; c: number; };
 type T0 = WithOptional<A, 'b' | 'c'>;  // { a: number; b?: number; c?: number }
 ```
 
-- `MeFunctionPropertyNamesthods<T>`
+- `FunctionPropertyNames<T>`
 
 获取对象中的方法名称，返回union type
 
