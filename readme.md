@@ -447,6 +447,26 @@ npm run cy:run -- --component
 npm run cy:run -- --component --spec tests/date.cy.ts
 ```
 
+运行E2E测试
+
+将`src`通过`tsc` build到`public/dist`目录
+
+```bash
+npm run build:public
+```
+
+启动一个Web服务器来访问`public/index.html`文件，`dist`目录的脚本可以通过`<script type="module"/>`引入
+
+```bash
+npm run serve
+```
+
+最后启动cypress GUI客户端，选择E2E测试
+
+```bash
+npm run cy:open
+```
+
 ## 发布
 
 更新package version:

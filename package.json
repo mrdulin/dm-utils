@@ -6,6 +6,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
+    "build:public": "tsc --project ./tsconfig.e2e.json",
     "prebuild": "npm run clean",
     "postpublish": "echo \"wait for 3 seconds, then sync cnpm\" && npm run wait3s && npm run cnpm:sync",
     "prepublishOnly": "npm run build",
@@ -16,7 +17,8 @@
     "test:tsd": "tsd",
     "postversion": "git push && git push --tags",
     "wait3s": "node -e \"setTimeout(() => process.exit(0), 3000)\"",
-    "cnpm:sync": "cnpm sync %npm_package_name%"
+    "cnpm:sync": "cnpm sync %npm_package_name%",
+    "start": "serve -l 64055 -n ./public"
   },
   "engines": {
     "node": ">=16.20.0"
@@ -50,7 +52,9 @@
     "cnpm": "^9.4.0",
     "cypress": "^13.6.6",
     "expect-type": "^0.19.0",
+    "read-excel-file": "^5.8.4",
     "rimraf": "^5.0.5",
+    "serve": "^14.2.3",
     "vite": "^4.5.2"
   },
   "dependencies": {

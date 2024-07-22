@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Page</title>
+</head>
+
+<body>
+
+  <h3>Download remote XLSX file</h3>
+  <button data-cy="download-remote-xlsx">Download</button>
+
+  <script type="module">
+    import { download } from './dist/file.js';
+
+    console.log('import download function from file.js');
+
+    const btn = document.querySelector('[data-cy="download-remote-xlsx"]');
+
+    btn.addEventListener('click', () => {
+      download('http://localhost:64055/people.xlsx');
+    });
+  </script>
+</body>
+
+</html>
