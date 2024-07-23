@@ -19,6 +19,7 @@ A dozen of utils for Front-End Development
 - [operator](#operator)
 - [decimal](#decimal)
 - [object](#object)
+- [echarts](#echarts)
 
 ### clipboard
 
@@ -432,6 +433,12 @@ type FormatOptions = {
 removeZeroValueKeys({ a: '', b: 'abc', c: undefined, d: null, e: NaN, f: -1, g: [], h: {} })
 // { b: 'abc', f: -1 }
 ```
+
+## echarts
+
+- `mergeOption(defaults: EChartsOption, overrides: EChartsOption, option?: deepmerge.Options): EChartsOption`
+
+deep merge Echarts配置，用法见[测试用例](./tests//echarts/echarts.cy.ts)
 
 ## 测试
 
