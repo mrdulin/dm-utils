@@ -10,3 +10,4 @@ export * as timer from './timer';
 export * as operator from './operator';
 export * as decimal from './decimal';
 export * as object from './object';
+export * as echarts from './echarts';
