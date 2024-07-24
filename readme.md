@@ -440,6 +440,16 @@ removeZeroValueKeys({ a: '', b: 'abc', c: undefined, d: null, e: NaN, f: -1, g: 
 
 deep merge Echarts配置，用法见[测试用例](./tests//echarts/echarts.cy.ts)
 
+- `fill<T extends Record<string, any>, XAxisField extends keyof T, YAxisField extends keyof T>(dataSource: T[], xAxisField:XAxisField, yAxisField: YAxisField): T[]`
+
+场景：后端接口返回某几个时间点的数据，需求是在接口数据的基础上每隔5分钟补一个点，以达到图中的效果: [折线图](https://raw.githubusercontent.com/mrdulin/pic-bucket-01/master/Dingtalk_20240724140535.jpg)。
+
+填充的点的Y轴值为前一个点的值, 时间示例: [9:23, 9:27] => [9:23, 9:25, 9:27, 9:30]，更多，见[测试用例](./tests/echarts/fill.cy.ts)
+
+- `calcYAxisRange<T extends Record<string, any>, Key extends keyof T>(data: T[], key: Key, splitNumber = 5): { max:number; min:number }`
+
+计算echarts YAxis的max和min属性，以达到根据实际数据动态调整，使折线图的波动明显。且第一个点始终在Y轴中间位置，[效果图](https://raw.githubusercontent.com/mrdulin/pic-bucket-01/master/Dingtalk_20240724140535.jpg)
+
 ## 测试
 
 运行全部组件测试
