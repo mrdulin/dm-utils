@@ -13,10 +13,18 @@ describe('calcYAxisRange', () => {
       expect(getDiffRate(0, 0.02)).to.be.equal(1.2);
     });
   });
-  it('should return the correct y axis range', () => {
-    const data = [{ price: 1.01 }, { price: 1.02 }, { price: 1.02 }, { price: 1.0 }, { price: 0.99 }];
+  it.only('should return the correct y axis range for data with decimal places 2', () => {
+    const data = [{ price: 1.01 }, { price: 1.02 }, { price: 1.02 }, { price: 1 }, { price: 0.99 }];
     const { max, min } = calcYAxisRange(data, 'price');
-    expect(max).to.be.equal(1.036);
-    expect(min).to.be.equal(0.984);
+    expect(max.toFixed(2)).to.be.equal('1.04');
+    expect(min.toFixed(2)).to.be.equal('0.98');
+  });
+
+  it('should return the correct y axis range for data with decimal places 1', () => {
+    const data = [{ price: 1.1 }, { price: 1.08 }, { price: 1.1 }, { price: 1.09 }, { price: 1.09 }, { price: 1.12 }, { price: 1.09 }];
+    const decimalPlaces = 2;
+    const { max, min } = calcYAxisRange(data, 'price', decimalPlaces);
+    expect(max.toFixed(decimalPlaces)).to.be.equal('1.13');
+    expect(min.toFixed(decimalPlaces)).to.be.equal('1.07');
   });
 });

@@ -446,7 +446,7 @@ deep merge Echarts配置，用法见[测试用例](./tests//echarts/echarts.cy.t
 
 填充的点的Y轴值为前一个点的值, 时间示例: [9:23, 9:27] => [9:23, 9:25, 9:27, 9:30]，更多，见[测试用例](./tests/echarts/fill.cy.ts)
 
-- `calcYAxisRange<T extends Record<string, any>, Key extends keyof T>(data: T[], key: Key, splitNumber = 5): { max:number; min:number }`
+- `calcYAxisRange<T extends Record<string, any>, Key extends keyof T>(data: T[], key: Key, decimalPlaces = 2, splitNumber = 5): { max:number; min:number }`
 
 计算echarts YAxis的max和min属性，以达到根据实际数据动态调整，使折线图的波动明显。且第一个点始终在Y轴中间位置，[效果图](https://raw.githubusercontent.com/mrdulin/pic-bucket-01/master/Dingtalk_20240724140535.jpg)
 

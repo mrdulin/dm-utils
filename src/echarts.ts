@@ -1,5 +1,4 @@
 import dayjs from 'dayjs';
-import Decimal from 'decimal.js-light';
 import deepmerge, { ArrayMergeOptions } from 'deepmerge';
 import { EChartsOption } from 'echarts';
 import { trueTypeOf } from './operator';
@@ -72,12 +71,13 @@ export function fill<T extends Record<string, any>, XAxisField extends keyof T, 
  * 判断max-min是否被5等分(是否小于0.01)，小于0.01表示不能被5等分，基础倍率增加0.1后，再次判断，直到被5等分
  * @param first
  * @param maxDiff
+ * @param decimalPlaces
+ * @param splitNumber
  * @returns 最大差值倍率
  */
-export const getDiffRate = (first: number, maxDiff: number, splitNumber = 5): number => {
+export const getDiffRate = (first: number, maxDiff: number, decimalPlaces = 2, splitNumber = 5): number => {
   let diffRate = 1.2;
   if (first === 0) return diffRate;
-  const decimalPlaces = new Decimal(first).dp();
   const minDiff = 1 / Math.pow(10, decimalPlaces);
 
   function calc(f: number, d: number): number {
@@ -97,10 +97,16 @@ export const getDiffRate = (first: number, maxDiff: number, splitNumber = 5): nu
  * 计算echarts YAxis的max和min属性，以达到根据实际数据动态调整，使折线图的波动明显。且第一个点始终在Y轴中间位置
  * @param data 原始数据
  * @param key Y轴字段
+ * @param decimalPlaces Y轴值的精度(小数位数)
  * @param splitNumber Y轴splitNumber属性
  * @returns
  */
-export function calcYAxisRange<T extends Record<string, any>, Key extends keyof T>(data: T[], key: Key, splitNumber = 5) {
+export function calcYAxisRange<T extends Record<string, any>, Key extends keyof T>(
+  data: T[],
+  key: Key,
+  decimalPlaces = 2,
+  splitNumber = 5,
+) {
   const maxValue = Math.max(...data.map((o) => o[key])) ?? 0;
   const minValue = Math.min(...data.map((o) => o[key])) ?? 0;
   let firstValue = 0;
@@ -115,7 +121,7 @@ export function calcYAxisRange<T extends Record<string, any>, Key extends keyof 
   // 例如：first = 1, max = 1.3, min = 0.6, maxDiff = abs(min - first) = 0.4
   const maxDiff = Math.max(Math.abs(maxValue - firstValue), Math.abs(minValue - firstValue));
   // 差值缩放比例
-  const diffRate = getDiffRate(firstValue, maxDiff, splitNumber);
+  const diffRate = getDiffRate(firstValue, maxDiff, decimalPlaces, splitNumber);
 
   const max = firstValue + (maxDiff === 0 ? firstValue / 6 : maxDiff * diffRate);
   const min = firstValue - (maxDiff === 0 ? firstValue / 6 : maxDiff * diffRate);
