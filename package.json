@@ -61,6 +61,7 @@
     "vite": "^4.5.2"
   },
   "dependencies": {
+    "dayjs": "^1.11.12",
     "decimal.js-light": "^2.5.1",
     "deepmerge": "^4.3.1",
     "react-fast-compare": "^3.2.2"
