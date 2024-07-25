@@ -99,7 +99,7 @@ const Test = () => {
 
 - `EnhancedComponent.prototype.setStateAsync(state)`
 
-setState 方法的同步版本
+`setState()`方法的同步版本
 
 ```ts
 import { react } from '@d-matrix/utils';
@@ -300,6 +300,24 @@ const t1 = {
   result: 0,
 };
 type T1 =  FunctionPropertyNames<typeof t1>; // 'result'
+```
+
+- `ValueOf<T>`
+
+获取对象中`key`的值，返回由这些值组成的union type
+
+```ts
+const map = {
+  0: '0m',
+  1: '1m',
+  2: '2m',
+  3: '3m',
+  4: '4m',
+  5: '5m',
+  6: '6m',
+} as const;
+
+type T0 = ValueOf<typeof map>; // '0m' | '1m' | '2m' | '3m' | '4m' | '5m' | '6m'
 ```
 
 ### algorithm
