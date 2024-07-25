@@ -164,6 +164,20 @@ const Parent = () => {
 };
 ```
 
+- `useForwardRef = <T>(ref: ForwardedRef<T>, initialValue: any = null): React.MutableRefObject<T>`
+
+解决使用`React.forwardRef`后，在调用`ref.current.someMethod()`时, 出现`Property 'current' does not exist on type '(instance: HTMLInputElement | null) => void'` TS类型错误，具体问题见[这里](https://stackoverflow.com/questions/66060217/i-cant-type-the-ref-correctly-using-useref-hook-in-typescript)
+
+```ts
+const Input = React.forwardRef<HTMLInputElement, React.ComponentPropsWithRef<'input'>>((props, ref) => {
+  const forwardRef = useForwardRef<HTMLInputElement>(ref);
+  useEffect(() => {
+    forwardRef.current.focus();
+  });
+  return <input type="text" ref={forwardRef} value={props.value} />;
+});
+```
+
 ### dom
 
 - `scrollToTop(element: Element | null | undefined): void`

@@ -1,6 +1,6 @@
 import React from 'react';
 import { expectTypeOf } from 'expect-type';
-import type { InferRef } from '../src/react/types';
+import type { ComponentRef } from '../src/react/types';
 
 interface ChildRefProps {
   prop1: () => void;
@@ -23,7 +23,7 @@ const Child = React.forwardRef<ChildRefProps, ChildProps>((props, ref) => {
   return null;
 });
 
-type InferredChildRef = InferRef<typeof Child>;
+type InferredChildRef = ComponentRef<typeof Child>;
 
 const Parent = () => {
   const childRef = React.useRef<InferredChildRef>(null);

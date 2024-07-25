@@ -8,6 +8,7 @@ import {
   useDeepCompareRef,
   useIsMounted,
   useStateCallback,
+  useForwardRef,
 } from '../src/react';
 
 describe('react', () => {
@@ -197,6 +198,21 @@ describe('react', () => {
       cy.get('[data-cy=signalRef]').should('have.text', 2);
       cy.get('[data-cy=change-state]').click();
       cy.get('[data-cy=signalRef]').should('have.text', 2);
+    });
+  });
+
+  describe('useForwardRef', () => {
+    it("should handle the Property 'current' does not exist on type '(instance: HTMLInputElement | null) => void' TS type error", () => {
+      const Input = React.forwardRef<HTMLInputElement, React.ComponentPropsWithRef<'input'>>((props, ref) => {
+        const forwardRef = useForwardRef<HTMLInputElement>(ref);
+        useEffect(() => {
+          forwardRef.current.focus();
+        });
+        return <input data-cy="input" type="text" ref={forwardRef} value={props.value} />;
+      });
+
+      cy.mount(<Input />);
+      cy.get('[data-cy=input]').should('have.focus');
     });
   });
 });

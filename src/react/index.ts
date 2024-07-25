@@ -6,3 +6,4 @@ export * from './useCopyToClipboard';
 export * from './enhancedComponent';
 export * from './useDeepCompareRef';
 export * from './types';
+export * from './useForwardRef';

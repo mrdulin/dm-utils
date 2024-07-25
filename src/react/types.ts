@@ -1,4 +1,17 @@
-import type { ForwardRefExoticComponent } from 'react';
+import type {
+  ForwardRefExoticComponent,
+  NamedExoticComponent,
+  ComponentPropsWithoutRef,
+  ComponentPropsWithRef,
+  RefAttributes,
+  ElementType,
+} from 'react';
+
+export type ComponentRef<T extends ElementType> = T extends NamedExoticComponent<ComponentPropsWithoutRef<T> & RefAttributes<infer Method>>
+  ? Method
+  : ComponentPropsWithRef<T> extends RefAttributes<infer Method>
+  ? Method
+  : never;
 
 // https://stackoverflow.com/a/76735017/6463558
 export type InferRef<T> = T extends ForwardRefExoticComponent<infer Ref>
