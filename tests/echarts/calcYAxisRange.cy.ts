@@ -12,6 +12,10 @@ describe('calcYAxisRange', () => {
     it('should return default diff rate if first value is 0', () => {
       expect(getDiffRate(0, 0.02)).to.be.equal(1.2);
     });
+
+    it('should return the default rate if the maxDiff is 0', () => {
+      expect(getDiffRate(1.65, 0)).to.be.equal(1.2);
+    });
   });
   it.only('should return the correct y axis range for data with decimal places 2', () => {
     const data = [{ price: 1.01 }, { price: 1.02 }, { price: 1.02 }, { price: 1 }, { price: 0.99 }];

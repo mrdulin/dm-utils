@@ -77,7 +77,7 @@ export function fill<T extends Record<string, any>, XAxisField extends keyof T, 
  */
 export const getDiffRate = (first: number, maxDiff: number, decimalPlaces = 2, splitNumber = 5): number => {
   let diffRate = 1.2;
-  if (first === 0) return diffRate;
+  if (first === 0 || maxDiff === 0) return diffRate;
   const minDiff = 1 / Math.pow(10, decimalPlaces);
 
   function calc(f: number, d: number): number {
