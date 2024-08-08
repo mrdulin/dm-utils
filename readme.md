@@ -178,6 +178,24 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentPropsWithRef<'in
 });
 ```
 
+- `useMediaQuery`
+
+使用[Match Media API](https://developer.mozilla.org/en-US/docs/Web/API/Window/matchMedia) 检测当前document是否匹配media query
+
+```ts
+import { useMediaQuery } from '@d-matrix/utils/react'
+
+export default function Component() {
+  const matches = useMediaQuery('(min-width: 768px)')
+
+  return (
+    <div>
+      {`The view port is ${matches ? 'at least' : 'less than'} 768 pixels wide`}
+    </div>
+  )
+}
+```
+
 ### dom
 
 - `scrollToTop(element: Element | null | undefined): void`

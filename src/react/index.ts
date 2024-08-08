@@ -7,3 +7,5 @@ export * from './enhancedComponent';
 export * from './useDeepCompareRef';
 export * from './types';
 export * from './useForwardRef';
+export * from './useIsomorphicLayoutEffect';
+export * from './useMediaQuery';
