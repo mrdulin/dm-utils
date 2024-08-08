@@ -178,7 +178,7 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentPropsWithRef<'in
 });
 ```
 
-- `useMediaQuery`
+- `useMediaQuery(query, options?): boolean`
 
 使用[Match Media API](https://developer.mozilla.org/en-US/docs/Web/API/Window/matchMedia) 检测当前document是否匹配media query
 
