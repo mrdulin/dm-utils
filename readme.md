@@ -19,6 +19,7 @@ A dozen of utils for Front-End Development
 - [operator](#operator)
 - [decimal](#decimal)
 - [object](#object)
+- [array](#array)
 - [echarts](#echarts)
 
 ### clipboard
@@ -483,6 +484,30 @@ type FormatOptions = {
 removeZeroValueKeys({ a: '', b: 'abc', c: undefined, d: null, e: NaN, f: -1, g: [], h: {} })
 // { b: 'abc', f: -1 }
 ```
+
+## array
+
+- `arrayMoveImmutable<T>(array: T[], fromIndex: number, toIndex: number): T[]`
+
+```js
+import { arrayMoveImmutable } from '@d-matrix/utils';
+
+const input = ['a', 'b', 'c'];
+
+const array1 = arrayMoveImmutable(input, 1, 2);
+console.log(array1);
+//=> ['a', 'c', 'b']
+
+const array2 = arrayMoveImmutable(input, -1, 0);
+console.log(array2);
+//=> ['c', 'a', 'b']
+
+const array3 = arrayMoveImmutable(input, -2, -3);
+console.log(array3);
+//=> ['b', 'a', 'c']
+```
+
+- `arrayMoveMutable<T>(array: T[], fromIndex: number, toIndex: number): void`
 
 ## echarts
 
