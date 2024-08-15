@@ -1,4 +1,4 @@
-export function arrayMoveMutable<T>(array: T[], fromIndex: number, toIndex: number): void {
+export function moveMutable<T>(array: T[], fromIndex: number, toIndex: number): void {
   const startIndex = fromIndex < 0 ? array.length + fromIndex : fromIndex;
 
   if (startIndex >= 0 && startIndex < array.length) {
@@ -9,8 +9,8 @@ export function arrayMoveMutable<T>(array: T[], fromIndex: number, toIndex: numb
   }
 }
 
-export function arrayMoveImmutable<T>(array: T[], fromIndex: number, toIndex: number): T[] {
+export function moveImmutable<T>(array: T[], fromIndex: number, toIndex: number): T[] {
   const newArray = [...array];
-  arrayMoveMutable(newArray, fromIndex, toIndex);
+  moveMutable(newArray, fromIndex, toIndex);
   return newArray;
 }

@@ -487,27 +487,27 @@ removeZeroValueKeys({ a: '', b: 'abc', c: undefined, d: null, e: NaN, f: -1, g: 
 
 ## array
 
-- `arrayMoveImmutable<T>(array: T[], fromIndex: number, toIndex: number): T[]`
+- `moveImmutable<T>(array: T[], fromIndex: number, toIndex: number): T[]`
 
 ```js
-import { arrayMoveImmutable } from '@d-matrix/utils';
+import { array } from '@d-matrix/utils';
 
 const input = ['a', 'b', 'c'];
 
-const array1 = arrayMoveImmutable(input, 1, 2);
+const array1 = array.moveImmutable(input, 1, 2);
 console.log(array1);
 //=> ['a', 'c', 'b']
 
-const array2 = arrayMoveImmutable(input, -1, 0);
+const array2 = array.moveImmutable(input, -1, 0);
 console.log(array2);
 //=> ['c', 'a', 'b']
 
-const array3 = arrayMoveImmutable(input, -2, -3);
+const array3 = array.moveImmutable(input, -2, -3);
 console.log(array3);
 //=> ['b', 'a', 'c']
 ```
 
-- `arrayMoveMutable<T>(array: T[], fromIndex: number, toIndex: number): void`
+- `moveMutable<T>(array: T[], fromIndex: number, toIndex: number): void`
 
 ## echarts
 
