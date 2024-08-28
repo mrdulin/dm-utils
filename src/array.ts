@@ -14,3 +14,10 @@ export function moveImmutable<T>(array: T[], fromIndex: number, toIndex: number)
   moveMutable(newArray, fromIndex, toIndex);
   return newArray;
 }
+
+export function moveToStart<T>(array: T[], predicate: (item: T) => boolean): T[] {
+  const newArray = [...array];
+  const index = array.findIndex(predicate);
+  moveMutable(newArray, index, 0);
+  return newArray;
+}

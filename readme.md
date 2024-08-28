@@ -509,6 +509,19 @@ console.log(array3);
 
 - `moveMutable<T>(array: T[], fromIndex: number, toIndex: number): void`
 
+- `moveToStart<T>(array: T[], predicate: (item: T) => boolean): T[]`
+
+移动元素到数组首位，不会修改原数组
+
+```js
+import { array } from '@d-matrix/utils';
+
+const list = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
+const newList = array.moveToStart(list, (item) => item.id === 4);
+
+// [{ id: 4 }, { id: 1 }, { id: 2 }, { id: 3 }, { id: 5 }]
+```
+
 ## echarts
 
 - `mergeOption(defaults: EChartsOption, overrides: EChartsOption, option?: deepmerge.Options): EChartsOption`
