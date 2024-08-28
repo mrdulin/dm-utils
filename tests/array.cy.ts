@@ -13,5 +13,11 @@ describe('array', () => {
       const newArray = moveToStart(array, (item) => item.id === 4);
       expect(newArray).to.deep.equal([{ id: 4 }, { id: 1 }, { id: 2 }, { id: 3 }, { id: 5 }]);
     });
+
+    it('should not move any element the target element is not found', () => {
+      const array = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
+      const newArray = moveToStart(array, (item) => item.id === 5);
+      expect(newArray).to.deep.equal([{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]);
+    });
   });
 });

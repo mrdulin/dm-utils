@@ -16,8 +16,9 @@ export function moveImmutable<T>(array: T[], fromIndex: number, toIndex: number)
 }
 
 export function moveToStart<T>(array: T[], predicate: (item: T) => boolean): T[] {
-  const newArray = [...array];
   const index = array.findIndex(predicate);
+  if (index < 0) return array;
+  const newArray = [...array];
   moveMutable(newArray, index, 0);
   return newArray;
 }
