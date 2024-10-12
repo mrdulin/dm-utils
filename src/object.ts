@@ -21,3 +21,11 @@ export const removeZeroValueKeys = <T extends Record<string, any>>(obj: T, zeroV
   }
   return r;
 };
+
+/**
+ * 返回tuple，而不是string[]
+ * const obj = { a: 1, b: '2' };
+ * Object.keys(obj) => string[]
+ * typedKeys({ a: 1, b: '2' }) => ('a' | 'b')[]
+ */
+export const typedKeys = Object.keys as <T extends object>(obj: T) => Array<keyof T>;

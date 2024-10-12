@@ -1,6 +1,14 @@
 import { expectTypeOf } from 'expect-type';
 
-import type { WithOptional, ExcludePickPartial, Undefinable, FunctionPropertyNames, NonFunctionPropertyNames, ValueOf } from '../src/types';
+import type {
+  WithOptional,
+  ExcludePickPartial,
+  Undefinable,
+  FunctionPropertyNames,
+  NonFunctionPropertyNames,
+  ValueOf,
+  WithRequired,
+} from '../src/types';
 
 expectTypeOf<{ a: number; b: string; c?: string }>().branded.toEqualTypeOf<WithOptional<{ a: number; b: string; c: string }, 'c'>>();
 
@@ -39,3 +47,10 @@ const map = {
 } as const;
 
 expectTypeOf<'0m' | '1m' | '2m' | '3m' | '4m' | '5m' | '6m'>().toEqualTypeOf<ValueOf<typeof map>>();
+
+type WithRequiredInput = {
+  a: number;
+  b?: string;
+};
+
+expectTypeOf<{ a: number; b: string }>().branded.toEqualTypeOf<WithRequired<WithRequiredInput, 'b'>>();

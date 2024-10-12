@@ -1,4 +1,5 @@
-import { removeZeroValueKeys, ZeroValues } from '../src/object';
+import { expectTypeOf } from 'expect-type';
+import { typedKeys, removeZeroValueKeys, ZeroValues } from '../src/object';
 
 describe('removeZeroValueKeys', () => {
   it('should remove the keys which value is "zero" value with default "zero" value option', () => {
@@ -13,5 +14,14 @@ describe('removeZeroValueKeys', () => {
         b: 'abc',
       },
     );
+  });
+});
+
+describe('getKeys', () => {
+  test('should get keys and TS type is tuple rather than string[]', () => {
+    const obj = { a: 1, b: '2' };
+    const keys = typedKeys(obj);
+    expect(keys).to.deep.equal(['a', 'b']);
+    expectTypeOf<('a' | 'b')[]>().toEqualTypeOf<typeof keys>();
   });
 });

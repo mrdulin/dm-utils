@@ -12,3 +12,4 @@ export * as decimal from './decimal';
 export * as object from './object';
 export * as echarts from './echarts';
 export * as array from './array';
+export * as number from './number';

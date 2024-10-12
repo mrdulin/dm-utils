@@ -13,3 +13,6 @@ export type NonFunctionPropertyNames<T> = { [P in keyof T]-?: T[P] extends Funct
 
 /** 获取对象中key的值，返回由这些值组成的union type */
 export type ValueOf<T> = T[keyof T];
+
+/** 指定属性变为必选 */
+export type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };

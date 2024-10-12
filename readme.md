@@ -20,6 +20,7 @@ A dozen of utils for Front-End Development
 - [decimal](#decimal)
 - [object](#object)
 - [array](#array)
+- [number](#number)
 - [echarts](#echarts)
 
 ### clipboard
@@ -339,6 +340,18 @@ const map = {
 type T0 = ValueOf<typeof map>; // '0m' | '1m' | '2m' | '3m' | '4m' | '5m' | '6m'
 ```
 
+- `WithRequired<T, K extends keyof T>`
+
+指定属性变为必选
+
+```ts
+type Input = {
+  a: number;
+  b?: string;
+};
+type Output = WithRequired<Input, 'b'> // { a: number; b: string }
+```
+
 ### algorithm
 
 - `moveMulti<T extends unknown>(arr: T[], indexes: number[], start: number): T[]`
@@ -485,6 +498,16 @@ removeZeroValueKeys({ a: '', b: 'abc', c: undefined, d: null, e: NaN, f: -1, g: 
 // { b: 'abc', f: -1 }
 ```
 
+- `typedKeys(obj: T): Array<keyof T>`
+
+返回`tuple`，而不是`string[]`
+
+```ts
+const obj = { a: 1, b: '2' };
+Object.keys(obj) //  string[]
+object.typedKeys({ a: 1, b: '2' }) // ('a' | 'b')[]
+```
+
 ## array
 
 - `moveImmutable<T>(array: T[], fromIndex: number, toIndex: number): T[]`
@@ -521,6 +544,12 @@ const newList = array.moveToStart(list, (item) => item.id === 4);
 
 // [{ id: 4 }, { id: 1 }, { id: 2 }, { id: 3 }, { id: 5 }]
 ```
+
+## number
+
+- `randomInt(min: number, max: number): number`
+
+返回`min`, `max`之间的随机整数
 
 ## echarts
 
