@@ -354,9 +354,22 @@ type Output = WithRequired<Input, 'b'> // { a: number; b: string }
 
 ### algorithm
 
-- `moveMulti<T extends unknown>(arr: T[], indexes: number[], start: number): T[]`
+- `function nodeCountAtDepth(root: Record<string, any>, depth: number, childrenKey: string = 'children'): number;`
 
-移动多个元素到数组中指定的位置,用法,见[测试用例](tests/algorithm.cy.ts)
+计算指定层级的节点数量
+
+```ts
+const root = {
+  id: 1,
+  children: [
+    { id: 2, children: [{ id: 21 }, { id: 22 }, { id: 23 }] },
+    { id: 3, children: [{ id: 31 }, { id: 32 }, { id: 33 }] },
+  ],
+};
+expect(tree.nodeCountAtDepth(root, 0)).to.be.equal(1);
+expect(tree.nodeCountAtDepth(root, 1)).to.be.equal(2);
+expect(tree.nodeCountAtDepth(root, 2)).to.be.equal(6);
+```
 
 ### file
 
@@ -545,6 +558,10 @@ const newList = array.moveToStart(list, (item) => item.id === 4);
 // [{ id: 4 }, { id: 1 }, { id: 2 }, { id: 3 }, { id: 5 }]
 ```
 
+- `moveMulti<T extends unknown>(arr: T[], indexes: number[], start: number): T[]`
+
+移动多个元素到数组中指定的位置,用法,见[测试用例](tests/algorithm.cy.ts)
+
 ## number
 
 - `randomInt(min: number, max: number): number`
@@ -572,13 +589,13 @@ deep merge Echarts配置，用法见[测试用例](./tests//echarts/echarts.cy.t
 运行全部组件测试
 
 ```bash
-npm run cy:run -- --component
+npm run cy:component:all
 ```
 
 运行单个组件测试
 
 ```bash
-npm run cy:run -- --component --spec tests/date.cy.ts
+npm run cy:component -- tests/date.cy.ts
 ```
 
 运行E2E测试
