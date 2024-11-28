@@ -43,3 +43,36 @@ export const findNode = <T extends Record<string, any>>(tree: T[], predicate: (n
   }
   return null;
 };
+
+/**
+ * 根据子节点查找父节点
+ * @param tree
+ * @param child 子节点
+ * @param indentityKey 节点唯一id字段名称
+ * @param childrenKey 节点的子节点的字段名称
+ * @returns
+ */
+export const findParent = <T extends Record<string, any>>(
+  tree: T | undefined,
+  child: T | undefined,
+  indentityKey = 'id',
+  childrenKey = 'children',
+): T | null => {
+  if (tree === undefined || child === undefined) {
+    return null;
+  }
+  const children = tree[childrenKey];
+  if (Array.isArray(children)) {
+    const count = children.length;
+    for (let i = 0; i < count; i++) {
+      if (children[i][indentityKey] === child[indentityKey]) {
+        return tree;
+      }
+      const parent = findParent(children[i], child, indentityKey, childrenKey);
+      if (parent !== null) {
+        return parent;
+      }
+    }
+  }
+  return null;
+};

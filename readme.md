@@ -390,6 +390,23 @@ const actual2 = tree.findNode([root], (node) => node.id === 33);
 expect(actual2).to.be.deep.equal(root.children[1].children[2]);
 ```
 
+- `tree.findNode(tree, child, indentityKey, childrenKey)`
+
+根据子节点查找父节点
+
+```ts
+const treeData = {
+  code: 1,
+  subs: [
+    { code: 2, subs: [{ code: 21 }, { code: 22 }, { code: 23 }] },
+    { code: 3, subs: [{ code: 31 }, { code: 32 }, { code: 33 }] },
+  ],
+};
+
+const actual = tree.findParent(treeData, treeData.subs[1].subs[2], 'code', 'subs');
+expect(actual).to.be.deep.equal(treeData.subs[1]);
+```
+
 ### file
 
 - `toImage(file: BlobPart | FileURL, options?: BlobPropertyBag): Promise<HTMLImageElement>`

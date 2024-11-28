@@ -8,7 +8,6 @@ const root = {
   ],
 };
 
-
 describe('tree', () => {
   describe('nodeCountAtDepth', () => {
     it('should pass', () => {
@@ -25,6 +24,31 @@ describe('tree', () => {
 
       const actual2 = tree.findNode([root], (node) => node.id === 33);
       expect(actual2).to.be.deep.equal(root.children[1].children[2]);
+    });
+
+    it('should find parent node', () => {
+      const actual = tree.findNode([root], (node) => node.children.findIndex((n) => n.id === 33) > -1);
+      expect(actual).to.be.deep.equal(root.children[1]);
+    });
+  });
+
+  describe('findParent', () => {
+    it('should find parent node with default indentityKey and childrenKey', () => {
+      const actual = tree.findParent(root, root.children[1].children[2]);
+      expect(actual).to.be.deep.equal(root.children[1]);
+    });
+
+    it('should find parent node with specified indentityKey and childrenKey', () => {
+      const treeData = {
+        code: 1,
+        subs: [
+          { code: 2, subs: [{ code: 21 }, { code: 22 }, { code: 23 }] },
+          { code: 3, subs: [{ code: 31 }, { code: 32 }, { code: 33 }] },
+        ],
+      };
+
+      const actual = tree.findParent(treeData, treeData.subs[1].subs[2], 'code', 'subs');
+      expect(actual).to.be.deep.equal(treeData.subs[1]);
     });
   });
 });
