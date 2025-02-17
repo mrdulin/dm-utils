@@ -50,7 +50,7 @@ export const findNode = <T extends Record<string, any>>(tree: T[], predicate: (n
  * @param child 子节点
  * @param indentityKey 节点唯一id字段名称
  * @param childrenKey 节点的子节点的字段名称
- * @returns
+ * @returns 父节点
  */
 export const findParent = <T extends Record<string, any>>(
   tree: T | undefined,
@@ -76,3 +76,29 @@ export const findParent = <T extends Record<string, any>>(
   }
   return null;
 };
+
+/**
+ * 查找节点路径
+ * @param tree
+ * @param func 符合条件的节点函数,返回 boolean
+ * @param childrenKey 子节点key
+ * @returns 节点路径
+ */
+export function findPath<T extends Record<string, any>>(tree: T[], func: (node: T) => boolean, childrenKey = 'children'): T[] | null {
+  const path = [];
+  const list = [...tree];
+  const visitedSet = new Set();
+  while (list.length) {
+    const node = list[0];
+    if (visitedSet.has(node)) {
+      path.pop();
+      list.shift();
+    } else {
+      visitedSet.add(node);
+      Array.isArray(node[childrenKey]) && list.unshift(...node[childrenKey]);
+      path.push(node);
+      if (func(node)) return path;
+    }
+  }
+  return null;
+}

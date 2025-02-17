@@ -51,4 +51,16 @@ describe('tree', () => {
       expect(actual).to.be.deep.equal(treeData.subs[1]);
     });
   });
+
+  describe('findPath', () => {
+    it('should find path', () => {
+      const actual = tree.findPath([root], (node) => node.id === 33);
+      expect(actual).to.be.deep.equal([root, root.children[1], root.children[1].children[2]]);
+    });
+
+    it('should return null if not found', () => {
+      const actual = tree.findPath([root], (node) => node.id === 34);
+      expect(actual).to.be.null;
+    });
+  });
 });

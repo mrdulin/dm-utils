@@ -407,6 +407,23 @@ const actual = tree.findParent(treeData, treeData.subs[1].subs[2], 'code', 'subs
 expect(actual).to.be.deep.equal(treeData.subs[1]);
 ```
 
+- `function findPath<T extends Record<string, any>>(tree: T[], func: (node: T) => boolean, childrenKey = 'children'): T[] | null`
+
+查找节点路径, 返回节点数组或`null`
+
+```ts
+const treeData = {
+  code: 1,
+  subs: [
+    { code: 2, subs: [{ code: 21 }, { code: 22 }, { code: 23 }] },
+    { code: 3, subs: [{ code: 31 }, { code: 32 }, { code: 33 }] },
+  ],
+};
+
+const actual = tree.findPath([root], (node) => node.id === 33);
+expect(actual).to.be.deep.equal([root, root.children[1], root.children[1].children[2]]);
+```
+
 ### file
 
 - `toImage(file: BlobPart | FileURL, options?: BlobPropertyBag): Promise<HTMLImageElement>`
