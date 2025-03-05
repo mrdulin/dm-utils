@@ -114,6 +114,8 @@ export function download(source: string | Blob, fileName = '', target?: HyperLin
     if (typeof target === 'string' && HyperLinkTargets.includes(target)) {
       link.target = target;
     } else {
+      // https://stackoverflow.com/questions/33909763/download-attribute-with-a-file-name-not-working
+      // download 只在同源 URL 或 blob:、data: 协议起作用, 如果下载不同源的oss文件，download属性无效
       link.download = fileName;
     }
     link.href = source;
