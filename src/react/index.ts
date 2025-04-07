@@ -9,3 +9,4 @@ export * from './types';
 export * from './useForwardRef';
 export * from './useIsomorphicLayoutEffect';
 export * from './useMediaQuery';
+export * from './useIsFirstRender';

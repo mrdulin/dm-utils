@@ -198,6 +198,10 @@ export default function Component() {
 }
 ```
 
+- `useIsFirstRender(): boolean`
+
+对于确定当前渲染是否是组件的第一个渲染很有用。当你想在初始渲染时有条件地执行某些逻辑或渲染特定组件时，这个 hook 特别有价值，提供了一种有效的方法来区分第一次和后续渲染。
+
 ### dom
 
 - `scrollToTop(element: Element | null | undefined): void`

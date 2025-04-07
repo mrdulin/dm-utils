@@ -23,7 +23,6 @@ export function moveToStart<T>(array: T[], predicate: (item: T) => boolean): T[]
   return newArray;
 }
 
-
 const removeSymbol = Symbol('Placeholder for removed element');
 export const moveMulti = <T extends unknown>(arr: T[], indexes: number[], start: number): T[] => {
   const cloned: (T | Symbol)[] = arr.slice();
@@ -36,3 +35,4 @@ export const moveMulti = <T extends unknown>(arr: T[], indexes: number[], start:
   cloned.splice(start, 0, ...els);
   return cloned.filter((v): v is T => v !== removeSymbol);
 };
+
