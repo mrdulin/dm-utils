@@ -102,3 +102,23 @@ export function findPath<T extends Record<string, any>>(tree: T[], func: (node: 
   }
   return null;
 }
+
+export function flatten<T extends Record<string, any>>(tree: T[], childrenKey = 'children'): Record<string, any>[] {
+  const result: Record<string, any>[] = [];
+
+  function traverse(node: T) {
+    // 将当前节点添加到结果数组
+    const { [childrenKey]: __, ...nodePropsOmitChildren } = node;
+    result.push(nodePropsOmitChildren);
+    const children: T[] | undefined = node[childrenKey];
+    // 如果节点有子节点，则递归处理每个子节点
+    if (children && Array.isArray(children) && children.length > 0) {
+      children.forEach((child) => traverse(child));
+    }
+  }
+
+  // 遍历树的每个根节点
+  tree.forEach((root) => traverse(root));
+
+  return result;
+}

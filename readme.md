@@ -429,6 +429,10 @@ const actual = tree.findPath([root], (node) => node.id === 33);
 expect(actual).to.be.deep.equal([root, root.children[1], root.children[1].children[2]]);
 ```
 
+- `tree.flatten(tree, T[], childrenKey = 'children')`
+
+扁平化树结构, 返回的每个节点没有`children`属性
+
 ### file
 
 - `toImage(file: BlobPart | FileURL, options?: BlobPropertyBag): Promise<HTMLImageElement>`

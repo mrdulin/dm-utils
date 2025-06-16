@@ -63,4 +63,45 @@ describe('tree', () => {
       expect(actual).to.be.null;
     });
   });
+
+  describe('flatten', () => {
+    it('should flatten tree and omit the "children" property', () => {
+      const treeData = {
+        id: 1,
+        title: 'a',
+        children: [
+          {
+            id: 2,
+            title: 'a-c1',
+            children: [
+              { id: 21, title: 'a-c1-c1' },
+              { id: 22, title: 'a-c1-c2' },
+              { id: 23, title: 'a-c1-c3' },
+            ],
+          },
+          {
+            id: 3,
+            title: 'a-c2',
+            children: [
+              { id: 31, title: 'a-c2-c1' },
+              { id: 32, title: 'a-c2-c2' },
+              { id: 33, title: 'a-c2-c3' },
+            ],
+          },
+        ],
+      };
+      const actual = tree.flatten([treeData]);
+      expect(actual).to.be.deep.equal([
+        { id: 1, title: 'a' },
+        { id: 2, title: 'a-c1' },
+        { id: 21, title: 'a-c1-c1' },
+        { id: 22, title: 'a-c1-c2' },
+        { id: 23, title: 'a-c1-c3' },
+        { id: 3, title: 'a-c2' },
+        { id: 31, title: 'a-c2-c1' },
+        { id: 32, title: 'a-c2-c2' },
+        { id: 33, title: 'a-c2-c3' },
+      ]);
+    });
+  });
 });
