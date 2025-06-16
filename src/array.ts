@@ -36,3 +36,6 @@ export const moveMulti = <T extends unknown>(arr: T[], indexes: number[], start:
   return cloned.filter((v): v is T => v !== removeSymbol);
 };
 
+export const getArrayOrUndefined = <T>(array?: T[] | undefined | null): T[] | undefined => {
+  if (Array.isArray(array) && array.length > 0) return array;
+};

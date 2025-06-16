@@ -1,4 +1,4 @@
-import { moveMulti, moveToStart } from '../src/array';
+import { getArrayOrUndefined, moveMulti, moveToStart } from '../src/array';
 
 describe('array', () => {
   describe('moveToStart', () => {
@@ -21,7 +21,6 @@ describe('array', () => {
     });
   });
 
-
   describe('moveMulti', () => {
     it('should move elements correctly', () => {
       const a = [1, 2, 3, 4, 5];
@@ -39,6 +38,26 @@ describe('array', () => {
       const a = [1, undefined, 2, 3, 2];
       const result = moveMulti(a, [1, 2], 4);
       expect(result).to.deep.equal([1, 3, undefined, 2, 2]);
+    });
+  });
+
+  describe('getArrayOrUndefined', () => {
+    it('should return undefined if the input is not an array', () => {
+      const x: { fields?: number[] } = {};
+      const result = getArrayOrUndefined(x.fields);
+      expect(result).to.be.undefined;
+    });
+
+    it('should return the array if the array is not empty', () => {
+      const x: { fields?: number[] } = { fields: [1, 2, 3] };
+      const result = getArrayOrUndefined(x.fields);
+      expect(result).to.deep.equal([1, 2, 3]);
+    });
+
+    it('should return undefined if the array is empty', () => {
+      const x: { fields?: number[] } = { fields: [] };
+      const result = getArrayOrUndefined(x.fields);
+      expect(result).to.be.undefined;
     });
   });
 });

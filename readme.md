@@ -22,6 +22,7 @@ A dozen of utils for Front-End Development
 - [array](#array)
 - [number](#number)
 - [echarts](#echarts)
+- [color](#color)
 
 ### clipboard
 
@@ -619,6 +620,10 @@ const newList = array.moveToStart(list, (item) => item.id === 4);
 
 移动多个元素到数组中指定的位置,用法,见[测试用例](tests/algorithm.cy.ts)
 
+- `getArrayOrUndefined<T>(array?: T[] | undefined | null): T[] | undefined`
+
+如果`array`是数组且不为空,返回该数组，否则返回`undefined`,见[测试用例](tests/array.cy.ts)
+
 ## number
 
 - `randomInt(min: number, max: number): number`
@@ -640,6 +645,12 @@ deep merge Echarts配置，用法见[测试用例](./tests//echarts/echarts.cy.t
 - `calcYAxisRange<T extends Record<string, any>, Key extends keyof T>(data: T[], key: Key, decimalPlaces = 2, splitNumber = 5): { max:number; min:number }`
 
 计算echarts YAxis的max和min属性，以达到根据实际数据动态调整，使折线图的波动明显。且第一个点始终在Y轴中间位置，[效果图](https://raw.githubusercontent.com/mrdulin/pic-bucket-01/master/Dingtalk_20240724140535.jpg)
+
+## color
+
+- `hexToRGBA(hex: string, alpha: number | string = 1): string`
+
+将十六进制颜色转换为 RGBA 颜色, 见[测试用例](./tests/color.cy.ts)
 
 ## 测试
 
