@@ -1,7 +1,7 @@
 {
   "name": "@d-matrix/utils",
   "sideEffects": false,
-  "version": "1.27.0",
+  "version": "1.27.1",
   "description": "A dozen of utils for Front-End Development",
   "main": "dist/index.js",
   "scripts": {
