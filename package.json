@@ -21,7 +21,7 @@
     "start": "serve -l 64055 -n ./public"
   },
   "engines": {
-    "node": ">=16.20.0"
+    "node": "^16"
   },
   "repository": {
     "type": "git",
