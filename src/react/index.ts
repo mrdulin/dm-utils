@@ -12,3 +12,4 @@ export * from './useMediaQuery';
 export * from './useIsFirstRender';
 export * from './useStateCallback';
 export * from './useSafeTimeout';
+export * from './useId';
