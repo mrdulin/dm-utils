@@ -18,7 +18,7 @@ describe('removeZeroValueKeys', () => {
 });
 
 describe('getKeys', () => {
-  test('should get keys and TS type is tuple rather than string[]', () => {
+  it('should get keys and TS type is tuple rather than string[]', () => {
     const obj = { a: 1, b: '2' };
     const keys = typedKeys(obj);
     expect(keys).to.deep.equal(['a', 'b']);
