@@ -80,7 +80,7 @@ const legacyWriteText = (text: string) => {
  * @returns
  */
 export async function writeText(text: string) {
-  if (!navigator.clipboard || typeof navigator.clipboard.writeText !== 'function') {
+  if (!navigator || !navigator.clipboard || typeof navigator.clipboard.writeText !== 'function') {
     legacyWriteText(text);
     return;
   }
