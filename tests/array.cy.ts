@@ -1,4 +1,4 @@
-import { getArrayOrUndefined, moveMulti, moveToStart } from '../src/array';
+import { calcUnusedMinSerialNumber, getArrayOrUndefined, moveMulti, moveToStart } from '../src/array';
 
 describe('array', () => {
   describe('moveToStart', () => {
@@ -58,6 +58,58 @@ describe('array', () => {
       const x: { fields?: number[] } = { fields: [] };
       const result = getArrayOrUndefined(x.fields);
       expect(result).to.be.undefined;
+    });
+  });
+
+  describe('calcUnusedMinSerialNumber', () => {
+    it('should return default value when list is empty', () => {
+      const result = calcUnusedMinSerialNumber([], { fieldName: 'name', prefix: 'test' });
+      expect(result).to.eq(1);
+    });
+
+    it('should return 1 when no items match the pattern', () => {
+      const list = [{ name: 'invalid-format' }, { name: 'another-invalid' }, { name: '' }];
+      const result = calcUnusedMinSerialNumber(list, { fieldName: 'name', prefix: 'test' });
+      expect(result).to.eq(1);
+    });
+
+    it('should return the first unused positive integer', () => {
+      const list = [{ name: 'test1' }, { name: 'test2' }, { name: 'test4' }];
+      const result = calcUnusedMinSerialNumber(list, { fieldName: 'name', prefix: 'test' });
+      expect(result).to.eq(3);
+    });
+
+    it('should handle non-sequential numbers', () => {
+      const list = [{ name: 'test5' }, { name: 'test10' }, { name: 'test15' }];
+      const result = calcUnusedMinSerialNumber(list, { fieldName: 'name', prefix: 'test' });
+      expect(result).to.eq(1);
+    });
+
+    it('should ignore invalid field values', () => {
+      const list = [{ name: null }, { name: 123 }, { name: '' }, { name: 'test2' }, { name: 'test3' }];
+      const result = calcUnusedMinSerialNumber(list, { fieldName: 'name', prefix: 'test' });
+      expect(result).to.eq(1);
+    });
+
+    it('should use custom default value', () => {
+      const result = calcUnusedMinSerialNumber([], {
+        fieldName: 'name',
+        prefix: 'test',
+        defaultNo: 5,
+      });
+      expect(result).to.eq(5);
+    });
+
+    it('should handle multiple digit numbers', () => {
+      const list = [{ name: 'test1' }, { name: 'test2' }, { name: 'test100' }];
+      const result = calcUnusedMinSerialNumber(list, { fieldName: 'name', prefix: 'test' });
+      expect(result).to.eq(3);
+    });
+
+    it('should work with different prefixes', () => {
+      const list = [{ id: 'group1' }, { id: 'group3' }];
+      const result = calcUnusedMinSerialNumber(list, { fieldName: 'id', prefix: 'group' });
+      expect(result).to.eq(2);
     });
   });
 });

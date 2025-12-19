@@ -622,11 +622,15 @@ const newList = array.moveToStart(list, (item) => item.id === 4);
 
 - `moveMulti<T extends unknown>(arr: T[], indexes: number[], start: number): T[]`
 
-移动多个元素到数组中指定的位置,用法,见[测试用例](tests/algorithm.cy.ts)
+移动多个元素到数组中指定的位置,用法,见[测试用例](tests/array.cy.ts)
 
 - `getArrayOrUndefined<T>(array?: T[] | undefined | null): T[] | undefined`
 
 如果`array`是数组且不为空,返回该数组，否则返回`undefined`,见[测试用例](tests/array.cy.ts)
+
+- `calcUnusedMinSerialNumber = <T extends Record<string, unknown>>(list: T[],options: { fieldName: keyof T; prefix: string; defaultNo?: number }): number`
+
+通用序号计算工具：从指定列表中提取「前缀+数字」格式的值，找到未被使用的最小正整数序号，用法见[测试用例](tests/array.cy.ts)
 
 ## number
 
