@@ -1,8 +1,5 @@
 name: Create GitHub Release
 on:
-  push:
-    tags: ['v*'] # 推送 Tag 时触发
-
   workflow_run:
     workflows: [Publish Package to NPM]
     types: [completed]
@@ -15,11 +12,35 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # 拉取所有提交记录，用于生成发布说明
+
+      - name: Resolve tag to Release
+        id: resolve-tag
+        run: |
+          if [ -n "${{ github.event.workflow_run.head_sha }}" ]; then
+            echo "Fetching tags..."
+            git fetch --tags --prune
+
+            COMMIT="${{ github.event.workflow_run.head_sha }}"
+            TAG=$(git tag --points-at "$COMMIT" || true)
+            if [ -z "$TAG" ]; then
+              echo "No tag found pointing at commit $COMMIT"
+              echo "tag=" >> "$GITHUB_OUTPUT"
+              exit 1
+            fi
+
+            echo "Found tag $TAG for commit $COMMIT"
+            echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "No tag context found"
+          echo "tag=" >> "$GITHUB_OUTPUT"
+          exit 1
+
       - name: 创建 Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ steps.resolve_tag.outputs.tag }}
           generate_release_notes: true
           make_latest: true
         env:
