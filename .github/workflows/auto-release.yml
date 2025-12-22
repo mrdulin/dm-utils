@@ -1,0 +1,26 @@
+name: Create GitHub Release
+on:
+  push:
+    tags: ['v*'] # 推送 Tag 时触发
+
+  workflow_run:
+    workflows: [Publish Package to NPM]
+    types: [completed]
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 拉取所有提交记录，用于生成发布说明
+      - name: 创建 Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          make_latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # 自动生成，无需配置
