@@ -98,43 +98,34 @@ export const getArrayOrUndefined = <T>(array?: T[] | undefined | null): T[] | un
  * @param options.defaultNo 无可用序号时的默认值（默认1）
  * @returns 未被使用的最小正整数序号
  */
-export const calcUnusedMinSerialNumber = <T extends Record<string, unknown>>(
-  list: T[],
-  options: { fieldName: keyof T; prefix: string; defaultNo?: number },
-): number => {
-  // 1. 参数校验与默认值处理
+export function calcUnusedMinSerialNumber(list: any[], options: { fieldName: string; prefix: string; defaultNo?: number }): number {
   const { fieldName, prefix, defaultNo = 1 } = options;
-  if (!Array.isArray(list)) return defaultNo; // 非数组直接返回默认值
-  if (list.length === 0) return defaultNo;
+  if (!list?.length) return defaultNo;
 
-  // 2. 正则匹配规则（通用化：前缀+数字）
-  const serialNumberRegex = new RegExp(`^(${prefix})(\\d+)$`);
-  // 记录已使用的序号（键：序号数字，值：标记已用）
-  const usedSerialNumbers: Record<number, boolean> = {};
+  // 获取所有匹配前缀的项目并提取序号
+  const serialNumbers = list
+    .map((item) => item[fieldName])
+    .filter((value) => typeof value === 'string' && value.startsWith(prefix))
+    .map((value) => {
+      const numPart = value.substring(prefix.length);
+      // 如果前缀后没有数字，则认为是序号1（或者根据业务需求处理）
+      if (numPart === '') return 1;
+      const num = parseInt(numPart, 10);
+      return isNaN(num) ? 0 : num;
+    })
+    .filter((num) => num > 0)
+    .sort((a, b) => a - b);
 
-  // 3. 遍历列表，提取有效序号
-  for (const item of list) {
-    // 确保字段值是字符串且非空
-    const fieldValue = item[fieldName];
-    if (typeof fieldValue !== 'string' || fieldValue.trim() === '') continue;
+  // 如果没有匹配项，返回默认值
+  if (serialNumbers.length === 0) return defaultNo;
 
-    const matchResult = fieldValue.match(serialNumberRegex);
-    if (matchResult) {
-      const serialNumberStr = matchResult[2];
-      const serialNumber = Number(serialNumberStr);
-      // 确保提取的是有效数字（排除 NaN、非整数）
-      if (Number.isInteger(serialNumber) && serialNumber > 0) {
-        usedSerialNumbers[serialNumber] = true;
-      }
+  // 找到第一个缺失的正整数
+  for (let i = 0; i < serialNumbers.length; i++) {
+    if (serialNumbers[i] !== i + 1) {
+      return i + 1;
     }
   }
 
-  // 4. 查找未被使用的最小正整数
-  const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER;
-  for (let i = 1; i < MAX_SAFE_INTEGER; i++) {
-    if (!usedSerialNumbers[i]) return i;
-  }
-
-  // 5. 极端兜底（理论上不会执行）
-  return defaultNo;
-};
+  // 如果序列完整，返回下一个数字
+  return serialNumbers.length + 1;
+}

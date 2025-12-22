@@ -101,8 +101,8 @@ describe('array', () => {
     });
 
     it('should handle multiple digit numbers', () => {
-      const list = [{ name: 'test1' }, { name: 'test2' }, { name: 'test100' }];
-      const result = calcUnusedMinSerialNumber(list, { fieldName: 'name', prefix: 'test' });
+      const list = [{ name: '名称1' }, { name: '名称2' }, { name: '测试' }, { name: '测试2' }, { name: '测试10' }, { name: '测试11' }];
+      const result = calcUnusedMinSerialNumber(list, { fieldName: 'name', prefix: '测试' });
       expect(result).to.eq(3);
     });
 
