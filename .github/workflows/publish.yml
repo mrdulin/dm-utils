@@ -9,12 +9,17 @@ on:
 
   workflow_dispatch:
 
+  workflow_run:
+    workflows: [Cypress Component Testing]
+    types: [completed]
+
 jobs:
   publish:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@v5
 
