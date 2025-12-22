@@ -14,7 +14,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Resolve tag to Release
-        id: resolve-tag
+        id: resolve_tag
         run: |
           if [ -n "${{ github.event.workflow_run.head_sha }}" ]; then
             echo "Fetching tags..."
