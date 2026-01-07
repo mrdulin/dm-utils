@@ -16,10 +16,10 @@ export function scrollToTop(element: Element | null | undefined): void {
 }
 
 /**
- * Strips HTML tags from a given string and returns the plain text content.
+ * 从HTML字符串中提取纯文本内容
  *
- * @param {string} html - The HTML string to strip tags from.
- * @return {string} The plain text content of the HTML string.
+ * @param html - 需要处理的HTML字符串，可能为null或undefined
+ * @returns 提取的纯文本内容，如果无法提取则返回空字符串
  */
 export function strip(html: string): string {
   let doc = new DOMParser().parseFromString(html ?? '', 'text/html');
@@ -27,9 +27,10 @@ export function strip(html: string): string {
 }
 
 /**
- * 将 HTML 字符串中的 rgb/rgba 颜色转换为 hex 格式
- * @param htmlStr 包含 rgb/rgba 颜色的 HTML 字符串
- * @returns 转换后的 HTML 字符串
+ * 将HTML字符串中的RGB和RGBA颜色值转换为十六进制颜色值
+ *
+ * @param htmlStr - 包含RGB/RGBA颜色值的HTML字符串
+ * @returns 将所有RGB/RGBA颜色值转换为十六进制格式的HTML字符串
  */
 export function convertRgbToHexInHtml(htmlStr: string): string {
   // Fixed regex: added -? to match negative numbers (e.g., -50)
@@ -37,7 +38,16 @@ export function convertRgbToHexInHtml(htmlStr: string): string {
     /rgba?\(\s*(-?\d+(?:\.\d+)?%?)\s*,\s*(-?\d+(?:\.\d+)?%?)\s*,\s*(-?\d+(?:\.\d+)?%?)\s*(?:,\s*(-?\d+(?:\.\d+)?))?\s*\)/gi;
 
   return htmlStr.replace(rgbPattern, (match, rVal, gVal, bVal, aVal) => {
-    // Normalize single RGB component (clamping logic)
+    /**
+     * 规范化单个RGB分量值
+     *
+     * 此函数处理两种格式的输入：
+     * 1. 百分数格式（如 "50%"）- 将其限制在0-100%范围内，然后转换为0-255范围
+     * 2. 数字格式（如 "128"）- 将其限制在0-255范围内
+     *
+     * @param valueStr - RGB分量的字符串表示，可以是百分比或数值（例如 "50%" 或 "128"）
+     * @returns 转换后的0-255范围内的整数值
+     */
     const normalizeRgbComponent = (valueStr: string): number => {
       const isPercentage = valueStr.endsWith('%');
       let rawValue = parseFloat(valueStr.replace('%', ''));
@@ -53,29 +63,29 @@ export function convertRgbToHexInHtml(htmlStr: string): string {
       }
     };
 
-    // Normalize alpha (clamp 0-1)
+    // 标准化alpha值（范围限制在0-1之间）
     const normalizeAlpha = (alphaStr: string): number => {
       const alpha = parseFloat(alphaStr);
       const clampedAlpha = Math.max(0, Math.min(1, alpha));
       return Math.round(clampedAlpha * 255);
     };
 
-    // Process R/G/B components
+    // 处理R/G/B组件
     const r = normalizeRgbComponent(rVal);
     const g = normalizeRgbComponent(gVal);
     const b = normalizeRgbComponent(bVal);
 
-    // Convert to 2-digit uppercase hex
+    // 转换为2位大写十六进制
     const toHex = (num: number): string => num.toString(16).padStart(2, '0').toUpperCase();
     const hexRGB = `${toHex(r)}${toHex(g)}${toHex(b)}`;
 
-    // Handle alpha (RGBA case)
+    // 处理alpha值（RGBA情况）
     if (aVal) {
       const alphaHex = toHex(normalizeAlpha(aVal));
       return `#${hexRGB}${alphaHex}`;
     }
 
-    // RGB case (no alpha)
+    // RGB情况（无alpha值）
     return `#${hexRGB}`;
   });
 }
