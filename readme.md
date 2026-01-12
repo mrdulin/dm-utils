@@ -2,6 +2,7 @@
 
 ![NPM Downloads](https://img.shields.io/npm/dw/%40d-matrix%2Futils)
 ![npm bundle size](https://img.shields.io/bundlephobia/min/%40d-matrix%2Futils)
+[![NPM version](https://img.shields.io/npm/v/@d-matrix/utils.svg?style=flat)](https://www.npmjs.com/package/@d-matrix/utils)
 
 A dozen of utils for Front-End Development
 
@@ -217,6 +218,15 @@ export default function Component() {
 import { dom } from '@d-matrix/utils';
 
 dom.strip('测试<em>高亮</em>测试'); // '测试高亮测试'
+```
+
+- `function convertRgbToHexInHtml(htmlStr: string): string`
+
+将HTML字符串中的RGB和RGBA颜色值转换为十六进制颜色值
+
+```ts
+const html = '<div style="color: rgb(255, 0, 0)">Red text</div>';
+dom.convertRgbToHexInHtml(html);  // <div style="color: #ff0000">Red text</div>
 ```
 
 ### date
