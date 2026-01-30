@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
 const defaultContextMenuTarget = () => document;
 type ContextMenuTarget = () => Element | Document | undefined | null;

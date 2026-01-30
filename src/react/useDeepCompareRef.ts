@@ -3,12 +3,19 @@ import { DependencyList, useRef } from 'react';
 import isEqual from 'react-fast-compare';
 
 /**
- * 使用深度比较来追踪依赖数组变化的 Hook。
- * 当传入的依赖数组发生变化时，返回的 ref 的 current 值会自增。
- * 适用于需要基于复杂对象或数组变化触发副作用的场景。
+ * 对依赖项进行深度比较的 Hook，返回一个信号引用，当依赖项发生变化时递增
+ * 该 Hook 适用于基于复杂对象或数组的深度相等性来触发 effect 或重新渲染
  *
- * @param deps 依赖数组，会被深度比较
- * @returns 一个 ref，其 current 值在依赖变化时递增
+ * @param deps - 需要进行深度比较的依赖项列表，可以是 undefined
+ * @returns 返回一个包含信号数字的可变引用对象，每次依赖项变化时该数字会递增
+ *
+ * @example
+ * ```tsx
+ * const signal = useDeepCompareRef([complexObject, nestedArray]);
+ * useEffect(() => {
+ *   console.log('依赖项已变化:', signal.current);
+ * }, [signal.current]);
+ * ```
  */
 export const useDeepCompareRef = (deps: DependencyList): React.MutableRefObject<number> => {
   const ref = useRef<DependencyList>();

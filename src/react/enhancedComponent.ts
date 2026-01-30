@@ -1,8 +1,5 @@
 import React from 'react';
 
-/**
- * react component 的增强类
- */
 export class EnhancedComponent<P, S> extends React.Component<P, S> {
   /**
    * setState 方法的同步版本

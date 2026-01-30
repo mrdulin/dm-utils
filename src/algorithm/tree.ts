@@ -103,6 +103,36 @@ export function findPath<T extends Record<string, any>>(tree: T[], func: (node: 
   return null;
 }
 
+/**
+ * 将树形结构展平为一维数组
+ * 递归遍历树的所有节点，并将每个节点（不包含子节点属性）添加到结果数组中
+ *
+ * @template T - 树节点的类型
+ * @param tree - 树形结构的数组
+ * @param childrenKey - 子节点的属性名称，默认为 'children'
+ * @returns 返回展平后的一维数组，每个元素是去除子节点属性后的节点对象
+ *
+ * @example
+ * ```typescript
+ * const tree = [
+ *   {
+ *     id: 1,
+ *     name: '根节点',
+ *     children: [
+ *       { id: 2, name: '子节点1', children: [] },
+ *       { id: 3, name: '子节点2', children: [] }
+ *     ]
+ *   }
+ * ];
+ *
+ * const flattened = flatten(tree);
+ * // 结果: [
+ * //   { id: 1, name: '根节点' },
+ * //   { id: 2, name: '子节点1' },
+ * //   { id: 3, name: '子节点2' }
+ * // ]
+ * ```
+ */
 export function flatten<T extends Record<string, any>>(tree: T[], childrenKey = 'children'): Record<string, any>[] {
   const result: Record<string, any>[] = [];
 

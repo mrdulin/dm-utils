@@ -1,7 +1,24 @@
 /**
  * 复制图片到剪贴板
- * @param element
- * @returns
+ * 该函数支持从 HTMLImageElement 或图片 URL 复制图片到剪贴板
+ * 使用 Canvas 将图片转换为 blob，然后通过 Clipboard API 写入剪贴板
+ *
+ * @param element - 图片元素或图片 URL 字符串
+ * @returns 返回一个 Promise，成功时 resolve，失败时 reject 并返回错误信息
+ *
+ * @example
+ * ```typescript
+ * // 从图片元素复制
+ * const imgElement = document.querySelector('img');
+ * writeImage(imgElement)
+ *   .then(() => console.log('图片复制成功'))
+ *   .catch(err => console.error('复制失败:', err));
+ *
+ * // 从图片 URL 复制
+ * writeImage('https://example.com/image.jpg')
+ *   .then(() => console.log('图片复制成功'))
+ *   .catch(err => console.error('复制失败:', err));
+ * ```
  */
 export async function writeImage(element: HTMLImageElement | null | string) {
   return new Promise((resolve, reject) => {
@@ -52,6 +69,14 @@ export async function writeImage(element: HTMLImageElement | null | string) {
   });
 }
 
+/**
+ * 传统的复制文本到剪贴板的方法
+ * 用于兼容不支持 Clipboard API 的旧浏览器
+ * 通过创建临时 textarea 元素，选中内容并执行 copy 命令来实现
+ *
+ * @param text - 要复制的文本内容
+ * @throws 当复制操作失败时会抛出错误
+ */
 const legacyWriteText = (text: string) => {
   const $textarea = document.createElement('textarea');
   $textarea.value = text;
@@ -76,8 +101,29 @@ const legacyWriteText = (text: string) => {
 
 /**
  * 复制文本到剪贴板
- * @param text
- * @returns
+ * 优先使用现代的 Clipboard API，如果不支持则降级使用传统方法
+ * 支持 Promise 链式调用和 async/await 语法
+ *
+ * @param text - 要复制的文本内容
+ * @returns 返回一个 Promise，成功时 resolve，失败时 reject 并返回错误信息
+ *
+ * @example
+ * ```typescript
+ * // 使用 Promise 链式调用
+ * writeText('Hello, World!')
+ *   .then(() => console.log('文本复制成功'))
+ *   .catch(err => console.error('复制失败:', err));
+ *
+ * // 使用 async/await
+ * async function copyText() {
+ *   try {
+ *     await writeText('Hello, World!');
+ *     console.log('文本复制成功');
+ *   } catch (err) {
+ *     console.error('复制失败:', err);
+ *   }
+ * }
+ * ```
  */
 export async function writeText(text: string) {
   if (!navigator || !navigator.clipboard || typeof navigator.clipboard.writeText !== 'function') {
