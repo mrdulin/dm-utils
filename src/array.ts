@@ -1,10 +1,26 @@
 /**
  * 在数组中移动元素的位置（修改原数组）
  *
- * @param array - 要操作的数组
- * @param fromIndex - 要移动元素的起始索引，支持负数（-1表示最后一个元素）
- * @param toIndex - 目标位置的索引，支持负数（-1表示最后一个位置）
- * @returns 无返回值，直接修改原数组
+ * 此函数会直接修改原始数组，将指定位置的元素移动到新位置。
+ * 支持负数索引，-1 表示最后一个元素，-2 表示倒数第二个元素，依此类推。
+ *
+ * @template T 数组元素的类型
+ * @param {T[]} array - 要操作的数组
+ * @param {number} fromIndex - 要移动元素的起始索引，支持负数（-1表示最后一个元素）
+ * @param {number} toIndex - 目标位置的索引，支持负数（-1表示最后一个位置）
+ * @returns {void} 无返回值，直接修改原数组
+ * @throws {Error} 当索引超出数组范围时抛出错误
+ * @example
+ * // 移动第二个元素到开头
+ * const arr = [1, 2, 3, 4];
+ * moveMutable(arr, 1, 0);
+ * console.log(arr); // [2, 1, 3, 4]
+ *
+ * @example
+ * // 使用负数索引移动最后一个元素到开头
+ * const arr = [1, 2, 3, 4];
+ * moveMutable(arr, -1, 0);
+ * console.log(arr); // [4, 1, 2, 3]
  */
 export function moveMutable<T>(array: T[], fromIndex: number, toIndex: number): void {
   // 计算实际的起始索引，支持负数索引

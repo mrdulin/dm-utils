@@ -23,25 +23,29 @@ export interface YearOption {
   value: number;
 }
 
-export type GetYearsOptions = {
+// 使用泛型和条件类型来实现参数的条件约束
+export type GetYearsOptions<T extends YearOptionKind> = {
   // 开始年份
   startYear?: number;
   // 最近几年
   recentYears?: number;
   // 截止年份
   endYear?: number;
-  // 后缀，默认为'年'
-  suffix?: string;
-};
+  type: T;
+  // TS限制只有当type参数是YearOptionKind.Objects时，才支持传suffix参数
+} & (T extends YearOptionKind.Objects ? { suffix?: string } : {});
+
 /**
  * 获取n年, 从大到小
  * @param options
  */
-//TODO: TS限制只有当type参数是YearOptionKind.Objects时，才支持传suffix参数
-export function getYears(options: GetYearsOptions & { type: YearOptionKind.Numbers }): number[];
-export function getYears(options: GetYearsOptions & { type: YearOptionKind.Objects }): YearOption[];
-export function getYears(options: GetYearsOptions & { type: YearOptionKind }): number[] | YearOption[] {
-  const { recentYears = 0, startYear, endYear, suffix = '年', type } = options;
+export function getYears<T extends YearOptionKind>(
+  options: GetYearsOptions<T>,
+): T extends YearOptionKind.Objects ? YearOption[] : number[] {
+  const { recentYears = 0, startYear, endYear, type } = options;
+  // 为 suffix 设置默认值，仅在需要时使用
+  const suffix = (options as any).suffix ?? '年';
+
   const endY = endYear ? endYear : new Date().getFullYear();
   let ranges = recentYears;
   if (typeof startYear === 'number') {
@@ -55,7 +59,7 @@ export function getYears(options: GetYearsOptions & { type: YearOptionKind }): n
           console.error('endYear不能小于startYear');
         }
       }
-      return [];
+      return type === YearOptionKind.Objects ? [] : [];
     }
   }
 
@@ -64,7 +68,7 @@ export function getYears(options: GetYearsOptions & { type: YearOptionKind }): n
     for (let i = 0; i < ranges; i++) {
       result.push(endY - i);
     }
-    return result;
+    return result as T extends YearOptionKind.Objects ? YearOption[] : number[];
   }
 
   if (type === YearOptionKind.Objects) {
@@ -75,7 +79,7 @@ export function getYears(options: GetYearsOptions & { type: YearOptionKind }): n
         label: `${endY - i}${suffix}`,
       });
     }
-    return result;
+    return result as T extends YearOptionKind.Objects ? YearOption[] : number[];
   }
 
   throw new Error('type must be enum: YearOptionKind.Numbers or YearOptionKind.Objects');

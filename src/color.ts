@@ -1,8 +1,30 @@
 /**
- * 将十六进制颜色转换为 RGBA 颜色
- * @param hex 十六进制颜色
- * @param alpha 透明度，默认值为 1
- * @returns RGBA 颜色
+ * 将十六进制颜色值转换为 RGBA 颜色字符串
+ *
+ * 此函数支持标准的 6 位十六进制颜色（如 #ff0000）以及简写的 3 位格式（如 #f00），
+ * 并允许指定透明度值。输入的颜色值会经过验证，确保符合十六进制颜色格式要求。
+ *
+ * @param {string} hex - 十六进制颜色值，支持 3 位或 6 位格式，可带或不带井号前缀
+ * @param {number | string} [alpha=1] - 透明度值，范围为 0 到 1，可以是数字或可转换为数字的字符串
+ * @returns {string} 格式为 'rgba(r, g, b, a)' 的 RGBA 颜色字符串
+ * @throws {Error} 当输入的十六进制颜色格式无效时抛出错误
+ * @throws {Error} 当透明度值不是有效数字或超出 0-1 范围时抛出错误
+ * @since 1.0.0
+ * @example
+ * // 标准 6 位十六进制颜色
+ * hexToRGBA('#ff0000', 0.5); // 'rgba(255, 0, 0, 0.5)'
+ *
+ * @example
+ * // 简写 3 位十六进制颜色
+ * hexToRGBA('#f00', 1); // 'rgba(255, 0, 0, 1)'
+ *
+ * @example
+ * // 不带井号前缀
+ * hexToRGBA('00ff00', 0.8); // 'rgba(0, 255, 0, 0.8)'
+ *
+ * @example
+ * // 透明度为 0
+ * hexToRGBA('#0000ff', 0); // 'rgba(0, 0, 255, 0)'
  */
 export function hexToRGBA(hex: string, alpha: number | string = 1): string {
   // 移除井号并转为小写
