@@ -405,7 +405,7 @@ const actual2 = tree.findNode([root], (node) => node.id === 33);
 expect(actual2).to.be.deep.equal(root.children[1].children[2]);
 ```
 
-- `tree.findNode(tree, child, indentityKey, childrenKey)`
+- `tree.findParent(tree, child, indentityKey, childrenKey)`
 
 根据子节点查找父节点
 
