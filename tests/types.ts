@@ -4,6 +4,9 @@ import type {
   WithOptional,
   ExcludePickPartial,
   Undefinable,
+  Nullishable,
+  Optional,
+  NullableValue,
   FunctionPropertyNames,
   NonFunctionPropertyNames,
   ValueOf,
@@ -17,6 +20,10 @@ expectTypeOf<{ a?: number; b?: string; c: string }>().branded.toEqualTypeOf<Excl
 expectTypeOf<{ a: string | undefined; b: number | undefined; c: boolean | undefined }>().toEqualTypeOf<
   Undefinable<{ a: string; b: number; c: boolean }>
 >();
+
+expectTypeOf<string | undefined | null>().toEqualTypeOf<Nullishable<string>>();
+expectTypeOf<number | undefined>().toEqualTypeOf<Optional<number>>();
+expectTypeOf<boolean | null>().toEqualTypeOf<NullableValue<boolean>>();
 
 class A {
   add() {}

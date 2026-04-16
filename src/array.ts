@@ -1,3 +1,5 @@
+import Decimal from 'decimal.js-light';
+
 /**
  * 在数组中移动元素的位置（修改原数组）
  *
@@ -145,3 +147,86 @@ export function calcUnusedMinSerialNumber(list: any[], options: { fieldName: str
   // 如果序列完整，返回下一个数字
   return serialNumbers.length + 1;
 }
+
+/**
+ * 计算给定值在数组中的百分位排名
+ *
+ * @param {number[]} arr - 排序后的数字数组（假设是升序排列）
+ * @param {number} value - 要计算百分位的值
+ * @returns {number} - 百分位排名，范围为 0 到 1
+ * @example
+ * // 示例 1: 精确匹配值
+ * const arr = [10, 20, 30, 40, 50];
+ * percentRank(arr, 30); // 返回 0.5 (50%)
+ *
+ * // 示例 2: 插值计算
+ * const arr = [10, 20, 40, 50];
+ * percentRank(arr, 30); // 返回 0.5 (50%, 在 20 和 40 之间)
+ */
+export const percentRank = (arr: number[], value: number | undefined | null): number | undefined => {
+  if (!arr.length) return;
+  if (value === undefined || value === null) return;
+
+  const sorted = [...arr].sort((a, b) => a - b);
+  return percentRankOfSorted(sorted, value);
+};
+
+/**
+ * 计算给定值在排序后的数组中的百分位排名
+ * @param sorted 排序后的数字数组（假设是升序排列）
+ * @param value 要计算百分位的值
+ * @returns 百分位排名，范围为 0 到 1
+ */
+export const percentRankOfSorted = (sorted: number[], value: number | undefined | null): number | undefined => {
+  if (!sorted.length) return;
+  if (value === undefined || value === null) return;
+
+  if (sorted.length === 1) {
+    return sorted[0] === value ? 0 : undefined;
+  }
+
+  const len = new Decimal(sorted.length);
+  const min = sorted[0];
+  const max = sorted[sorted.length - 1];
+
+  if (value < min || value > max) return undefined;
+
+  if (value === min) return 0;
+  if (value === max) return 1;
+
+  for (let i = 0; i < sorted.length; i++) {
+    if (sorted[i] === value) {
+      return new Decimal(i).div(len.sub(1)).toNumber();
+    }
+  }
+
+  for (let i = 0; i < sorted.length - 1; i++) {
+    if (sorted[i] < value && value < sorted[i + 1]) {
+      const x1 = sorted[i];
+      const x2 = sorted[i + 1];
+      const y1 = new Decimal(i).div(len.sub(1));
+      const y2 = new Decimal(i + 1).div(len.sub(1));
+      const x1Dec = new Decimal(x1);
+      const x2Dec = new Decimal(x2);
+      const valueDec = new Decimal(value);
+      const numerator = x2Dec.sub(valueDec).mul(y1).add(valueDec.sub(x1Dec).mul(y2));
+      return numerator.div(x2Dec.sub(x1Dec)).toNumber();
+    }
+  }
+
+  return undefined;
+};
+
+/**
+ * 计算数组的总体标准差
+ *
+ * @param {number[]} arr - 数字数组
+ * @returns {number} - 标准差
+ */
+export const standardDeviation = (arr: number[]): number | undefined => {
+  if (arr.length === 0) return;
+  // 使用 Decimal 保证高精度
+  const mean = new Decimal(arr.reduce((sum, val) => sum + val, 0)).div(arr.length);
+  const variance = arr.reduce((sum, val) => sum.add(new Decimal(val).sub(mean).pow(2)), new Decimal(0)).div(arr.length);
+  return variance.sqrt().toNumber();
+};

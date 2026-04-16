@@ -293,6 +293,24 @@ type A = { a: number; b: number; c: number; };
 type T0 = WithOptional<A, 'b' | 'c'>;  // { a: number; b?: number; c?: number }
 ```
 
+- `Nullishable<T>`
+
+```ts
+type T0 = Nullishable<string>; // string | undefined | null
+```
+
+- `Optional<T>`
+
+```ts
+type T0 = Optional<number>; // number | undefined
+```
+
+- `NullableValue<T>`
+
+```ts
+type T0 = NullableValue<boolean>; // boolean | null
+```
+
 - `FunctionPropertyNames<T>`
 
 获取对象中的方法名称，返回union type
@@ -642,11 +660,90 @@ const newList = array.moveToStart(list, (item) => item.id === 4);
 
 通用序号计算工具：从指定列表中提取「前缀+数字」格式的值，找到未被使用的最小正整数序号，用法见[测试用例](tests/array.cy.ts)
 
+- `percentRank(arr: number[], value: number | undefined | null): number | undefined`
+
+计算给定值在数组中的百分位排名。函数内部会先对数组做升序排序，再计算结果。
+
+```ts
+const arr = [10, 20, 40, 50];
+
+array.percentRank(arr, 30); // 0.5
+array.percentRank(arr, 10); // 0
+array.percentRank(arr, 50); // 1
+```
+
+- `percentRankOfSorted(sorted: number[], value: number | undefined | null): number | undefined`
+
+计算给定值在已排序数组中的百分位排名，适用于输入已经是升序数组的场景，避免重复排序。支持精确命中和区间插值，超出范围时返回 `undefined`，更多见[测试用例](tests/array.cy.ts)。
+
+```ts
+const sorted = [10, 20, 40, 50];
+
+array.percentRankOfSorted(sorted, 30); // 0.5
+array.percentRankOfSorted(sorted, 10); // 0
+array.percentRankOfSorted(sorted, 50); // 1
+```
+
+- `standardDeviation(arr: number[]): number | undefined`
+
+计算数字数组的总体标准差，空数组时返回 `undefined`，更多见[测试用例](tests/array.cy.ts)。
+
+```ts
+array.standardDeviation([1, 2, 3, 4, 5]); // 1.4142135623730951
+array.standardDeviation([5]); // 0
+array.standardDeviation([]); // undefined
+```
+
 ## number
 
 - `randomInt(min: number, max: number): number`
 
 返回`min`, `max`之间的随机整数
+
+- `safeMinus(a: number | string | undefined | null, b: number | string | undefined | null): number | undefined`
+
+安全减法。支持数字和可转为数字的字符串。任一参数为 `undefined`、`null`、空字符串、空白字符串或非法数字字符串时返回 `undefined`。
+
+```ts
+number.safeMinus(5, 2); // 3
+number.safeMinus('5', '2'); // 3
+number.safeMinus(undefined, 2); // undefined
+number.safeMinus('abc', 2); // undefined
+```
+
+- `safePlus(a: number | string | undefined | null, b: number | string | undefined | null): number | undefined`
+
+安全加法。支持数字和可转为数字的字符串。任一参数为 `undefined`、`null`、空字符串、空白字符串或非法数字字符串时返回 `undefined`。
+
+```ts
+number.safePlus(5, 2); // 7
+number.safePlus('5', '2'); // 7
+number.safePlus(null, 2); // undefined
+number.safePlus('', 2); // undefined
+```
+
+- `safeMultiply(a: number | string | undefined | null, b: number | string | undefined | null): number | undefined`
+
+安全乘法。支持数字和可转为数字的字符串。任一参数为 `undefined`、`null`、空字符串、空白字符串或非法数字字符串时返回 `undefined`。
+
+```ts
+number.safeMultiply(5, 2); // 10
+number.safeMultiply('5', '2'); // 10
+number.safeMultiply(5, undefined); // undefined
+number.safeMultiply('   ', 2); // undefined
+```
+
+- `safeDivide(a: number | string | undefined | null, b: number | string | undefined | null): number | undefined`
+
+安全除法。支持数字和可转为数字的字符串。任一参数为 `undefined`、`null`、空字符串、空白字符串、非法数字字符串，或者除数为 `0`（包括字符串 `'0'`）时返回 `undefined`。
+
+```ts
+number.safeDivide(6, 2); // 3
+number.safeDivide('6', '2'); // 3
+number.safeDivide(1, 0); // undefined
+number.safeDivide(1, '0'); // undefined
+number.safeDivide(6, null); // undefined
+```
 
 ## echarts
 

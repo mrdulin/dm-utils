@@ -1,4 +1,11 @@
-import { calcUnusedMinSerialNumber, getArrayOrUndefined, moveMulti, moveToStart } from '../src/array';
+import {
+  calcUnusedMinSerialNumber,
+  getArrayOrUndefined,
+  moveMulti,
+  moveToStart,
+  percentRankOfSorted,
+  standardDeviation,
+} from '../src/array';
 
 describe('array', () => {
   describe('moveToStart', () => {
@@ -110,6 +117,72 @@ describe('array', () => {
       const list = [{ id: 'group1' }, { id: 'group3' }];
       const result = calcUnusedMinSerialNumber(list, { fieldName: 'id', prefix: 'group' });
       expect(result).to.eq(2);
+    });
+  });
+
+  describe('percentRankOfSorted', () => {
+    it('should return undefined for empty array', () => {
+      expect(percentRankOfSorted([], 1)).to.be.undefined;
+    });
+
+    it('should return undefined for nullish value', () => {
+      expect(percentRankOfSorted([1, 2, 3], undefined)).to.be.undefined;
+      expect(percentRankOfSorted([1, 2, 3], null)).to.be.undefined;
+    });
+
+    it('should handle single-element array', () => {
+      expect(percentRankOfSorted([5], 5)).to.eq(0);
+      expect(percentRankOfSorted([5], 4)).to.be.undefined;
+    });
+
+    it('should return 0 for the minimum value and 1 for the maximum value', () => {
+      const sorted = [1, 2, 3, 5, 8];
+      expect(percentRankOfSorted(sorted, 1)).to.eq(0);
+      expect(percentRankOfSorted(sorted, 8)).to.eq(1);
+    });
+
+    it('should return the rank for exact matches', () => {
+      const sorted = [1, 2, 3, 5, 8];
+      expect(percentRankOfSorted(sorted, 3)).to.eq(0.5);
+    });
+
+    it('should interpolate rank for values between adjacent points', () => {
+      const sorted = [10, 20, 40, 50];
+      expect(percentRankOfSorted(sorted, 30)).to.eq(0.5);
+    });
+
+    it('should use the first matched index when there are duplicate values', () => {
+      const sorted = [1, 2, 3, 5, 5, 8];
+      expect(percentRankOfSorted(sorted, 1)).to.eq(0);
+      expect(percentRankOfSorted(sorted, 2)).to.eq(0.2);
+      expect(percentRankOfSorted(sorted, 3)).to.eq(0.4);
+      expect(percentRankOfSorted(sorted, 5)).to.eq(0.6);
+      expect(percentRankOfSorted(sorted, 8)).to.eq(1);
+    });
+
+    it('should return undefined for values outside the sorted range', () => {
+      const sorted = [1, 2, 3, 5, 8];
+      expect(percentRankOfSorted(sorted, 0)).to.be.undefined;
+      expect(percentRankOfSorted(sorted, 9)).to.be.undefined;
+    });
+  });
+
+  describe('standardDeviation', () => {
+    it('should return undefined for empty array', () => {
+      expect(standardDeviation([])).to.be.undefined;
+    });
+
+    it('should return 0 for single-element array', () => {
+      expect(standardDeviation([5])).to.eq(0);
+    });
+
+    it('should calculate population standard deviation for integer arrays', () => {
+      expect(standardDeviation([10, 2, 38, 23, 38, 23, 21])).to.eq(12.29899614287479);
+      expect(standardDeviation([1, 2, 3, 4, 5])).to.eq(1.4142135623730951);
+    });
+
+    it('should return the same result regardless of element order', () => {
+      expect(standardDeviation([3, 1, 2])).to.eq(standardDeviation([1, 2, 3]));
     });
   });
 });

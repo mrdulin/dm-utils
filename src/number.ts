@@ -1,3 +1,5 @@
+import type { Nullishable } from './types';
+
 /**
  * 生成指定范围内的随机整数
  *
@@ -24,6 +26,51 @@
  * const negativeRandom = randomInt(-5, -1);
  * console.log(negativeRandom); // 可能输出 -5 到 -1 之间的任意整数
  */
-export function randomInt(min: number, max: number) {
+export function randomInt(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
+
+type MaybeNumberish = Nullishable<number | string>;
+
+const isNil = (value: unknown): value is null | undefined => value === undefined || value === null;
+
+export const toNumber = (value: MaybeNumberish): number | undefined => {
+  if (isNil(value)) {
+    return undefined;
+  }
+  if (typeof value === 'number') {
+    return value;
+  }
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return undefined;
+  }
+  const parsed = Number(trimmed);
+  return Number.isNaN(parsed) ? undefined : parsed;
+};
+
+const safeBinaryOp =
+  (op: (a: number, b: number) => number) =>
+  (a: MaybeNumberish, b: MaybeNumberish): number | undefined => {
+    const left = toNumber(a);
+    const right = toNumber(b);
+    if (left === undefined || right === undefined) {
+      return undefined;
+    }
+    return op(left, right);
+  };
+
+export const safeMinus = safeBinaryOp((a, b) => a - b);
+
+export const safePlus = safeBinaryOp((a, b) => a + b);
+
+export const safeMultiply = safeBinaryOp((a, b) => a * b);
+
+export const safeDivide = (a: MaybeNumberish, b: MaybeNumberish): number | undefined => {
+  const left = toNumber(a);
+  const right = toNumber(b);
+  if (left === undefined || right === undefined || right === 0) {
+    return undefined;
+  }
+  return left / right;
+};

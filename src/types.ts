@@ -41,6 +41,30 @@ export type ExcludePickPartial<T, K extends keyof T> = Partial<Omit<T, K>> & Pic
 export type Undefinable<T> = { [K in keyof T]: T[K] | undefined };
 
 /**
+ * 为任意类型 T 扩展 undefined 和 null
+ *
+ * @template T - 原始类型
+ * @returns T | undefined | null
+ */
+export type Nullishable<T> = T | undefined | null;
+
+/**
+ * 为任意类型 T 扩展 undefined
+ *
+ * @template T - 原始类型
+ * @returns T | undefined
+ */
+export type Optional<T> = T | undefined;
+
+/**
+ * 为任意类型 T 扩展 null
+ *
+ * @template T - 原始类型
+ * @returns T | null
+ */
+export type NullableValue<T> = T | null;
+
+/**
  * 获取对象类型中所有函数类型的属性名
  *
  * @template T - 要检查的对象类型
