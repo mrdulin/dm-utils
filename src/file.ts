@@ -73,7 +73,7 @@ export async function isImageExists(src: string, img: HTMLImageElement = new Ima
  * @returns string
  *
  */
-export function getFilenameFromContentDispositionHeader(header: { ['content-disposition']: string }): string {
+export function getFilenameFromContentDispositionHeader(header: Record<string, string>): string {
   const contentDisposition = header['content-disposition'];
   if (!contentDisposition) return '';
   const filename = contentDisposition.split('filename=')[1].split(';')[0];
@@ -138,26 +138,22 @@ export function download(source: string | Blob, fileName = '', target?: HyperLin
   }, 4e4); // 40S
 }
 
-
 /**
  * 通过创建iframe进行文件下载
  * @param source
  * @returns
  */
 export function downloadFileByIframe(source: string): boolean {
-  const httpsPath = source.replace(/http:\/\//, "https://");
-  const iframes = document.getElementsByTagName("iframe");
-  if (
-    iframes.length === 0 ||
-    (iframes.length > 0 && iframes[0].className === "fill" && iframes[iframes.length - 1].className === "fill")
-  ) {
-    const element = document.createElement("iframe");
-    element.style.display = "none";
+  const httpsPath = source.replace(/http:\/\//, 'https://');
+  const iframes = document.getElementsByTagName('iframe');
+  if (iframes.length === 0 || (iframes.length > 0 && iframes[0].className === 'fill' && iframes[iframes.length - 1].className === 'fill')) {
+    const element = document.createElement('iframe');
+    element.style.display = 'none';
     element.src = httpsPath;
     document.body.appendChild(element);
     return true;
   }
-  if (iframes.length > 0 && iframes[iframes.length - 1].className !== "fill") {
+  if (iframes.length > 0 && iframes[iframes.length - 1].className !== 'fill') {
     iframes[0].src = httpsPath;
     return true;
   }
