@@ -14,3 +14,4 @@ export * as echarts from './echarts';
 export * as array from './array';
 export * as number from './number';
 export * as color from './color';
+export * as scene from './scene';

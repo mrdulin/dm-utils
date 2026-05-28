@@ -24,6 +24,7 @@ A dozen of utils for Front-End Development
 - [number](#number)
 - [echarts](#echarts)
 - [color](#color)
+- [scene](#scene)
 
 ### clipboard
 
@@ -766,6 +767,45 @@ deep merge Echarts配置，用法见[测试用例](./tests//echarts/echarts.cy.t
 - `hexToRGBA(hex: string, alpha: number | string = 1): string`
 
 将十六进制颜色转换为 RGBA 颜色, 见[测试用例](./tests/color.cy.ts)
+
+## scene
+
+- `toggleSelectionValue<T extends string | number>(params: { selectedValues: T[] | undefined; toggledValue: T; selected: boolean; defaultValue: T; isDefaultSelected: (value: T[] | undefined) => boolean; }): T[]`
+
+切换多选值，并在取消最后一个普通项时回退到默认值。适用于“全部”与普通选项互斥的场景。
+
+```ts
+import { scene } from '@d-matrix/utils';
+
+const defaultValue = 'all';
+const isDefaultSelected = (value: string[] | undefined) => scene.hasSameSelectionValues(value, [defaultValue]);
+
+scene.toggleSelectionValue({
+  selectedValues: [defaultValue],
+  toggledValue: 'A',
+  selected: true,
+  defaultValue,
+  isDefaultSelected,
+}); // ['A']
+
+scene.toggleSelectionValue({
+  selectedValues: ['A'],
+  toggledValue: 'A',
+  selected: false,
+  defaultValue,
+  isDefaultSelected,
+}); // ['all']
+```
+
+- `hasSameSelectionValues<T extends string | number>(selectedValues: T[] | undefined, nextSelectedValues: T[]): boolean`
+
+判断两次选中值是否一致。`undefined` 会按空数组处理。
+
+```ts
+scene.hasSameSelectionValues(undefined, []); // true
+scene.hasSameSelectionValues(['A', 'B'], ['A', 'B']); // true
+scene.hasSameSelectionValues(['A', 'B'], ['B', 'A']); // false
+```
 
 ## 测试
 
