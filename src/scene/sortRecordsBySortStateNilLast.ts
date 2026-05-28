@@ -19,11 +19,11 @@ export interface VirtualTableSort {
 }
 
 type SortRecordsBySortStateNilLastOptions<T extends object> = {
-  getSortValue?: (record: T, field: keyof T) => unknown;
+  getSortValue?: (record: T, field: Extract<keyof T, string>) => unknown;
 };
 
-const getDefaultSortableFieldValue = <T extends object>(record: T, field: keyof T) => {
-  const value = (record as Record<PropertyKey, unknown>)[field as PropertyKey];
+const getDefaultSortableFieldValue = <T extends object>(record: T, field: Extract<keyof T, string>) => {
+  const value = (record as Record<string, unknown>)[field];
 
   if (isNil(value)) {
     return undefined;
@@ -51,7 +51,7 @@ export const sortRecordsBySortStateNilLast = <T extends object>(
     return records;
   }
 
-  const sortField = sortState.field as keyof T;
+  const sortField = sortState.field as Extract<keyof T, string>;
   const isAsc = sortState.direction === VirtualTableSortDirection.ASC;
   const getSortValue = options?.getSortValue ?? getDefaultSortableFieldValue;
 
