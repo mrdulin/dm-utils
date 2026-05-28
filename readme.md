@@ -807,6 +807,43 @@ scene.hasSameSelectionValues(['A', 'B'], ['A', 'B']); // true
 scene.hasSameSelectionValues(['A', 'B'], ['B', 'A']); // false
 ```
 
+- `sortRecordsBySortStateNilLast<T extends object>(records: T[] | undefined, sortState: VirtualTableSort | undefined, options?: { getSortValue?: (record: T, field: keyof T) => unknown; }): T[] | undefined`
+
+根据排序状态对记录排序，并将 `null` / `undefined` 放到结果末尾。
+
+```ts
+import { scene } from '@d-matrix/utils';
+
+const records = [{ value: 3 }, { value: undefined }, { value: 1 }];
+
+scene.sortRecordsBySortStateNilLast(records, {
+  field: 'value',
+  direction: scene.VirtualTableSortDirection.ASC,
+});
+// [{ value: 1 }, { value: 3 }, { value: undefined }]
+```
+
+- `VirtualTableSortDirection`
+
+排序方向常量：
+
+```ts
+scene.VirtualTableSortDirection.NONE; // 0
+scene.VirtualTableSortDirection.ASC; // 1
+scene.VirtualTableSortDirection.DESC; // -1
+```
+
+- `VirtualTableSort`
+
+排序状态类型：
+
+```ts
+type VirtualTableSort = {
+  field: string;
+  direction: ValueOf<typeof scene.VirtualTableSortDirection>;
+};
+```
+
 ## 测试
 
 运行全部组件测试
