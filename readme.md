@@ -4,53 +4,127 @@
 ![npm bundle size](https://img.shields.io/bundlephobia/min/%40d-matrix%2Futils)
 [![NPM version](https://img.shields.io/npm/v/@d-matrix/utils.svg?style=flat)](https://www.npmjs.com/package/@d-matrix/utils)
 
-A dozen of utils for Front-End Development
+`@d-matrix/utils` 是一个面向前端开发的 TypeScript 工具函数集合，按命名空间导出浏览器、React、日期、数组、数值、文件与图表等常用能力。
 
-## API
+文档同时保留了详细 API 说明、测试入口和发布命令，既适合作为包使用说明，也适合作为仓库维护入口。
 
-- [clipboard](#clipboard)
-- [react](#react)
-- [dom](#dom)
-- [date](#date)
-- [types](#types)
-- [algorithm](#algorithm)
-- [file](#file)
-- [support](#support)
-- [timer](#timer)
-- [operator](#operator)
-- [decimal](#decimal)
-- [object](#object)
-- [array](#array)
-- [number](#number)
-- [echarts](#echarts)
-- [color](#color)
-- [scene](#scene)
+## 特性
+
+- 按命名空间导出，导入路径稳定，适合在业务项目中按模块组织调用。
+- 覆盖前端常见场景，包括剪贴板、DOM、React Hook、文件处理、ECharts、数组与数值计算。
+- 提供 Cypress 组件测试、类型测试和示例页面，便于验证行为与查看用法。
+
+## 快速开始
+
+### 安装
+
+```bash
+npm install @d-matrix/utils
+```
+
+如果你会使用 `react` 或 `echarts` 相关能力，请根据项目实际情况安装对应的 peer dependencies。
+
+### 导入方式
+
+包的公开入口与 [src/index.ts](./src/index.ts) 保持一致，推荐按命名空间导入：
+
+```ts
+import { array, date, number, react } from '@d-matrix/utils';
+```
+
+### 基本示例
+
+```ts
+import { date, number } from '@d-matrix/utils';
+
+const years = date.getYears({ type: date.YearOptionKind.Numbers, recentYears: 3 });
+const ratio = number.safeDivide('12', '4');
+
+console.log(years); // [2026, 2025, 2024]
+console.log(ratio); // 3
+```
+
+```tsx
+import React from 'react';
+import { react } from '@d-matrix/utils';
+
+export function ResponsivePanel() {
+  const isDesktop = react.useMediaQuery('(min-width: 1024px)');
+
+  return <div>{isDesktop ? 'desktop' : 'mobile'}</div>;
+}
+```
+
+## API 导航
+
+每个 API 默认收起，点击展开可查看说明、示例和测试入口。
+
+- [clipboard](#clipboard)：剪贴板读写。
+- [react](#react)：React 渲染、Hook 与类型辅助。
+- [dom](#dom)：DOM 操作与 HTML 字符串处理。
+- [date](#date)：年份与星期相关工具。
+- [types](#types)：TypeScript 类型工具。
+- [algorithm](#algorithm)：树结构与二分相关算法。
+- [file](#file)：图片、下载与文件辅助。
+- [support](#support)：运行环境能力检测。
+- [timer](#timer)：异步等待工具。
+- [operator](#operator)：运行时类型判断。
+- [decimal](#decimal)：十进制格式化。
+- [object](#object)：对象清理与键名辅助。
+- [array](#array)：数组移动、统计与排名。
+- [number](#number)：安全数值运算。
+- [echarts](#echarts)：ECharts 配置与数据处理。
+- [color](#color)：颜色转换。
+- [scene](#scene)：业务场景选择态与排序工具。
+
+## API 详情
 
 ### clipboard
 
-- `writeImage(element: HTMLImageElement | null | string): Promise<void>`
+提供剪贴板写入能力，支持文本和图片两类常见前端交互场景。
 
-复制图片到剪贴板
+相关测试：[clipboard.cy.tsx](./tests/clipboard.cy.tsx)
 
-- `writeText(text: string): Promise<void>`
+<details>
+<summary><code>writeImage(element: HTMLImageElement | null | string): Promise&lt;void&gt;</code></summary>
 
-复制文本到剪切板
+复制图片到剪贴板。
+
+</details>
+
+<details>
+<summary><code>writeText(text: string): Promise&lt;void&gt;</code></summary>
+
+复制文本到剪贴板。
+
+</details>
 
 ### react
 
-- `render<P>(element: ReactElement<P>): Promise<string>`
+提供 React 渲染、常用 Hook、类组件增强能力与类型辅助工具。
 
-渲染`React`组件，返回HTML字符串。
+相关测试：[react.cy.tsx](./tests/react.cy.tsx)、[react-types.tsx](./tests/react-types.tsx)
 
-- `cleanup(): void`
+<details>
+<summary><code>render&lt;P&gt;(element: ReactElement&lt;P&gt;): Promise&lt;string&gt;</code></summary>
 
-清理函数，需要在调用`render()`函数后调用。
+渲染 `React` 组件并返回 HTML 字符串。
 
-- `useDisableContextMenu(target: ContextMenuTarget = defaultContextMenuTarget): void`
+</details>
 
-在`target`函数返回的元素上禁用右键菜单，默认的`target`是`() => document`
+<details>
+<summary><code>cleanup(): void</code></summary>
 
-例1：在`id`是`test`的元素上禁用右键菜单
+清理函数，需要在调用 `render()` 后执行。
+
+</details>
+
+<details>
+<summary><code>useDisableContextMenu(target: ContextMenuTarget = defaultContextMenuTarget): void</code></summary>
+
+在 `target` 函数返回的元素上禁用右键菜单，默认 `target` 为 `() => document`。
+
+例 1：在 `id` 是 `test` 的元素上禁用右键菜单。
 
 ```tsx
 import { react } from '@d-matrix/utils';
@@ -60,56 +134,68 @@ const TestComp = () => {
 
   return (
     <div>
-      <div id='test'>此元素的右键菜单被禁用</div>
+      <div id="test">此元素的右键菜单被禁用</div>
     </div>
-  )
-}
+  );
+};
 ```
 
-例2：在`document`上禁用右键菜单
+例 2：在 `document` 上禁用右键菜单。
 
 ```tsx
 const TestComp = () => {
   react.useDisableContextMenu();
 
-  return <div>内容</div>
-}
+  return <div>内容</div>;
+};
 ```
 
-- `useStateCallback<T>(initialState: T): [T, (state: T, cb?: (state: T) => void) => void]`
+</details>
 
-返回值`setState()`函数类似类组件中的`setState(updater[, callback])`,可以在`callback`中获取更新后的`state`
+<details>
+<summary><code>useStateCallback&lt;T&gt;(initialState: T): [T, (state: T, cb?: (state: T) =&gt; void) =&gt; void]</code></summary>
 
-- `useIsMounted(): () => boolean`
+返回值中的 `setState()` 类似类组件里的 `setState(updater[, callback])`，可在 `callback` 中获取更新后的 `state`。
 
-获取当前组件是否已挂载的 Hook
+</details>
+
+<details>
+<summary><code>useIsMounted(): () =&gt; boolean</code></summary>
+
+获取当前组件是否已挂载的 Hook。
 
 ```ts
 const Test = () => {
   const isMounted = useIsMounted();
 
   useEffect(() => {
-      if (isMounted()) {
-       console.log('component mounted')
-      }
+    if (isMounted()) {
+      console.log('component mounted');
+    }
   }, [isMounted]);
 
-  return null
+  return null;
 };
 ```
 
-- `useCopyToClipboard(props?: UseCopyToClipboardProps)`
+</details>
 
-复制文本到剪切板, 用法见[测试](./tests/react.cy.tsx)
+<details>
+<summary><code>useCopyToClipboard(props?: UseCopyToClipboardProps)</code></summary>
 
-- `EnhancedComponent.prototype.setStateAsync(state)`
+复制文本到剪贴板。更多用法见[测试](./tests/react.cy.tsx)。
 
-`setState()`方法的同步版本
+</details>
+
+<details>
+<summary><code>EnhancedComponent.prototype.setStateAsync(state)</code></summary>
+
+`setState()` 方法的同步版本。
 
 ```ts
 import { react } from '@d-matrix/utils';
 
- class TestComponent extends EnhancedComponent<unknown, { pageIndex: number }> {
+class TestComponent extends EnhancedComponent<unknown, { pageIndex: number }> {
   state = {
     pageIndex: 1,
   };
@@ -129,13 +215,19 @@ import { react } from '@d-matrix/utils';
 }
 ```
 
-- `useDeepCompareRef(deps: DependencyList): React.MutableRefObject<number>`
+</details>
 
-深比较`deps`。返回`ref`，`ref.current`是一个自增数字，每次`deps`变化，`ref.current`加`1`。用法见[测试](./tests/react.cy.tsx)
+<details>
+<summary><code>useDeepCompareRef(deps: DependencyList): React.MutableRefObject&lt;number&gt;</code></summary>
 
-- `InferRef<T>`
+深比较 `deps`。返回的 `ref.current` 是自增数字，每次 `deps` 变化时加 `1`。更多用法见[测试](./tests/react.cy.tsx)。
 
-推导子组件的`ref`类型，适用于组件没有导出其`ref`类型的场景, 更多用法见[测试](./tests/react-types.tsx)
+</details>
+
+<details>
+<summary><code>InferRef&lt;T&gt;</code></summary>
+
+推导子组件的 `ref` 类型，适用于组件没有导出 `ref` 类型的场景。更多用法见[测试](./tests/react-types.tsx)。
 
 ```tsx
 interface ChildRefProps {
@@ -160,7 +252,7 @@ const Child = React.forwardRef<ChildRefProps, ChildProps>((props, ref) => {
   return null;
 });
 
-type InferredChildRef = InferRef<typeof Child>;  // 等价于ChildRefProps
+type InferredChildRef = InferRef<typeof Child>; // 等价于 ChildRefProps
 
 const Parent = () => {
   const childRef = React.useRef<InferredChildRef>(null);
@@ -169,9 +261,12 @@ const Parent = () => {
 };
 ```
 
-- `useForwardRef = <T>(ref: ForwardedRef<T>, initialValue: any = null): React.MutableRefObject<T>`
+</details>
 
-解决使用`React.forwardRef`后，在调用`ref.current.someMethod()`时, 出现`Property 'current' does not exist on type '(instance: HTMLInputElement | null) => void'` TS类型错误，具体问题见[这里](https://stackoverflow.com/questions/66060217/i-cant-type-the-ref-correctly-using-useref-hook-in-typescript)
+<details>
+<summary><code>useForwardRef = &lt;T&gt;(ref: ForwardedRef&lt;T&gt;, initialValue: any = null): React.MutableRefObject&lt;T&gt;</code></summary>
+
+解决 `React.forwardRef` 场景下调用 `ref.current.someMethod()` 时出现 `Property 'current' does not exist on type '(instance: HTMLInputElement | null) => void'` 的 TypeScript 类型错误。问题背景见[这里](https://stackoverflow.com/questions/66060217/i-cant-type-the-ref-correctly-using-useref-hook-in-typescript)。
 
 ```ts
 const Input = React.forwardRef<HTMLInputElement, React.ComponentPropsWithRef<'input'>>((props, ref) => {
@@ -183,35 +278,47 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentPropsWithRef<'in
 });
 ```
 
-- `useMediaQuery(query, options?): boolean`
+</details>
 
-使用[Match Media API](https://developer.mozilla.org/en-US/docs/Web/API/Window/matchMedia) 检测当前document是否匹配media query
+<details>
+<summary><code>useMediaQuery(query, options?): boolean</code></summary>
+
+使用 [Match Media API](https://developer.mozilla.org/en-US/docs/Web/API/Window/matchMedia) 检测当前 `document` 是否匹配 media query。
 
 ```ts
-import { useMediaQuery } from '@d-matrix/utils/react'
+import { useMediaQuery } from '@d-matrix/utils/react';
 
 export default function Component() {
-  const matches = useMediaQuery('(min-width: 768px)')
+  const matches = useMediaQuery('(min-width: 768px)');
 
-  return (
-    <div>
-      {`The view port is ${matches ? 'at least' : 'less than'} 768 pixels wide`}
-    </div>
-  )
+  return <div>{`The viewport is ${matches ? 'at least' : 'less than'} 768 pixels wide`}</div>;
 }
 ```
 
-- `useIsFirstRender(): boolean`
+</details>
 
-对于确定当前渲染是否是组件的第一个渲染很有用。当你想在初始渲染时有条件地执行某些逻辑或渲染特定组件时，这个 hook 特别有价值，提供了一种有效的方法来区分第一次和后续渲染。
+<details>
+<summary><code>useIsFirstRender(): boolean</code></summary>
+
+用于判断当前渲染是否为组件的第一次渲染，适合在初始渲染与后续渲染之间做逻辑区分。
+
+</details>
 
 ### dom
 
-- `scrollToTop(element: Element | null | undefined): void`
+提供 DOM 滚动、纯文本提取和 HTML 颜色值转换等浏览器侧工具。
 
-元素滚动条滚动到顶部，对老旧浏览器做了兼容，见[浏览器兼容性](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollTop#browser_compatibility)。
+相关测试：[dom.cy.tsx](./tests/dom.cy.tsx)
 
-- `strip(html: string): string`
+<details>
+<summary><code>scrollToTop(element: Element | null | undefined): void</code></summary>
+
+将元素滚动条滚动到顶部，并兼容老旧浏览器。浏览器兼容性见[MDN](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollTop#browser_compatibility)。
+
+</details>
+
+<details>
+<summary><code>strip(html: string): string</code></summary>
 
 从字符串中去除 HTML 标签并返回纯文本内容。
 
@@ -221,22 +328,37 @@ import { dom } from '@d-matrix/utils';
 dom.strip('测试<em>高亮</em>测试'); // '测试高亮测试'
 ```
 
-- `function convertRgbToHexInHtml(htmlStr: string): string`
+</details>
 
-将HTML字符串中的RGB和RGBA颜色值转换为十六进制颜色值
+<details>
+<summary><code>convertRgbToHexInHtml(htmlStr: string): string</code></summary>
+
+将 HTML 字符串中的 RGB / RGBA 颜色值转换为十六进制颜色值。
 
 ```ts
 const html = '<div style="color: rgb(255, 0, 0)">Red text</div>';
-dom.convertRgbToHexInHtml(html);  // <div style="color: #ff0000">Red text</div>
+dom.convertRgbToHexInHtml(html); // <div style="color: #ff0000">Red text</div>
 ```
+
+</details>
 
 ### date
 
-- `rangeOfYears(start: number, end: number = new Date().getFullYear()): number[]`
+提供年份选项构造和星期展示等日期辅助能力。
 
-创建`start`和`end`之间的年份数组。
+相关测试：[date.cy.ts](./tests/date.cy.ts)
 
-- `getYears()`
+<details>
+<summary><code>rangeOfYears(start: number, end: number = new Date().getFullYear()): number[]</code></summary>
+
+创建 `start` 到 `end` 之间的年份数组。
+
+</details>
+
+<details>
+<summary><code>getYears()</code></summary>
+
+获取最近若干年。`type` 传 `YearOptionKind.Numbers` 时返回数字数组；传 `YearOptionKind.Objects` 时返回对象数组。
 
 ```ts
 export interface YearOption {
@@ -250,24 +372,18 @@ export enum YearOptionKind {
 }
 
 export type GetYearsOptions = {
-  // 开始年份
   startYear?: number;
-  // 最近几年
   recentYears?: number;
-  // 截止年份
   endYear?: number;
-  // 后缀，默认为'年'
   suffix?: string;
 };
 
 export function getYears(options: GetYearsOptions & { type: YearOptionKind.Numbers }): number[];
 export function getYears(options: GetYearsOptions & { type: YearOptionKind.Objects }): YearOption[];
-export function getYears(options: GetYearsOptions & { type: YearOptionKind }): number[] | YearOption[]
+export function getYears(options: GetYearsOptions & { type: YearOptionKind }): number[] | YearOption[];
 ```
 
-获取n年，`type`传`YearOptionKind.Numbers`，返回`[2023, 2022, 2021]`数字数组；`type`传`YearOptionKind.Objects`，返回如下的对象数组
-
-```sh
+```ts
 [
   { value: 2023, label: '2023年' },
   { value: 2022, label: '2022年' },
@@ -275,46 +391,76 @@ export function getYears(options: GetYearsOptions & { type: YearOptionKind }): n
 ]
 ```
 
-更多用法，见[测试用例](./tests/date.cy.ts)
+更多用法见[测试用例](./tests/date.cy.ts)。
 
-- `dayOfWeek(num: number, lang: keyof typeof i18n = 'zh'): string`
+</details>
 
-返回星期几, `lang`仅支持`zh`和`en`, `num`必须为正整数,否则报错
+<details>
+<summary><code>dayOfWeek(num: number, lang: keyof typeof i18n = 'zh'): string</code></summary>
 
-```js
-dayOfWeek(0) // "日"
+返回星期几。`lang` 仅支持 `zh` 和 `en`，`num` 需要是整数，内部按 `7` 取模。
+
+```ts
+dayOfWeek(0); // '日'
 ```
+
+</details>
 
 ### types
 
-- `WithOptional<T, K extends keyof T>`
+提供常用的 TypeScript 类型变换工具，适合在业务类型声明中复用。
+
+相关测试：[types.ts](./tests/types.ts)
+
+<details>
+<summary><code>WithOptional&lt;T, K extends keyof T&gt;</code></summary>
+
+将指定属性设为可选。
 
 ```ts
-type A = { a: number; b: number; c: number; };
-type T0 = WithOptional<A, 'b' | 'c'>;  // { a: number; b?: number; c?: number }
+type A = { a: number; b: number; c: number };
+type T0 = WithOptional<A, 'b' | 'c'>; // { a: number; b?: number; c?: number }
 ```
 
-- `Nullishable<T>`
+</details>
+
+<details>
+<summary><code>Nullishable&lt;T&gt;</code></summary>
+
+为任意类型 `T` 扩展 `undefined | null`。
 
 ```ts
 type T0 = Nullishable<string>; // string | undefined | null
 ```
 
-- `Optional<T>`
+</details>
+
+<details>
+<summary><code>Optional&lt;T&gt;</code></summary>
+
+为任意类型 `T` 扩展 `undefined`。
 
 ```ts
 type T0 = Optional<number>; // number | undefined
 ```
 
-- `NullableValue<T>`
+</details>
+
+<details>
+<summary><code>NullableValue&lt;T&gt;</code></summary>
+
+为任意类型 `T` 扩展 `null`。
 
 ```ts
 type T0 = NullableValue<boolean>; // boolean | null
 ```
 
-- `FunctionPropertyNames<T>`
+</details>
 
-获取对象中的方法名称，返回union type
+<details>
+<summary><code>FunctionPropertyNames&lt;T&gt;</code></summary>
+
+获取对象中的方法名称，返回 union type。
 
 ```ts
 class A {
@@ -331,12 +477,15 @@ const t1 = {
   div() {},
   result: 0,
 };
-type T1 =  FunctionPropertyNames<typeof t1>; // 'add' | 'minus' | 'div'
+type T1 = FunctionPropertyNames<typeof t1>; // 'add' | 'minus' | 'div'
 ```
 
-- `NonFunctionPropertyNames<T>`
+</details>
 
-获取对象中非函数属性名称，返回union type
+<details>
+<summary><code>NonFunctionPropertyNames&lt;T&gt;</code></summary>
+
+获取对象中的非函数属性名称，返回 union type。
 
 ```ts
 class A {
@@ -345,7 +494,7 @@ class A {
   div() {}
   public result: number = 0;
 }
-type T0 = FunctionPropertyNames<A>; // 'result'
+type T0 = NonFunctionPropertyNames<A>; // 'result'
 
 const t1 = {
   add() {},
@@ -353,12 +502,15 @@ const t1 = {
   div() {},
   result: 0,
 };
-type T1 =  FunctionPropertyNames<typeof t1>; // 'result'
+type T1 = NonFunctionPropertyNames<typeof t1>; // 'result'
 ```
 
-- `ValueOf<T>`
+</details>
 
-获取对象中`key`的值，返回由这些值组成的union type
+<details>
+<summary><code>ValueOf&lt;T&gt;</code></summary>
+
+获取对象中所有值组成的 union type。
 
 ```ts
 const map = {
@@ -374,23 +526,33 @@ const map = {
 type T0 = ValueOf<typeof map>; // '0m' | '1m' | '2m' | '3m' | '4m' | '5m' | '6m'
 ```
 
-- `WithRequired<T, K extends keyof T>`
+</details>
 
-指定属性变为必选
+<details>
+<summary><code>WithRequired&lt;T, K extends keyof T&gt;</code></summary>
+
+将指定属性变为必选。
 
 ```ts
 type Input = {
   a: number;
   b?: string;
 };
-type Output = WithRequired<Input, 'b'> // { a: number; b: string }
+type Output = WithRequired<Input, 'b'>; // { a: number; b: string }
 ```
+
+</details>
 
 ### algorithm
 
-- `function nodeCountAtDepth(root: Record<string, any>, depth: number, childrenKey: string = 'children'): number;`
+收录树结构与二分相关的算法辅助能力。
 
-计算指定层级的节点数量
+相关测试：[tree.cy.ts](./tests/algorithm/tree.cy.ts)、[binary.cy.ts](./tests/algorithm/binary.cy.ts)
+
+<details>
+<summary><code>nodeCountAtDepth(root: Record&lt;string, any&gt;, depth: number, childrenKey: string = 'children'): number</code></summary>
+
+计算指定层级的节点数量。
 
 ```ts
 const root = {
@@ -405,9 +567,12 @@ expect(tree.nodeCountAtDepth(root, 1)).to.be.equal(2);
 expect(tree.nodeCountAtDepth(root, 2)).to.be.equal(6);
 ```
 
-- `const findNode = <T extends Record<string, any>>(tree: T[], predicate: (node: T) => boolean, childrenKey = 'children'): T | null`
+</details>
 
-找到符合条件的节点
+<details>
+<summary><code>findNode&lt;T extends Record&lt;string, any&gt;&gt;(tree: T[], predicate: (node: T) =&gt; boolean, childrenKey = 'children'): T | null</code></summary>
+
+找到符合条件的节点。
 
 ```ts
 const root = {
@@ -424,9 +589,12 @@ const actual2 = tree.findNode([root], (node) => node.id === 33);
 expect(actual2).to.be.deep.equal(root.children[1].children[2]);
 ```
 
-- `tree.findParent(tree, child, indentityKey, childrenKey)`
+</details>
 
-根据子节点查找父节点
+<details>
+<summary><code>findParent(tree, child, indentityKey, childrenKey)</code></summary>
+
+根据子节点查找父节点。
 
 ```ts
 const treeData = {
@@ -441,16 +609,19 @@ const actual = tree.findParent(treeData, treeData.subs[1].subs[2], 'code', 'subs
 expect(actual).to.be.deep.equal(treeData.subs[1]);
 ```
 
-- `function findPath<T extends Record<string, any>>(tree: T[], func: (node: T) => boolean, childrenKey = 'children'): T[] | null`
+</details>
 
-查找节点路径, 返回节点数组或`null`
+<details>
+<summary><code>findPath&lt;T extends Record&lt;string, any&gt;&gt;(tree: T[], func: (node: T) =&gt; boolean, childrenKey = 'children'): T[] | null</code></summary>
+
+查找节点路径，返回节点数组或 `null`。
 
 ```ts
-const treeData = {
-  code: 1,
-  subs: [
-    { code: 2, subs: [{ code: 21 }, { code: 22 }, { code: 23 }] },
-    { code: 3, subs: [{ code: 31 }, { code: 32 }, { code: 33 }] },
+const root = {
+  id: 1,
+  children: [
+    { id: 2, children: [{ id: 21 }, { id: 22 }, { id: 23 }] },
+    { id: 3, children: [{ id: 31 }, { id: 32 }, { id: 33 }] },
   ],
 };
 
@@ -458,19 +629,34 @@ const actual = tree.findPath([root], (node) => node.id === 33);
 expect(actual).to.be.deep.equal([root, root.children[1], root.children[1].children[2]]);
 ```
 
-- `tree.flatten(tree, T[], childrenKey = 'children')`
+</details>
 
-扁平化树结构, 返回的每个节点没有`children`属性
+<details>
+<summary><code>flatten(tree, childrenKey = 'children')</code></summary>
+
+扁平化树结构，返回的每个节点都不包含 `children` 属性。
+
+</details>
 
 ### file
 
-- `toImage(file: BlobPart | FileURL, options?: BlobPropertyBag): Promise<HTMLImageElement>`
+提供图片加载、尺寸校验、文件下载和响应头文件名解析等工具。
 
-转换BlobPart或者文件地址为图片对象
+相关测试：[file.cy.ts](./tests/file.cy.ts)
 
-- `validateImageSize(file: BlobPart | FileURL, limitSize: { width: number; height: number }, options?: BlobPropertyBag): Promise<ImageSizeValidationResult>`
+<details>
+<summary><code>toImage(file: BlobPart | FileURL, options?: BlobPropertyBag): Promise&lt;HTMLImageElement&gt;</code></summary>
 
-返回值:
+将 `BlobPart` 或文件地址转换为图片对象。
+
+</details>
+
+<details>
+<summary><code>validateImageSize(file: BlobPart | FileURL, limitSize: { width: number; height: number }, options?: BlobPropertyBag): Promise&lt;ImageSizeValidationResult&gt;</code></summary>
+
+图片宽高校验。
+
+返回值：
 
 ```ts
 interface ImageSizeValidationResult {
@@ -480,11 +666,12 @@ interface ImageSizeValidationResult {
 }
 ```
 
-图片宽，高校验
+</details>
 
-- `isImageExists(src: string, img: HTMLImageElement = new Image()): Promise<boolean>`
+<details>
+<summary><code>isImageExists(src: string, img: HTMLImageElement = new Image()): Promise&lt;boolean&gt;</code></summary>
 
-检测图片地址是否可用
+检测图片地址是否可用。
 
 ```ts
 import { file } from '@d-matrix/utils';
@@ -493,71 +680,107 @@ const url = 'https://picsum.photos/200/300';
 const res = await file.isImageExists(url);
 ```
 
-传入HTML中已经存在的`img`元素
+传入 HTML 中已存在的 `img` 元素：
 
-```js
+```ts
 import { file } from '@d-matrix/utils';
 
 const $img = document.getElementById('img');
-const res = await file.isImageExists(url, $img);
+const res = await file.isImageExists(url, $img as HTMLImageElement);
 ```
 
-- `getFilenameFromContentDispositionHeader(header: { ['content-disposition']: string }): string`
+</details>
 
-从`Content-Disposition` response header中获取`filename`
+<details>
+<summary><code>getFilenameFromContentDispositionHeader(header: { ['content-disposition']: string }): string</code></summary>
+
+从 `Content-Disposition` response header 中获取 `filename`。
 
 ```ts
 import { file } from '@d-matrix/utils';
 
 const header = {
-  'content-disposition': 'attachment;filename=%E5%A4%A7%E8%A1%8C%E6%8C%87%E5%AF%BC2024-06-27-2024-06-28.xlsx'
+  'content-disposition': 'attachment;filename=%E5%A4%A7%E8%A1%8C%E6%8C%87%E5%AF%BC2024-06-27-2024-06-28.xlsx',
 };
 const filename = file.getFilenameFromContentDispositionHeader(header);
 // '大行指导2024-06-27-2024-06-28.xlsx'
 ```
 
-- `download(source: string | Blob, fileName = '', target?: HyperLinkTarget): void`
+</details>
 
-文件下载，`source`是文件地址或`blob`对象。
+<details>
+<summary><code>download(source: string | Blob, fileName = '', target?: HyperLinkTarget): void</code></summary>
+
+文件下载，`source` 可以是文件地址或 `blob` 对象。
 
 ```ts
-type HyperLinkTarget = "_self" | "_blank" | "_parent" | "_top"
+type HyperLinkTarget = '_self' | '_blank' | '_parent' | '_top';
 ```
 
-- `downloadFileByIframe(source: string): boolean`
+</details>
 
-通过创建`iframe`进行文件下载
+<details>
+<summary><code>downloadFileByIframe(source: string): boolean</code></summary>
 
-## support
+通过创建 `iframe` 进行文件下载。
 
-- `isBrowserEnv(): boolean`
+</details>
 
-是否是浏览器环境
+### support
 
-- `isWebSocket(): boolean`
+提供浏览器、WebSocket、SharedWorker 等运行环境能力检测函数。
 
-是否支持WebSocket
+相关测试：暂无专用测试
 
-- `isSharedWorker(): boolean`
+<details>
+<summary><code>isBrowserEnv(): boolean</code></summary>
 
-是否支持SharedWorker
+判断当前是否为浏览器环境。
 
-## timer
+</details>
 
-- `sleep(ms?: number): Promise<unknown>`
+<details>
+<summary><code>isWebSocket(): boolean</code></summary>
 
-使用`setTimeout`与`Promise`实现，暂停执行`ms`毫秒
+判断当前环境是否支持 `WebSocket`。
+
+</details>
+
+<details>
+<summary><code>isSharedWorker(): boolean</code></summary>
+
+判断当前环境是否支持 `SharedWorker`。
+
+</details>
+
+### timer
+
+提供基于 Promise 的异步等待工具。
+
+相关测试：暂无专用测试
+
+<details>
+<summary><code>sleep(ms?: number): Promise&lt;unknown&gt;</code></summary>
+
+使用 `setTimeout` 与 `Promise` 实现暂停执行若干毫秒。
 
 ```ts
-await sleep(3000); // 暂停3秒
+await sleep(3000); // 暂停 3 秒
 console.log('continue'); // 继续执行
 ```
 
-## operator
+</details>
 
-- `trueTypeOf = (obj: unknown): string`
+### operator
 
-检查数据类型
+提供运行时值类型判断工具。
+
+相关测试：[operator.cy.ts](./tests/operator.cy.ts)
+
+<details>
+<summary><code>trueTypeOf(obj: unknown): string</code></summary>
+
+检查数据类型。
 
 ```ts
 trueTypeOf([]); // array
@@ -572,11 +795,18 @@ trueTypeOf(null); // null
 trueTypeOf(undefined); // undefined
 ```
 
-## decimal
+</details>
 
-- `format(value: number | string | undefined | null, options?: FormatOptions): string`
+### decimal
 
-格式化数字，默认保留3位小数，可添加前缀，后缀，默认值为'--'，用法见[测试](./tests//decimal.cy.ts)
+提供基于 `decimal.js-light` 的数值格式化能力。
+
+相关测试：[decimal.cy.ts](./tests/decimal.cy.ts)
+
+<details>
+<summary><code>format(value: number | string | undefined | null, options?: FormatOptions): string</code></summary>
+
+格式化数字，默认保留 3 位小数，可添加前缀、后缀，默认值为 `'--'`。更多用法见[测试](./tests/decimal.cy.ts)。
 
 ```ts
 type FormatOptions = {
@@ -591,32 +821,51 @@ type FormatOptions = {
 };
 ```
 
-## object
+</details>
 
-- `removeZeroValueKeys = <T extends Record<string, any>>(obj: T, zeroValues = ZeroValues): T`
+### object
 
-移除零值的键, 默认的零值是：`undefined`、`null`, `''`, `NaN`, `[]`, `{}`
+提供对象零值清理与类型安全键名访问辅助函数。
+
+相关测试：[object.cy.ts](./tests/object.cy.ts)
+
+<details>
+<summary><code>removeZeroValueKeys = &lt;T extends Record&lt;string, any&gt;&gt;(obj: T, zeroValues = ZeroValues): T</code></summary>
+
+移除零值的键。默认零值包括 `undefined`、`null`、`''`、`NaN`、`[]`、`{}`。
 
 ```ts
-removeZeroValueKeys({ a: '', b: 'abc', c: undefined, d: null, e: NaN, f: -1, g: [], h: {} })
+removeZeroValueKeys({ a: '', b: 'abc', c: undefined, d: null, e: NaN, f: -1, g: [], h: {} });
 // { b: 'abc', f: -1 }
 ```
 
-- `typedKeys(obj: T): Array<keyof T>`
+</details>
 
-返回`tuple`，而不是`string[]`
+<details>
+<summary><code>typedKeys(obj: T): Array&lt;keyof T&gt;</code></summary>
+
+返回 `tuple` 类型，而不是 `string[]`。
 
 ```ts
 const obj = { a: 1, b: '2' };
-Object.keys(obj) //  string[]
-object.typedKeys({ a: 1, b: '2' }) // ('a' | 'b')[]
+Object.keys(obj); // string[]
+object.typedKeys({ a: 1, b: '2' }); // ('a' | 'b')[]
 ```
 
-## array
+</details>
 
-- `moveImmutable<T>(array: T[], fromIndex: number, toIndex: number): T[]`
+### array
 
-```js
+提供数组移动、序号计算、百分位排名和标准差等实用函数。
+
+相关测试：[array.cy.ts](./tests/array.cy.ts)
+
+<details>
+<summary><code>moveImmutable&lt;T&gt;(array: T[], fromIndex: number, toIndex: number): T[]</code></summary>
+
+移动数组元素位置，返回新数组，不修改原数组。
+
+```ts
 import { array } from '@d-matrix/utils';
 
 const input = ['a', 'b', 'c'];
@@ -634,13 +883,21 @@ console.log(array3);
 //=> ['b', 'a', 'c']
 ```
 
-- `moveMutable<T>(array: T[], fromIndex: number, toIndex: number): void`
+</details>
 
-- `moveToStart<T>(array: T[], predicate: (item: T) => boolean): T[]`
+<details>
+<summary><code>moveMutable&lt;T&gt;(array: T[], fromIndex: number, toIndex: number): void</code></summary>
 
-移动元素到数组首位，不会修改原数组
+移动数组元素位置，直接修改原数组。
 
-```js
+</details>
+
+<details>
+<summary><code>moveToStart&lt;T&gt;(array: T[], predicate: (item: T) =&gt; boolean): T[]</code></summary>
+
+将满足条件的元素移动到数组首位，不修改原数组。
+
+```ts
 import { array } from '@d-matrix/utils';
 
 const list = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
@@ -649,19 +906,31 @@ const newList = array.moveToStart(list, (item) => item.id === 4);
 // [{ id: 4 }, { id: 1 }, { id: 2 }, { id: 3 }, { id: 5 }]
 ```
 
-- `moveMulti<T extends unknown>(arr: T[], indexes: number[], start: number): T[]`
+</details>
 
-移动多个元素到数组中指定的位置,用法,见[测试用例](tests/array.cy.ts)
+<details>
+<summary><code>moveMulti&lt;T extends unknown&gt;(arr: T[], indexes: number[], start: number): T[]</code></summary>
 
-- `getArrayOrUndefined<T>(array?: T[] | undefined | null): T[] | undefined`
+将多个元素移动到数组中的指定位置。更多用法见[测试用例](./tests/array.cy.ts)。
 
-如果`array`是数组且不为空,返回该数组，否则返回`undefined`,见[测试用例](tests/array.cy.ts)
+</details>
 
-- `calcUnusedMinSerialNumber = <T extends Record<string, unknown>>(list: T[],options: { fieldName: keyof T; prefix: string; defaultNo?: number }): number`
+<details>
+<summary><code>getArrayOrUndefined&lt;T&gt;(array?: T[] | undefined | null): T[] | undefined</code></summary>
 
-通用序号计算工具：从指定列表中提取「前缀+数字」格式的值，找到未被使用的最小正整数序号，用法见[测试用例](tests/array.cy.ts)
+如果 `array` 是非空数组则返回该数组，否则返回 `undefined`。更多用法见[测试用例](./tests/array.cy.ts)。
 
-- `percentRank(arr: number[], value: number | undefined | null): number | undefined`
+</details>
+
+<details>
+<summary><code>calcUnusedMinSerialNumber = &lt;T extends Record&lt;string, unknown&gt;&gt;(list: T[], options: { fieldName: keyof T; prefix: string; defaultNo?: number }): number</code></summary>
+
+从指定列表中提取“前缀 + 数字”格式的值，找到未被使用的最小正整数序号。更多用法见[测试用例](./tests/array.cy.ts)。
+
+</details>
+
+<details>
+<summary><code>percentRank(arr: number[], value: number | undefined | null): number | undefined</code></summary>
 
 计算给定值在数组中的百分位排名。函数内部会先对数组做升序排序，再计算结果。
 
@@ -673,9 +942,12 @@ array.percentRank(arr, 10); // 0
 array.percentRank(arr, 50); // 1
 ```
 
-- `percentRankOfSorted(sorted: number[], value: number | undefined | null): number | undefined`
+</details>
 
-计算给定值在已排序数组中的百分位排名，适用于输入已经是升序数组的场景，避免重复排序。支持精确命中和区间插值，超出范围时返回 `undefined`，更多见[测试用例](tests/array.cy.ts)。
+<details>
+<summary><code>percentRankOfSorted(sorted: number[], value: number | undefined | null): number | undefined</code></summary>
+
+计算给定值在已排序数组中的百分位排名，适用于输入已经是升序数组的场景，避免重复排序。支持精确命中和区间插值，超出范围时返回 `undefined`。更多用法见[测试用例](./tests/array.cy.ts)。
 
 ```ts
 const sorted = [10, 20, 40, 50];
@@ -685,9 +957,12 @@ array.percentRankOfSorted(sorted, 10); // 0
 array.percentRankOfSorted(sorted, 50); // 1
 ```
 
-- `standardDeviation(arr: number[]): number | undefined`
+</details>
 
-计算数字数组的总体标准差，空数组时返回 `undefined`，更多见[测试用例](tests/array.cy.ts)。
+<details>
+<summary><code>standardDeviation(arr: number[]): number | undefined</code></summary>
+
+计算数字数组的总体标准差，空数组时返回 `undefined`。更多用法见[测试用例](./tests/array.cy.ts)。
 
 ```ts
 array.standardDeviation([1, 2, 3, 4, 5]); // 1.4142135623730951
@@ -695,13 +970,23 @@ array.standardDeviation([5]); // 0
 array.standardDeviation([]); // undefined
 ```
 
-## number
+</details>
 
-- `randomInt(min: number, max: number): number`
+### number
 
-返回`min`, `max`之间的随机整数
+提供随机整数、字符串转数值与安全四则运算函数。
 
-- `safeMinus(a: number | string | undefined | null, b: number | string | undefined | null): number | undefined`
+相关测试：[number.cy.ts](./tests/number.cy.ts)
+
+<details>
+<summary><code>randomInt(min: number, max: number): number</code></summary>
+
+返回 `min` 到 `max` 之间的随机整数。
+
+</details>
+
+<details>
+<summary><code>safeMinus(a: number | string | undefined | null, b: number | string | undefined | null): number | undefined</code></summary>
 
 安全减法。支持数字和可转为数字的字符串。任一参数为 `undefined`、`null`、空字符串、空白字符串或非法数字字符串时返回 `undefined`。
 
@@ -712,7 +997,10 @@ number.safeMinus(undefined, 2); // undefined
 number.safeMinus('abc', 2); // undefined
 ```
 
-- `safePlus(a: number | string | undefined | null, b: number | string | undefined | null): number | undefined`
+</details>
+
+<details>
+<summary><code>safePlus(a: number | string | undefined | null, b: number | string | undefined | null): number | undefined</code></summary>
 
 安全加法。支持数字和可转为数字的字符串。任一参数为 `undefined`、`null`、空字符串、空白字符串或非法数字字符串时返回 `undefined`。
 
@@ -723,7 +1011,10 @@ number.safePlus(null, 2); // undefined
 number.safePlus('', 2); // undefined
 ```
 
-- `safeMultiply(a: number | string | undefined | null, b: number | string | undefined | null): number | undefined`
+</details>
+
+<details>
+<summary><code>safeMultiply(a: number | string | undefined | null, b: number | string | undefined | null): number | undefined</code></summary>
 
 安全乘法。支持数字和可转为数字的字符串。任一参数为 `undefined`、`null`、空字符串、空白字符串或非法数字字符串时返回 `undefined`。
 
@@ -734,7 +1025,10 @@ number.safeMultiply(5, undefined); // undefined
 number.safeMultiply('   ', 2); // undefined
 ```
 
-- `safeDivide(a: number | string | undefined | null, b: number | string | undefined | null): number | undefined`
+</details>
+
+<details>
+<summary><code>safeDivide(a: number | string | undefined | null, b: number | string | undefined | null): number | undefined</code></summary>
 
 安全除法。支持数字和可转为数字的字符串。任一参数为 `undefined`、`null`、空字符串、空白字符串、非法数字字符串，或者除数为 `0`（包括字符串 `'0'`）时返回 `undefined`。
 
@@ -746,31 +1040,60 @@ number.safeDivide(1, '0'); // undefined
 number.safeDivide(6, null); // undefined
 ```
 
-## echarts
+</details>
 
-- `mergeOption(defaults: EChartsOption, overrides: EChartsOption, option?: deepmerge.Options): EChartsOption`
+### echarts
 
-deep merge Echarts配置，用法见[测试用例](./tests//echarts/echarts.cy.ts)
+提供 ECharts 配置合并、时间序列补点和 Y 轴范围计算工具。
 
-- `fill<T extends Record<string, any>, XAxisField extends keyof T, YAxisField extends keyof T>(dataSource: T[], xAxisField:XAxisField, yAxisField: YAxisField): T[]`
+相关测试：[mergeOption.cy.ts](./tests/echarts/mergeOption.cy.ts)、[fill.cy.ts](./tests/echarts/fill.cy.ts)、[calcYAxisRange.cy.ts](./tests/echarts/calcYAxisRange.cy.ts)
 
-场景：后端接口返回某几个时间点的数据，需求是在接口数据的基础上每隔5分钟补一个点，以达到图中的效果: [折线图](https://raw.githubusercontent.com/mrdulin/pic-bucket-01/master/Dingtalk_20240724140535.jpg)。
+<details>
+<summary><code>mergeOption(defaults: EChartsOption, overrides: EChartsOption, option?: deepmerge.Options): EChartsOption</code></summary>
 
-填充的点的Y轴值为前一个点的值, 时间示例: [9:23, 9:27] => [9:23, 9:25, 9:27, 9:30]，更多，见[测试用例](./tests/echarts/fill.cy.ts)
+deep merge ECharts 配置。更多用法见[测试用例](./tests/echarts/mergeOption.cy.ts)。
 
-- `calcYAxisRange<T extends Record<string, any>, Key extends keyof T>(data: T[], key: Key, decimalPlaces = 2, splitNumber = 5): { max:number; min:number }`
+</details>
 
-计算echarts YAxis的max和min属性，以达到根据实际数据动态调整，使折线图的波动明显。且第一个点始终在Y轴中间位置，[效果图](https://raw.githubusercontent.com/mrdulin/pic-bucket-01/master/Dingtalk_20240724140535.jpg)
+<details>
+<summary><code>fill&lt;T extends Record&lt;string, any&gt;, XAxisField extends keyof T, YAxisField extends keyof T&gt;(dataSource: T[], xAxisField: XAxisField, yAxisField: YAxisField): T[]</code></summary>
 
-## color
+适用于后端接口只返回部分时间点数据时，按 5 分钟粒度补点。填充点的 Y 轴值沿用前一个点的值。
 
-- `hexToRGBA(hex: string, alpha: number | string = 1): string`
+时间示例：`[9:23, 9:27] => [9:23, 9:25, 9:27, 9:30]`
 
-将十六进制颜色转换为 RGBA 颜色, 见[测试用例](./tests/color.cy.ts)
+更多用法见[测试用例](./tests/echarts/fill.cy.ts)，效果图见[折线图](https://raw.githubusercontent.com/mrdulin/pic-bucket-01/master/Dingtalk_20240724140535.jpg)。
 
-## scene
+</details>
 
-- `toggleSelectionValue<T extends string | number>(params: { selectedValues: T[] | undefined; toggledValue: T; selected: boolean; defaultValue: T; isDefaultSelected: (value: T[] | undefined) => boolean; }): T[]`
+<details>
+<summary><code>calcYAxisRange&lt;T extends Record&lt;string, any&gt;, Key extends keyof T&gt;(data: T[], key: Key, decimalPlaces = 2, splitNumber = 5): { max: number; min: number }</code></summary>
+
+计算 ECharts `YAxis` 的 `max` 和 `min`，使折线图能够根据实际数据动态调整波动范围，并让第一个点始终位于 Y 轴中间位置。效果图见[这里](https://raw.githubusercontent.com/mrdulin/pic-bucket-01/master/Dingtalk_20240724140535.jpg)。
+
+</details>
+
+### color
+
+提供十六进制颜色与 RGBA 之间的转换能力。
+
+相关测试：[color.cy.ts](./tests/color.cy.ts)
+
+<details>
+<summary><code>hexToRGBA(hex: string, alpha: number | string = 1): string</code></summary>
+
+将十六进制颜色转换为 RGBA 颜色。更多用法见[测试用例](./tests/color.cy.ts)。
+
+</details>
+
+### scene
+
+提供多选默认项切换和带空值兜底的排序场景工具。
+
+相关测试：[toggleSelectionValue.cy.ts](./tests/scene/toggleSelectionValue.cy.ts)、[sortRecordsBySortStateNilLast.cy.ts](./tests/scene/sortRecordsBySortStateNilLast.cy.ts)
+
+<details>
+<summary><code>toggleSelectionValue&lt;T extends string | number&gt;(params: { selectedValues: T[] | undefined; toggledValue: T; selected: boolean; defaultValue: T; isDefaultSelected: (value: T[] | undefined) =&gt; boolean; }): T[]</code></summary>
 
 切换多选值，并在取消最后一个普通项时回退到默认值。适用于“全部”与普通选项互斥的场景。
 
@@ -797,7 +1120,10 @@ scene.toggleSelectionValue({
 }); // ['all']
 ```
 
-- `hasSameSelectionValues<T extends string | number>(selectedValues: T[] | undefined, nextSelectedValues: T[]): boolean`
+</details>
+
+<details>
+<summary><code>hasSameSelectionValues&lt;T extends string | number&gt;(selectedValues: T[] | undefined, nextSelectedValues: T[]): boolean</code></summary>
 
 判断两次选中值是否一致。`undefined` 会按空数组处理。
 
@@ -807,7 +1133,10 @@ scene.hasSameSelectionValues(['A', 'B'], ['A', 'B']); // true
 scene.hasSameSelectionValues(['A', 'B'], ['B', 'A']); // false
 ```
 
-- `sortRecordsBySortStateNilLast<T extends object>(records: T[] | undefined, sortState: VirtualTableSort | undefined, options?: { getSortValue?: (record: T, field: keyof T) => unknown; }): T[] | undefined`
+</details>
+
+<details>
+<summary><code>sortRecordsBySortStateNilLast&lt;T extends object&gt;(records: T[] | undefined, sortState: VirtualTableSort | undefined, options?: { getSortValue?: (record: T, field: keyof T) =&gt; unknown; }): T[] | undefined</code></summary>
 
 根据排序状态对记录排序，并将 `null` / `undefined` 放到结果末尾。
 
@@ -823,9 +1152,12 @@ scene.sortRecordsBySortStateNilLast(records, {
 // [{ value: 1 }, { value: 3 }, { value: undefined }]
 ```
 
-- `VirtualTableSortDirection`
+</details>
 
-排序方向常量：
+<details>
+<summary><code>VirtualTableSortDirection</code></summary>
+
+排序方向常量。
 
 ```ts
 scene.VirtualTableSortDirection.NONE; // 0
@@ -833,9 +1165,12 @@ scene.VirtualTableSortDirection.ASC; // 1
 scene.VirtualTableSortDirection.DESC; // -1
 ```
 
-- `VirtualTableSort`
+</details>
 
-排序状态类型：
+<details>
+<summary><code>VirtualTableSort</code></summary>
+
+排序状态类型。
 
 ```ts
 type VirtualTableSort = {
@@ -844,52 +1179,82 @@ type VirtualTableSort = {
 };
 ```
 
-## 测试
+</details>
 
-运行全部组件测试
+## 测试与开发
+
+### 测试
+
+运行全部组件测试：
 
 ```bash
 npm run cy:component:all
 ```
 
-运行单个组件测试
+运行单个组件测试：
 
 ```bash
 npm run cy:component -- tests/date.cy.ts
 ```
 
-运行E2E测试
+运行类型测试：
 
-将`src`通过`tsc` build到`public/dist`目录
+```bash
+npm run test:tsd
+```
+
+运行 E2E 测试前，先将 `src` 通过 `tsc` 构建到 `public/dist` 目录：
 
 ```bash
 npm run build:public
 ```
 
-启动一个Web服务器来访问`public/index.html`文件，`dist`目录的脚本可以通过`<script type="module"/>`引入
+启动一个 Web 服务器访问 `public/index.html`，`dist` 目录脚本可通过 `<script type="module" />` 引入：
 
 ```bash
-npm run serve
+npm run start
 ```
 
-最后启动cypress GUI客户端，选择E2E测试
+最后启动 Cypress GUI 客户端并选择 E2E 测试：
 
 ```bash
 npm run cy:open
 ```
 
-## 发布
+### 本地开发
 
-更新package version:
+构建 npm 包输出到 `dist` 目录：
+
+```bash
+npm run build
+```
+
+启动本地示例页服务：
+
+```bash
+npm run start
+```
+
+如果需要先为示例页准备 `public/dist` 下的构建产物，请先执行：
+
+```bash
+npm run build:public
+```
+
+## 发布说明
+
+发布前建议先执行 `npm run build`、`npm run test:tsd`，并按需运行相关 Cypress 测试，确保包产物与类型声明可用。
+
+更新 package 版本：
 
 ```bash
 npm version <minor> or <major>...
 ```
 
-构建:
+构建：
 
 ```bash
-npm build
+npm run build
 ```
 
 发布：
@@ -898,23 +1263,25 @@ npm build
 npm publish --access public
 ```
 
-网络原因导致连接registry服务器超时,可指定proxy
+网络原因导致连接 registry 服务器超时时，可指定 proxy：
 
 ```bash
 npm --proxy http://127.0.0.1:7890 publish
 ```
 
-镜像站查询版本与手动同步:
+镜像站查询版本与手动同步：
 
-[npm镜像站](https://npmmirror.com/package/@d-matrix/utils)
+[npm 镜像站](https://npmmirror.com/package/@d-matrix/utils)
 
-通过`git log`命令获取changelogs，用于填写GitHub Release内容:
+通过 `git log` 命令获取 changelog，用于填写 GitHub Release 内容：
 
 ```bash
 git log --oneline --decorate
 ```
 
-## 注意事项
+## 补充链接
+
+与发布和包维护相关的补充资料：
 
 - [Before Publishing: Make Sure Your Package Installs and Works](https://docs.npmjs.com/cli/v10/using-npm/developers/#before-publishing-make-sure-your-package-installs-and-works)
 - [npm-link](https://docs.npmjs.com/cli/v9/commands/npm-link)
