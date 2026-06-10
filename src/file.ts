@@ -82,6 +82,31 @@ export function getFilenameFromContentDispositionHeader(header: Record<string, s
 
 const HyperLinkTargets = ['_self', '_blank', '_parent', '_top'] as const;
 export type HyperLinkTarget = (typeof HyperLinkTargets)[number];
+
+export function downloadByXHR(url: string, filename: string, target?: HyperLinkTarget): void {
+  const request = new XMLHttpRequest();
+  request.open('GET', url, true);
+  request.responseType = 'blob';
+  request.onload = () => {
+    const objectURL = URL.createObjectURL(request.response);
+    const link = document.createElement('a');
+    link.href = objectURL;
+
+    if (typeof target === 'string' && HyperLinkTargets.includes(target)) {
+      link.target = target;
+    } else {
+      link.download = filename;
+    }
+    link.click();
+
+    setTimeout(() => {
+      if (typeof objectURL === 'string') {
+        URL.revokeObjectURL(objectURL);
+      }
+    }, 4e4); // 40S
+  };
+  request.send();
+}
 /**
  * 文件下载
  * @param source 文件地址或blob对象
@@ -143,7 +168,7 @@ export function download(source: string | Blob, fileName = '', target?: HyperLin
  * @param source
  * @returns
  */
-export function downloadFileByIframe(source: string): boolean {
+export function downloadByIframe(source: string): boolean {
   const httpsPath = source.replace(/http:\/\//, 'https://');
   const iframes = document.getElementsByTagName('iframe');
   if (iframes.length === 0 || (iframes.length > 0 && iframes[0].className === 'fill' && iframes[iframes.length - 1].className === 'fill')) {

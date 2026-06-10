@@ -720,7 +720,7 @@ type HyperLinkTarget = '_self' | '_blank' | '_parent' | '_top';
 </details>
 
 <details>
-<summary><code>downloadFileByIframe(source: string): boolean</code></summary>
+<summary><code>downloadByIframe(source: string): boolean</code></summary>
 
 通过创建 `iframe` 进行文件下载。
 
