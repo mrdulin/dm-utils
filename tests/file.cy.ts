@@ -26,25 +26,32 @@ describe('file', () => {
         const response = new Blob(['file content'], { type: 'text/plain' });
         const originalCreateElement = document.createElement.bind(document);
         let anchor: HTMLAnchorElement | undefined;
+        const xhrOpen = cy.stub();
+        const xhrSend = cy.stub().callsFake(() => {
+          request.response = response;
+          request.onload?.();
+        });
         const request = {
-          open: cy.stub().as('xhrOpen'),
-          send: cy.stub().callsFake(() => {
-            request.response = response;
-            request.onload?.();
-          }).as('xhrSend'),
+          open: xhrOpen,
+          send: xhrSend,
           responseType: '',
           response,
           onload: undefined as (() => void) | undefined,
         };
 
+        cy.wrap(xhrOpen, { log: false }).as('xhrOpen');
+        cy.wrap(xhrSend, { log: false }).as('xhrSend');
         cy.stub(window, 'XMLHttpRequest').callsFake(() => request as unknown as XMLHttpRequest);
-        cy.stub(URL, 'createObjectURL').returns('blob:mock-url').as('createObjectURL');
-        cy.stub(URL, 'revokeObjectURL').as('revokeObjectURL');
+        const createObjectURL = cy.stub(URL, 'createObjectURL').returns('blob:mock-url');
+        const revokeObjectURL = cy.stub(URL, 'revokeObjectURL');
+        cy.wrap(createObjectURL, { log: false }).as('createObjectURL');
+        cy.wrap(revokeObjectURL, { log: false }).as('revokeObjectURL');
         cy.stub(document, 'createElement').callsFake(((tagName: string, options?: ElementCreationOptions) => {
           const element = originalCreateElement(tagName, options);
           if (tagName === 'a') {
             anchor = element as HTMLAnchorElement;
-            cy.stub(anchor, 'click').as('anchorClick');
+            const anchorClick = cy.stub(anchor, 'click');
+            cy.wrap(anchorClick, { log: false }).as('anchorClick');
           }
           return element;
         }) as typeof document.createElement);

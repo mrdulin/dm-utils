@@ -1243,7 +1243,11 @@ npm run build:public
 
 ## 发布说明
 
-发布前建议先执行 `npm run build`、`npm run test:tsd`，并按需运行相关 Cypress 测试，确保包产物与类型声明可用。
+默认发布路径改为“打版本 tag 触发 GitHub Actions 自动发布”。发布前建议先在本地执行一次完整校验：
+
+```bash
+npm run release:verify
+```
 
 更新 package 版本：
 
@@ -1251,19 +1255,27 @@ npm run build:public
 npm version <minor> or <major>...
 ```
 
-构建：
+`npm version` 会更新版本、创建 git tag，并通过 `postversion` 自动 push commit 与 tag。tag 推送后，GitHub Actions 会执行：
 
 ```bash
+npm ci
 npm run build
+npm run test:types
+npm run cy:component:all
+npm pack --dry-run
+npm publish --access public
+自动创建 GitHub Release
 ```
 
-发布：
+如果只想本地验证产物而不发布，可单独执行：
 
 ```bash
-npm publish --access public
+npm run pack:check
 ```
 
-网络原因导致连接 registry 服务器超时时，可指定 proxy：
+不再建议把 `npm publish` 作为常规发布入口；除非自动发布链路不可用且你明确要走人工兜底。
+
+网络原因导致连接 registry 服务器超时时，可在人工兜底发布时指定 proxy：
 
 ```bash
 npm --proxy http://127.0.0.1:7890 publish
@@ -1273,7 +1285,7 @@ npm --proxy http://127.0.0.1:7890 publish
 
 [npm 镜像站](https://npmmirror.com/package/@d-matrix/utils)
 
-通过 `git log` 命令获取 changelog，用于填写 GitHub Release 内容：
+GitHub Release 默认由 Actions 自动创建，并启用 GitHub 的自动 release notes 分类；只有在需要补充说明时，才需要手动编辑 release 内容。
 
 ```bash
 git log --oneline --decorate

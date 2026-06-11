@@ -1,23 +1,34 @@
-name: Cypress Component Testing
+name: Package Verification
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - '**'
+    paths-ignore:
+      - 'README.md'
+
+  pull_request:
     paths-ignore:
       - 'README.md'
 
   workflow_dispatch:
 
 jobs:
-  build:
+  verify:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ['16.x', '24.x']
 
     steps:
       - uses: actions/checkout@v5
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '16.x'
+          node-version: ${{ matrix.node-version }}
       - run: npm ci
-      - run: npm run cy:component:all
+      - run: npm run build
+      - run: npm run test:types
+      - if: matrix.node-version == '16.x'
+        run: npm run cy:component:all

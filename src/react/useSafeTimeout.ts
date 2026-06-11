@@ -53,9 +53,9 @@ export function useSafeTimeout(): { safeSetTimeout: SetTimeout; safeClearTimeout
     return () => {
       // eslint-disable-next-line react-compiler/react-compiler
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      for (const id of timers.current) {
+      timers.current.forEach((id) => {
         clearTimeout(id);
-      }
+      });
     };
   }, []);
 

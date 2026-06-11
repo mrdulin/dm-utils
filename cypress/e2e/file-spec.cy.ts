@@ -23,9 +23,10 @@ export const validateExcelFile = () => {
     // returns an array of lines read from Excel file
     .should('have.length', 4)
     .then((list) => {
-      expect(list[0], 'header line').to.deep.equal(['First name', 'Last name', 'Occupation', 'Age', 'City', 'State']);
+      const rows = list as unknown[][];
+      expect(rows[0], 'header line').to.deep.equal(['First name', 'Last name', 'Occupation', 'Age', 'City', 'State']);
 
-      expect(list[1], 'first person').to.deep.equal(['Joe', 'Smith', 'student', 20, 'Boston', 'MA']);
+      expect(rows[1], 'first person').to.deep.equal(['Joe', 'Smith', 'student', 20, 'Boston', 'MA']);
     });
 };
 
