@@ -18,19 +18,8 @@ export interface VirtualTableSort {
   direction: ValueOf<typeof VirtualTableSortDirection>;
 }
 
-export type SortFieldSortValueGetter<T extends object, K extends Extract<keyof T, string> = Extract<keyof T, string>> = (
-  value: T[K],
-  record: T,
-  field: K,
-) => unknown;
-
-export type SortFieldSortValueMap<T extends object> = Partial<{
-  [K in Extract<keyof T, string>]: SortFieldSortValueGetter<T, K>;
-}>;
-
-export type SortRecordsBySortStateNilLastOptions<T extends object> = {
+type SortRecordsBySortStateNilLastOptions<T extends object> = {
   getSortValue?: (record: T, field: Extract<keyof T, string>) => unknown;
-  sortValueMap?: SortFieldSortValueMap<T>;
 };
 
 const getDefaultSortableFieldValue = <T extends object>(record: T, field: Extract<keyof T, string>) => {
@@ -50,7 +39,6 @@ const getDefaultSortableFieldValue = <T extends object>(record: T, field: Extrac
  * @param records 待排序记录列表
  * @param sortState 当前排序状态
  * @param options 排序选项
- * @param options.sortValueMap 按字段配置的排序值转换规则，优先级高于 `getSortValue`
  * @param options.getSortValue 自定义获取排序值的方法，默认读取记录上的同名字段
  * @returns 排序后的记录列表；当 `records` 或 `sortState` 无效时返回原值
  */
@@ -66,18 +54,10 @@ export const sortRecordsBySortStateNilLast = <T extends object>(
   const sortField = sortState.field as Extract<keyof T, string>;
   const isAsc = sortState.direction === VirtualTableSortDirection.ASC;
   const getSortValue = options?.getSortValue ?? getDefaultSortableFieldValue;
-  const sortValueGetter = options?.sortValueMap?.[sortField] as SortFieldSortValueGetter<T, typeof sortField> | undefined;
-  const resolveSortValue = (record: T) => {
-    if (sortValueGetter) {
-      return sortValueGetter((record as T)[sortField], record, sortField);
-    }
-
-    return getSortValue(record, sortField);
-  };
 
   return orderBy(
     records,
-    [(record) => (isNil(resolveSortValue(record)) ? 1 : 0), (record) => resolveSortValue(record)],
+    [(record) => (isNil(getSortValue(record, sortField)) ? 1 : 0), (record) => getSortValue(record, sortField)],
     ['asc', isAsc ? 'asc' : 'desc'],
   );
 };
