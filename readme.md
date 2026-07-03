@@ -1092,6 +1092,8 @@ deep merge ECharts 配置。更多用法见[测试用例](./tests/echarts/mergeO
 
 相关测试：[toggleSelectionValue.cy.ts](./tests/scene/toggleSelectionValue.cy.ts)、[sortRecordsBySortStateNilLast.cy.ts](./tests/scene/sortRecordsBySortStateNilLast.cy.ts)
 
+相关源码：[d3LeanLabeler.ts](./src/scene/d3LeanLabeler.ts)
+
 <details>
 <summary><code>toggleSelectionValue&lt;T extends string | number&gt;(params: { selectedValues: T[] | undefined; toggledValue: T; selected: boolean; defaultValue: T; isDefaultSelected: (value: T[] | undefined) =&gt; boolean; }): T[]</code></summary>
 
@@ -1151,6 +1153,48 @@ scene.sortRecordsBySortStateNilLast(records, {
 });
 // [{ value: 1 }, { value: 3 }, { value: undefined }]
 ```
+
+</details>
+
+<details>
+<summary><code>d3LeanLabeler(): D3LeanLabeler</code></summary>
+
+基于模拟退火的标签避让器，用于减少标签重叠、标签与锚点重叠，以及引导线相交。
+
+注意事项：
+
+- 这是 [`src/scene/d3LeanLabeler.ts`](./src/scene/d3LeanLabeler.ts) 的默认导出，当前不会通过根入口的 `scene` 命名空间暴露。
+- `label()` 与 `anchor()` 传入的数组需要等长，且按索引一一对应。
+- `start()` 会原地修改 `label` 数组中的 `x`、`y` 坐标。
+- `alt_schedule()` 目前只保留兼容签名，实际仍使用内置的线性降温策略。
+
+```ts
+import d3LeanLabeler, { type Anchor, type Label } from '@d-matrix/utils/dist/scene/d3LeanLabeler';
+
+const labels: Label[] = [
+  { x: 120, y: 110, width: 80, height: 20, id: 'A' },
+  { x: 160, y: 118, width: 80, height: 20, id: 'B' },
+];
+
+const anchors: Anchor[] = [
+  { x: 100, y: 100, r: 4, id: 'A' },
+  { x: 140, y: 108, r: 4, id: 'B' },
+];
+
+const labeler = d3LeanLabeler().width(800).height(600).label(labels).anchor(anchors);
+
+labeler.start(200);
+
+console.log(labels); // 坐标已被原地更新
+```
+
+链式 API：
+
+- `width(width)` / `height(height)`：设置布局边界。
+- `label(labels)` / `anchor(anchors)`：注入标签与锚点数据。
+- `alt_energy(fn)`：覆盖默认能量函数。
+- `alt_schedule(fn)`：兼容接口，当前不会真正生效。
+- `start(nsweeps)`：执行退火布局。
 
 </details>
 
