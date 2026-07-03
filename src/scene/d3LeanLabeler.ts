@@ -151,7 +151,7 @@ export interface D3LeanLabeler {
  * labeler.start(200);
  * ```
  */
-export default function d3LeanLabeler(): D3LeanLabeler {
+export function d3LeanLabeler(): D3LeanLabeler {
   let lab: Label[] = [];
   let anc: Anchor[] = [];
   let w = 1; // box width

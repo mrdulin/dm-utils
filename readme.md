@@ -1163,13 +1163,13 @@ scene.sortRecordsBySortStateNilLast(records, {
 
 注意事项：
 
-- 这是 [`src/scene/d3LeanLabeler.ts`](./src/scene/d3LeanLabeler.ts) 的默认导出，当前不会通过根入口的 `scene` 命名空间暴露。
+- 这是 [`src/scene/d3LeanLabeler.ts`](./src/scene/d3LeanLabeler.ts) 的命名导出函数，当前不会通过根入口的 `scene` 命名空间暴露。
 - `label()` 与 `anchor()` 传入的数组需要等长，且按索引一一对应。
 - `start()` 会原地修改 `label` 数组中的 `x`、`y` 坐标。
 - `alt_schedule()` 目前只保留兼容签名，实际仍使用内置的线性降温策略。
 
 ```ts
-import d3LeanLabeler, { type Anchor, type Label } from '@d-matrix/utils/dist/scene/d3LeanLabeler';
+import { d3LeanLabeler, type Anchor, type Label } from '@d-matrix/utils/dist/scene/d3LeanLabeler';
 
 const labels: Label[] = [
   { x: 120, y: 110, width: 80, height: 20, id: 'A' },
