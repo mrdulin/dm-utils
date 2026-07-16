@@ -1,6 +1,6 @@
 import React from 'react';
 import { expectTypeOf } from 'expect-type';
-import type { ComponentRef } from '../src/react/types';
+import type { ComponentRef } from '../../src/react/types';
 
 interface ChildRefProps {
   prop1: () => void;
@@ -31,4 +31,4 @@ const Parent = () => {
   return <Child ref={childRef} otherProp="a" />;
 };
 
-expectTypeOf<ChildRefProps>().toMatchTypeOf<InferredChildRef>()
+expectTypeOf<ChildRefProps>().toMatchTypeOf<InferredChildRef>();

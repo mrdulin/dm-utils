@@ -103,7 +103,7 @@ export function ResponsivePanel() {
 
 提供 React 渲染、常用 Hook、类组件增强能力与类型辅助工具。
 
-相关测试：[react.cy.tsx](./tests/react.cy.tsx)、[react-types.tsx](./tests/react-types.tsx)
+相关测试：[tests/react](./tests/react)
 
 <details>
 <summary><code>render&lt;P&gt;(element: ReactElement&lt;P&gt;): Promise&lt;string&gt;</code></summary>
@@ -183,7 +183,7 @@ const Test = () => {
 <details>
 <summary><code>useCopyToClipboard(props?: UseCopyToClipboardProps)</code></summary>
 
-复制文本到剪贴板。更多用法见[测试](./tests/react.cy.tsx)。
+复制文本到剪贴板。更多用法见[测试](./tests/react/useCopyToClipboard.cy.tsx)。
 
 </details>
 
@@ -220,14 +220,14 @@ class TestComponent extends EnhancedComponent<unknown, { pageIndex: number }> {
 <details>
 <summary><code>useDeepCompareRef(deps: DependencyList): React.MutableRefObject&lt;number&gt;</code></summary>
 
-深比较 `deps`。返回的 `ref.current` 是自增数字，每次 `deps` 变化时加 `1`。更多用法见[测试](./tests/react.cy.tsx)。
+深比较 `deps`。返回的 `ref.current` 是自增数字，每次 `deps` 变化时加 `1`。更多用法见[测试](./tests/react/useDeepCompareRef.cy.tsx)。
 
 </details>
 
 <details>
 <summary><code>InferRef&lt;T&gt;</code></summary>
 
-推导子组件的 `ref` 类型，适用于组件没有导出 `ref` 类型的场景。更多用法见[测试](./tests/react-types.tsx)。
+推导子组件的 `ref` 类型，适用于组件没有导出 `ref` 类型的场景。更多用法见[测试](./tests/react/types.tsx)。
 
 ```tsx
 interface ChildRefProps {
@@ -380,7 +380,7 @@ export function UserProfile({ userId }: UserProfileProps) {
 - 依赖数组应该包含能代表当前上下文的值，不需要在外部手动拼接字符串 key。
 - 依赖值会使用深比较判断是否变化；复杂对象建议保持不可变更新，避免原地修改导致历史依赖快照同时被改写。
 - `useVersionGuard()` 只负责判断结果是否过期，不会取消已经发出的请求；如果需要真正取消网络请求，可以结合 `AbortController` 使用。
-- `captureVersion()` 和 `isCurrentVersion()` 引用稳定，可安全放入 `useEffect` 依赖数组。更多行为验证见[测试](./tests/react.cy.tsx)。
+- `captureVersion()` 和 `isCurrentVersion()` 引用稳定，可安全放入 `useEffect` 依赖数组。更多行为验证见[测试](./tests/react/useVersionGuard.cy.tsx)。
 
 </details>
 
