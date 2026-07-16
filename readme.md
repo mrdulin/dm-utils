@@ -425,6 +425,18 @@ type T0 = WithOptional<A, 'b' | 'c'>; // { a: number; b?: number; c?: number }
 </details>
 
 <details>
+<summary><code>WithUndefinable&lt;T, K extends keyof T&gt;</code></summary>
+
+将指定属性的值类型扩展为 `undefined`，并保留原属性的必选或可选修饰。
+
+```ts
+type A = { a: number; b: string; c?: boolean };
+type T0 = WithUndefinable<A, 'b' | 'c'>; // { a: number; b: string | undefined; c?: boolean | undefined }
+```
+
+</details>
+
+<details>
 <summary><code>Nullishable&lt;T&gt;</code></summary>
 
 为任意类型 `T` 扩展 `undefined | null`。

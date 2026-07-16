@@ -149,3 +149,12 @@ export type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
 export type Nullable<T> = {
   [K in keyof T]: T[K] | null;
 };
+
+/**
+ * 创建一个新类型，将指定属性的值类型扩展为 undefined
+ *
+ * @template T - 原始对象类型
+ * @template K - 需要扩展为可 undefined 的属性键名，必须是T的键名的子集
+ * @returns 返回一个新的类型，K指定的属性值允许为 undefined，并保留原属性的必选或可选修饰
+ */
+export type WithUndefinable<T, K extends keyof T> = Omit<T, K> & { [P in K]: Optional<T[P]> };

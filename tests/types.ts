@@ -11,6 +11,7 @@ import type {
   NonFunctionPropertyNames,
   ValueOf,
   WithRequired,
+  WithUndefinable,
 } from '../src/types';
 
 expectTypeOf<{ a: number; b: string; c?: string }>().branded.toEqualTypeOf<WithOptional<{ a: number; b: string; c: string }, 'c'>>();
@@ -61,3 +62,13 @@ type WithRequiredInput = {
 };
 
 expectTypeOf<{ a: number; b: string }>().branded.toEqualTypeOf<WithRequired<WithRequiredInput, 'b'>>();
+
+type WithUndefinableInput = {
+  a: number;
+  b: string;
+  c?: boolean;
+};
+
+expectTypeOf<{ a: number; b: string | undefined; c?: boolean | undefined }>().branded.toEqualTypeOf<
+  WithUndefinable<WithUndefinableInput, 'b' | 'c'>
+>();
