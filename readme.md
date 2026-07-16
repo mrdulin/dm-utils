@@ -304,6 +304,86 @@ export default function Component() {
 
 </details>
 
+<details>
+<summary><code>useVersionGuard(deps: DependencyList): { captureVersion: () =&gt; number; isCurrentVersion: (version: number) =&gt; boolean }</code></summary>
+
+基于依赖列表维护一个自增版本号，用来解决「异步结果晚于上下文变化返回」的问题。典型场景包括：搜索关键字连续变化、路由参数切换、详情页资源 ID 切换、定时器或延迟任务返回时组件上下文已变化。
+
+使用步骤：
+
+1. 将能代表当前业务上下文的值作为依赖数组传入，例如 `[query]`、`[routeId]`、`[userId, filter]`。
+2. 在发起异步任务前调用 `captureVersion()`，记录当前版本快照。
+3. 在异步回调返回后调用 `isCurrentVersion(version)`，只在返回 `true` 时写入状态。
+
+#### 搜索请求示例
+
+当用户快速输入多个搜索关键字时，旧请求可能比新请求更晚返回。`useVersionGuard()` 可以避免旧请求覆盖新结果。
+
+```tsx
+import React from 'react';
+import { react } from '@d-matrix/utils';
+
+export function SearchResult({ query }: { query: string }) {
+  const [result, setResult] = React.useState('');
+  const { captureVersion, isCurrentVersion } = react.useVersionGuard([query]);
+
+  React.useEffect(() => {
+    const version = captureVersion();
+
+    fetch(`/api/search?q=${encodeURIComponent(query)}`)
+      .then((response) => response.text())
+      .then((text) => {
+        if (isCurrentVersion(version)) {
+          setResult(text);
+        }
+      });
+  }, [captureVersion, isCurrentVersion, query]);
+
+  return <div>{result}</div>;
+}
+```
+
+#### 路由资源示例
+
+当详情页从 `userId=1` 切到 `userId=2` 时，`userId=1` 的请求结果如果晚返回，不应该覆盖 `userId=2` 的页面状态。
+
+```tsx
+import React from 'react';
+import { react } from '@d-matrix/utils';
+
+interface UserProfileProps {
+  userId: string;
+}
+
+export function UserProfile({ userId }: UserProfileProps) {
+  const [name, setName] = React.useState('');
+  const { captureVersion, isCurrentVersion } = react.useVersionGuard([userId]);
+
+  React.useEffect(() => {
+    const version = captureVersion();
+
+    fetch(`/api/users/${userId}`)
+      .then((response) => response.json())
+      .then((user: { name: string }) => {
+        if (isCurrentVersion(version)) {
+          setName(user.name);
+        }
+      });
+  }, [captureVersion, isCurrentVersion, userId]);
+
+  return <div>{name}</div>;
+}
+```
+
+#### 注意事项
+
+- 依赖数组应该包含能代表当前上下文的值，不需要在外部手动拼接字符串 key。
+- 依赖值会使用深比较判断是否变化；复杂对象建议保持不可变更新，避免原地修改导致历史依赖快照同时被改写。
+- `useVersionGuard()` 只负责判断结果是否过期，不会取消已经发出的请求；如果需要真正取消网络请求，可以结合 `AbortController` 使用。
+- `captureVersion()` 和 `isCurrentVersion()` 引用稳定，可安全放入 `useEffect` 依赖数组。更多行为验证见[测试](./tests/react.cy.tsx)。
+
+</details>
+
 ### dom
 
 提供 DOM 滚动、纯文本提取和 HTML 颜色值转换等浏览器侧工具。

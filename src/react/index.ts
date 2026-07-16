@@ -13,3 +13,4 @@ export * from './useIsFirstRender';
 export * from './useStateCallback';
 export * from './useSafeTimeout';
 export * from './useId';
+export * from './useVersionGuard';
