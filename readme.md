@@ -1165,6 +1165,31 @@ deep merge ECharts 配置。更多用法见[测试用例](./tests/echarts/mergeO
 
 </details>
 
+#### 中国地图 GeoJSON
+
+中国地图数据位于 [src/echarts/geo-json/china.json](./src/echarts/geo-json/china.json)。在创建图表前使用 `registerMap()` 注册数据；`geo.map` 与地图系列的 `map` 使用相同名称。
+
+```ts
+import * as echarts from 'echarts';
+import chinaJson from './src/echarts/geo-json/china.json';
+
+echarts.registerMap('china', chinaJson);
+
+const option: echarts.EChartsOption = {
+  geo: {
+    map: 'china',
+  },
+  series: [
+    {
+      type: 'map',
+      map: 'china',
+    },
+  ],
+};
+```
+
+更多参数见 [ECharts registerMap API](https://echarts.apache.org/en/api.html#echarts.registerMap)。
+
 ### color
 
 提供十六进制颜色与 RGBA 之间的转换能力。
