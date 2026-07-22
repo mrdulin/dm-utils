@@ -1138,8 +1138,6 @@ number.safeDivide(6, null); // undefined
 
 ### echarts
 
-![ECharts 图标预览](./src/echarts/symbols/preview.png)
-
 提供 ECharts 配置合并、时间序列补点和 Y 轴范围计算工具。
 
 相关测试：[mergeOption.cy.ts](./tests/echarts/mergeOption.cy.ts)、[fill.cy.ts](./tests/echarts/fill.cy.ts)、[calcYAxisRange.cy.ts](./tests/echarts/calcYAxisRange.cy.ts)
@@ -1204,6 +1202,29 @@ const option: EChartsOption = {
 ```
 
 </details>
+
+#### 自定义图标
+
+自定义 ECharts `symbol` 定义位于 [src/echarts/symbols/index.ts](./src/echarts/symbols/index.ts)，可通过深路径导入单个图标或 `symbols` 集合。
+
+```ts
+import { ChevronLeftOutline, symbols } from '@d-matrix/utils/dist/echarts/symbols';
+
+const option = {
+  series: [
+    {
+      type: 'scatter',
+      symbol: ChevronLeftOutline,
+      symbolSize: 24,
+      data: [[0, 0]],
+    },
+  ],
+};
+
+symbols.StarFilled;
+```
+
+![ECharts 图标预览](./src/echarts/symbols/preview.png)
 
 #### 中国地图 GeoJSON
 
