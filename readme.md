@@ -1165,6 +1165,42 @@ deep merge ECharts 配置。更多用法见[测试用例](./tests/echarts/mergeO
 
 </details>
 
+<details>
+<summary><code>confinePosition: TooltipComponentPositionCallback</code>（已弃用）</summary>
+
+`confinePosition` 会根据鼠标位置与 tooltip 尺寸计算提示框左上角坐标，避免提示框超出图表视图右侧和底部。默认偏移量为右下方各 `20px`；空间不足时会尝试显示在鼠标左侧或上方。
+
+在线示例：[CodeSandbox](https://codesandbox.io/p/sandbox/f8v7p4)。
+
+推荐直接使用 ECharts 原生的 `tooltip.confine: true` 配置。它会将 tooltip 限制在图表容器中，无需维护自定义位置回调。
+
+```ts
+import type { EChartsOption } from 'echarts';
+
+const option: EChartsOption = {
+  tooltip: {
+    trigger: 'axis',
+    confine: true,
+  },
+};
+```
+
+在迁移完成前，仍可通过深路径导入已弃用的回调：
+
+```ts
+import type { EChartsOption } from 'echarts';
+import { confinePosition } from '@d-matrix/utils/dist/echarts/tooltip';
+
+const option: EChartsOption = {
+  tooltip: {
+    trigger: 'axis',
+    position: confinePosition,
+  },
+};
+```
+
+</details>
+
 #### 中国地图 GeoJSON
 
 中国地图数据位于 [src/echarts/geo-json/china.json](./src/echarts/geo-json/china.json)。在创建图表前使用 `registerMap()` 注册数据；`geo.map` 与地图系列的 `map` 使用相同名称。
