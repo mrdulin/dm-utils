@@ -4,14 +4,16 @@
 
 在执行 `npm run build` 时生成并纳入版本控制
 `src/echarts/symbols/preview.png`。在 `readme.md` 中嵌入该图片，使仓库访问者能够
-预览所有导出的 ECharts 图标路径。
+预览所有导出的 ECharts 图标。
 
 ## 设计
 
 - 新增专用 Cypress 预览用例，导入 `symbols` 中的所有图标导出项，并渲染为固定网格。
 - `path://` 图标以 SVG 路径渲染，并根据路径实际边界设置视图区域；
   `image://` 图标使用其原始 Data URL 渲染。
-- 使用固定视口、白色背景、两列布局、一致的图标尺寸和可见的导出名称，确保生成结果稳定。
+- 使用固定视口、白色背景、两列布局和可见的导出名称，确保生成结果稳定。
+- 每个图标使用固定的 `72px × 72px` 画布；`path://` 图标按实际边界加相同比例留白后等比缩放，
+  `image://` 图标使用 `object-fit: contain` 保持在相同画布内。
 - 新增 Node 脚本，执行 Cypress 预览用例并将截图移动到
   `src/echarts/symbols/preview.png`。
 - 在 TypeScript 编译和现有中国地图 GeoJSON 复制脚本完成后，从 `postbuild` 执行生成脚本。
