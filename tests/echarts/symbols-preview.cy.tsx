@@ -104,7 +104,7 @@ describe('ECharts 图标预览', () => {
 
     cy.get('[data-cy=symbol-card]').should('have.length', symbolEntries.length);
     if (pathCount > 0) {
-      cy.get('[data-cy=symbol-card] svg path').should(($paths) => {
+      cy.get<SVGPathElement>('[data-cy=symbol-card] svg path').should(($paths) => {
         expect($paths).to.have.length(pathCount);
         $paths.each((_, path) => {
           const box = path.getBBox();
@@ -114,7 +114,7 @@ describe('ECharts 图标预览', () => {
       });
     }
     if (imageCount > 0) {
-      cy.get('[data-cy=symbol-card] img').should(($images) => {
+      cy.get<HTMLImageElement>('[data-cy=symbol-card] img').should(($images) => {
         expect($images).to.have.length(imageCount);
         $images.each((_, image) => {
           expect(image.complete).to.equal(true);
