@@ -99,6 +99,7 @@ describe('ECharts 图标预览', () => {
     const pathCount = symbolEntries.filter(([, value]) => value.startsWith(pathPrefix)).length;
     const imageCount = symbolEntries.filter(([, value]) => value.startsWith(imagePrefix)).length;
 
+    cy.viewport(1024, 900);
     cy.mount(<SymbolPreview />);
 
     cy.get('[data-cy=symbol-card]').should('have.length', symbolEntries.length);
