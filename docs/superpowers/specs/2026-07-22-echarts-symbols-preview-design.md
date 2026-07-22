@@ -1,32 +1,29 @@
-# ECharts Symbols Preview Design
+# ECharts 图标预览图设计
 
-## Goal
+## 目标
 
-During `npm run build`, generate and track `src/echarts/symbols/preview.png`.
-Embed the generated image in `readme.md` so repository visitors can inspect all
-exported ECharts symbol paths.
+在执行 `npm run build` 时生成并纳入版本控制
+`src/echarts/symbols/preview.png`。在 `readme.md` 中嵌入该图片，使仓库访问者能够
+预览所有导出的 ECharts 图标路径。
 
-## Design
+## 设计
 
-- Add a dedicated Cypress preview spec that imports the symbol exports and
-  renders each `path://` value as an SVG path in a fixed grid.
-- Use a fixed viewport, white background, 2-column layout, consistent icon
-  size, and visible export names to keep output deterministic.
-- Add a Node script that invokes the Cypress spec and moves its screenshot to
-  `src/echarts/symbols/preview.png`.
-- Run the generator from `postbuild`, after TypeScript compilation and the
-  existing China GeoJSON copy script complete.
-- Add a relative Markdown image reference to `readme.md`.
+- 新增专用 Cypress 预览用例，导入图标导出项，并将每个 `path://` 值渲染为固定网格中的
+  SVG 路径。
+- 使用固定视口、白色背景、两列布局、一致的图标尺寸和可见的导出名称，确保生成结果稳定。
+- 新增 Node 脚本，执行 Cypress 预览用例并将截图移动到
+  `src/echarts/symbols/preview.png`。
+- 在 TypeScript 编译和现有中国地图 GeoJSON 复制脚本完成后，从 `postbuild` 执行生成脚本。
+- 在 `readme.md` 中添加相对路径的 Markdown 图片引用。
 
-## Failure Handling
+## 失败处理
 
-- Fail generation when no symbols are exported.
-- Fail the build when Cypress cannot render or the screenshot is not produced.
-- Do not leave Cypress screenshot directories as tracked artifacts.
+- 没有可预览图标导出项时，生成失败。
+- Cypress 无法渲染或未生成截图时，构建失败。
+- 不将 Cypress 截图目录作为受版本控制的产物保留。
 
-## Verification
+## 验证
 
-- Run `npm run build`.
-- Confirm `preview.png` has the PNG signature and is non-empty.
-- Confirm `readme.md` references `./src/echarts/symbols/preview.png`.
-
+- 执行 `npm run build`。
+- 确认 `preview.png` 具有 PNG 文件签名且非空。
+- 确认 `readme.md` 引用了 `./src/echarts/symbols/preview.png`。
