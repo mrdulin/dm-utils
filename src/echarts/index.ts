@@ -3,6 +3,8 @@ import deepmerge, { ArrayMergeOptions } from 'deepmerge';
 import { EChartsOption } from 'echarts';
 import { trueTypeOf } from '../operator';
 
+export * from './tooltip';
+
 const combineMerge = (target: any[], source: any[], options: ArrayMergeOptions) => {
   const destination = target.slice();
 

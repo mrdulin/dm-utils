@@ -1,5 +1,7 @@
 # @d-matrix/utils
 
+<!-- markdownlint-configure-file { "MD033": { "allowed_elements": ["details", "summary", "code"] } } -->
+
 ![NPM Downloads](https://img.shields.io/npm/dw/%40d-matrix%2Futils)
 ![npm bundle size](https://img.shields.io/bundlephobia/min/%40d-matrix%2Futils)
 [![NPM version](https://img.shields.io/npm/v/@d-matrix/utils.svg?style=flat)](https://www.npmjs.com/package/@d-matrix/utils)
