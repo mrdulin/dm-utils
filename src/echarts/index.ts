@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import deepmerge, { ArrayMergeOptions } from 'deepmerge';
 import { EChartsOption } from 'echarts';
-import { trueTypeOf } from './operator';
+import { trueTypeOf } from '../operator';
 
 const combineMerge = (target: any[], source: any[], options: ArrayMergeOptions) => {
   const destination = target.slice();
