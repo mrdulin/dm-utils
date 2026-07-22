@@ -11,7 +11,7 @@
     "pack:check": "npm pack --dry-run",
     "release:verify": "npm run ci:verify && npm run pack:check",
     "prebuild": "npm run clean",
-    "postbuild": "node scripts/copy-china-geo-json.js",
+    "postbuild": "node scripts/copy-china-geo-json.js && node scripts/generate-echarts-symbol-preview.js",
     "prepublishOnly": "npm run build && npm run test:types && npm run pack:check",
     "clean": "rimraf dist",
     "cy:open": "cypress open",

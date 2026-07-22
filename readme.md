@@ -1138,6 +1138,8 @@ number.safeDivide(6, null); // undefined
 
 ### echarts
 
+![ECharts 图标预览](./src/echarts/symbols/preview.png)
+
 提供 ECharts 配置合并、时间序列补点和 Y 轴范围计算工具。
 
 相关测试：[mergeOption.cy.ts](./tests/echarts/mergeOption.cy.ts)、[fill.cy.ts](./tests/echarts/fill.cy.ts)、[calcYAxisRange.cy.ts](./tests/echarts/calcYAxisRange.cy.ts)
