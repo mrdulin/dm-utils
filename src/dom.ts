@@ -165,3 +165,135 @@ export function convertRgbToHexInHtml(htmlStr: string): string {
     return `#${hexRGB}`;
   });
 }
+
+type CssSizeValue = string | number;
+
+export type MeasureTextByDomOptions = {
+  text: string;
+  minWidth?: CssSizeValue;
+  maxWidth?: CssSizeValue;
+  fontSize?: CSSStyleDeclaration['fontSize'];
+  fontFamily?: CSSStyleDeclaration['fontFamily'];
+  fontWeight?: CSSStyleDeclaration['fontWeight'];
+  fontStyle?: CSSStyleDeclaration['fontStyle'];
+  lineHeight?: CssSizeValue;
+};
+
+export type TextSize = {
+  width: number;
+  height: number;
+};
+
+const assignCssSize = (style: CSSStyleDeclaration, property: 'maxWidth' | 'minWidth' | 'lineHeight', value?: CssSizeValue) => {
+  style[property] = value == null ? '' : typeof value === 'number' ? `${value}px` : value;
+};
+
+/**
+ * 文本测量器实例。
+ *
+ * @property {Function} measure 计算文本尺寸。
+ * @property {Function} dispose 释放测量容器。
+ */
+export type TextMeasurer = {
+  measure: (options: MeasureTextByDomOptions) => TextSize;
+  dispose: () => void;
+};
+
+/**
+ * 创建文本测量器。
+ *
+ * 测量器会复用一个隐藏的 DOM 容器，避免每次测量都创建和移除节点。
+ * 不再需要测量时调用 `dispose()`，释放内部缓存的测量容器。
+ *
+ * @returns {TextMeasurer} 文本测量器实例
+ * @example
+ * const measurer = createTextMeasurer();
+ * const size = measurer.measure({
+ *   text: '测试文本',
+ *   fontSize: '14px',
+ *   fontFamily: 'Arial',
+ *   maxWidth: 120,
+ *   lineHeight: '20px',
+ * });
+ *
+ * console.log(size.width, size.height);
+ * measurer.dispose();
+ *
+ * @example
+ * function TextWidthPreview() {
+ *   const measurer = React.useMemo(() => createTextMeasurer(), []);
+ *   const [width, setWidth] = React.useState(0);
+ *
+ *   React.useEffect(() => {
+ *     const size = measurer.measure({
+ *       text: '示例文本',
+ *       fontSize: '14px',
+ *       fontFamily: 'Arial',
+ *       maxWidth: 120,
+ *       lineHeight: '20px',
+ *     });
+ *
+ *     setWidth(size.width);
+ *
+ *     return () => {
+ *       measurer.dispose();
+ *     };
+ *   }, [measurer]);
+ *
+ *   return <div>{`width: ${width}px`}</div>;
+ * }
+ */
+export const createTextMeasurer = (): TextMeasurer => {
+  let measureTextContainer: HTMLDivElement | null = null;
+
+  const removeMeasureTextContainer = () => {
+    if (measureTextContainer?.parentNode) {
+      measureTextContainer.parentNode.removeChild(measureTextContainer);
+    }
+
+    measureTextContainer = null;
+  };
+
+  const getMeasureTextContainer = () => {
+    if (measureTextContainer && measureTextContainer.ownerDocument === document && measureTextContainer.isConnected) {
+      return measureTextContainer;
+    }
+
+    if (measureTextContainer) {
+      removeMeasureTextContainer();
+    }
+
+    const container = document.createElement('div');
+    container.style.position = 'fixed';
+    container.style.visibility = 'hidden';
+    container.style.top = '0px';
+    container.style.left = '0px';
+    document.body.appendChild(container);
+    measureTextContainer = container;
+    return container;
+  };
+
+  const measure = (options: MeasureTextByDomOptions) => {
+    const { text, minWidth, maxWidth, lineHeight } = options;
+    const fontSize = options.fontSize || '12px';
+    const fontFamily = options.fontFamily || 'Arial';
+    const fontWeight = options.fontWeight || 'normal';
+    const fontStyle = options.fontStyle || 'normal';
+    const container = getMeasureTextContainer();
+    assignCssSize(container.style, 'maxWidth', maxWidth);
+    assignCssSize(container.style, 'minWidth', minWidth);
+    container.style.fontSize = fontSize;
+    container.style.fontFamily = fontFamily;
+    container.style.fontWeight = fontWeight;
+    container.style.fontStyle = fontStyle;
+    assignCssSize(container.style, 'lineHeight', lineHeight);
+    container.innerText = text;
+    const { width, height } = container.getBoundingClientRect();
+    return { width, height };
+  };
+
+  return {
+    measure,
+    dispose: removeMeasureTextContainer,
+  };
+};

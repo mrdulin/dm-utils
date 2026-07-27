@@ -106,4 +106,133 @@ describe('dom', () => {
       expect(result).to.equal('<div style="color: #FF0000">Text</div>');
     });
   });
+
+  describe('createTextMeasurer', () => {
+    let measurer: ReturnType<typeof dom.createTextMeasurer> | undefined;
+
+    beforeEach(() => {
+      measurer = dom.createTextMeasurer();
+    });
+
+    afterEach(() => {
+      measurer?.dispose();
+    });
+
+    it('should preserve explicit css size values', () => {
+      cy.document().then((doc) => {
+        const appendChild = doc.body.appendChild.bind(doc.body);
+        let appended: HTMLDivElement | null = null;
+
+        cy.stub(doc.body, 'appendChild').callsFake((node: Node) => {
+          appended = node as HTMLDivElement;
+          return appendChild(node);
+        });
+
+        const size = measurer!.measure({
+          text: 'measure me',
+          maxWidth: '120px',
+          minWidth: 0,
+          lineHeight: '24px',
+        });
+
+        expect(appended).to.not.be.null;
+        expect(appended!.style.maxWidth).to.equal('120px');
+        expect(appended!.style.minWidth).to.equal('0px');
+        expect(appended!.style.lineHeight).to.equal('24px');
+        expect(size.width).to.be.greaterThan(0);
+      });
+    });
+
+    it('should reuse the same measurement node', () => {
+      cy.document().then((doc) => {
+        const appendChild = doc.body.appendChild.bind(doc.body);
+        let appendCount = 0;
+
+        cy.stub(doc.body, 'appendChild').callsFake((node: Node) => {
+          appendCount += 1;
+          return appendChild(node);
+        });
+
+        const firstSize = measurer!.measure({
+          text: 'first measure',
+          maxWidth: 200,
+        });
+        const secondSize = measurer!.measure({
+          text: 'second measure',
+          maxWidth: 240,
+        });
+
+        expect(appendCount).to.equal(1);
+        expect(firstSize.width).to.be.greaterThan(0);
+        expect(secondSize.width).to.be.greaterThan(0);
+      });
+    });
+
+    it('should reset optional size styles between measurements', () => {
+      cy.document().then((doc) => {
+        const appendChild = doc.body.appendChild.bind(doc.body);
+        let measureNode: HTMLDivElement | null = null;
+
+        cy.stub(doc.body, 'appendChild').callsFake((node: Node) => {
+          measureNode = node as HTMLDivElement;
+          return appendChild(node);
+        });
+
+        measurer!.measure({
+          text: 'first measure',
+          maxWidth: 120,
+          minWidth: 20,
+          lineHeight: '24px',
+        });
+
+        expect(measureNode).to.not.be.null;
+        expect(measureNode!.style.maxWidth).to.equal('120px');
+        expect(measureNode!.style.minWidth).to.equal('20px');
+        expect(measureNode!.style.lineHeight).to.equal('24px');
+
+        measurer!.measure({
+          text: 'second measure',
+        });
+
+        expect(measureNode!.style.maxWidth).to.equal('');
+        expect(measureNode!.style.minWidth).to.equal('');
+        expect(measureNode!.style.lineHeight).to.equal('');
+      });
+    });
+
+    it('should dispose the measurement node explicitly', () => {
+      cy.document().then((doc) => {
+        const appendChild = doc.body.appendChild.bind(doc.body);
+        let appendCount = 0;
+        let measureNode: HTMLDivElement | null = null;
+
+        cy.stub(doc.body, 'appendChild').callsFake((node: Node) => {
+          appendCount += 1;
+          measureNode = node as HTMLDivElement;
+          return appendChild(node);
+        });
+
+        measurer!.measure({
+          text: 'first measure',
+          maxWidth: 200,
+        });
+
+        expect(measureNode).to.not.be.null;
+        expect(measureNode!.isConnected).to.be.true;
+
+        measurer!.dispose();
+
+        expect(measureNode!.isConnected).to.be.false;
+
+        measurer = dom.createTextMeasurer();
+
+        measurer!.measure({
+          text: 'second measure',
+          maxWidth: 240,
+        });
+
+        expect(appendCount).to.equal(2);
+      });
+    });
+  });
 });

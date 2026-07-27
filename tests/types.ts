@@ -13,6 +13,7 @@ import type {
   WithRequired,
   WithUndefinable,
 } from '../src/types';
+import type { TextMeasurer, TextSize } from '../src/dom';
 
 expectTypeOf<{ a: number; b: string; c?: string }>().branded.toEqualTypeOf<WithOptional<{ a: number; b: string; c: string }, 'c'>>();
 
@@ -72,3 +73,5 @@ type WithUndefinableInput = {
 expectTypeOf<{ a: number; b: string | undefined; c?: boolean | undefined }>().branded.toEqualTypeOf<
   WithUndefinable<WithUndefinableInput, 'b' | 'c'>
 >();
+
+expectTypeOf<ReturnType<TextMeasurer['measure']>>().toEqualTypeOf<TextSize>();

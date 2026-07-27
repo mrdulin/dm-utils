@@ -388,7 +388,7 @@ export function UserProfile({ userId }: UserProfileProps) {
 
 ### dom
 
-提供 DOM 滚动、纯文本提取和 HTML 颜色值转换等浏览器侧工具。
+提供 DOM 滚动、纯文本提取、HTML 颜色值转换和文本尺寸测量等浏览器侧工具。
 
 相关测试：[dom.cy.tsx](./tests/dom.cy.tsx)
 
@@ -420,6 +420,65 @@ dom.strip('测试<em>高亮</em>测试'); // '测试高亮测试'
 ```ts
 const html = '<div style="color: rgb(255, 0, 0)">Red text</div>';
 dom.convertRgbToHexInHtml(html); // <div style="color: #ff0000">Red text</div>
+```
+
+</details>
+
+<details>
+<summary><code>createTextMeasurer(): TextMeasurer</code></summary>
+
+创建文本测量器。测量器内部会复用一个隐藏的 DOM 容器，适合在表格列宽、图表标签或浮层布局中反复测量文本尺寸。
+
+使用完成后调用 `dispose()`，释放内部缓存的测量容器。
+
+```ts
+import { dom } from '@d-matrix/utils';
+
+const measurer = dom.createTextMeasurer();
+
+const size = measurer.measure({
+  text: '测试文本',
+  fontSize: '14px',
+  fontFamily: 'Arial',
+  fontWeight: 'normal',
+  maxWidth: 120,
+  minWidth: 0,
+  lineHeight: '20px',
+});
+
+console.log(size.width, size.height);
+
+measurer.dispose();
+```
+
+React 函数组件中也可以这样使用：
+
+```tsx
+import React from 'react';
+import { dom } from '@d-matrix/utils';
+
+export function TextWidthPreview() {
+  const measurer = React.useMemo(() => dom.createTextMeasurer(), []);
+  const [width, setWidth] = React.useState(0);
+
+  React.useEffect(() => {
+    const size = measurer.measure({
+      text: '示例文本',
+      fontSize: '14px',
+      fontFamily: 'Arial',
+      maxWidth: 120,
+      lineHeight: '20px',
+    });
+
+    setWidth(size.width);
+
+    return () => {
+      measurer.dispose();
+    };
+  }, [measurer]);
+
+  return <div>{`width: ${width}px`}</div>;
+}
 ```
 
 </details>
