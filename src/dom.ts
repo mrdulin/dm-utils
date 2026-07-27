@@ -264,6 +264,7 @@ export const createTextMeasurer = (): TextMeasurer => {
     }
 
     const container = document.createElement('div');
+    container.id = 'd_matrix_utils__measure_text_container';
     container.style.position = 'fixed';
     container.style.visibility = 'hidden';
     container.style.top = '0px';
