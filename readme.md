@@ -696,6 +696,35 @@ type Output = WithRequired<Input, 'b'>; // { a: number; b: string }
 
 </details>
 
+<details>
+<summary><code>Simplify&lt;T&gt;</code></summary>
+
+将交叉类型或映射类型展开为单个更易读的对象类型，便于编辑器展示解析后的结构。
+
+```ts
+type A = { name: string };
+type B = { age: number };
+type User = Simplify<A & B>; // { name: string; age: number }
+```
+
+</details>
+
+<details>
+<summary><code>Mutable&lt;T&gt;</code></summary>
+
+移除对象类型中所有属性的 `readonly` 修饰。
+
+```ts
+type ReadonlyUser = {
+  readonly id: number;
+  readonly name: string;
+};
+
+type User = Mutable<ReadonlyUser>; // { id: number; name: string }
+```
+
+</details>
+
 ### algorithm
 
 收录树结构与二分相关的算法辅助能力。

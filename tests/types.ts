@@ -12,6 +12,8 @@ import type {
   ValueOf,
   WithRequired,
   WithUndefinable,
+  Simplify,
+  Mutable,
 } from '../src/types';
 import type { TextMeasurer, TextSize } from '../src/dom';
 
@@ -73,5 +75,17 @@ type WithUndefinableInput = {
 expectTypeOf<{ a: number; b: string | undefined; c?: boolean | undefined }>().branded.toEqualTypeOf<
   WithUndefinable<WithUndefinableInput, 'b' | 'c'>
 >();
+
+type SimplifyInput = { a: number } & { b: string };
+type SimplifyOutput = Simplify<SimplifyInput>;
+
+expectTypeOf<{ a: number; b: string }>().branded.toEqualTypeOf<SimplifyOutput>();
+
+type MutableInput = {
+  readonly a: number;
+  readonly b: string;
+};
+
+expectTypeOf<{ a: number; b: string }>().branded.toEqualTypeOf<Mutable<MutableInput>>();
 
 expectTypeOf<ReturnType<TextMeasurer['measure']>>().toEqualTypeOf<TextSize>();

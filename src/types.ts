@@ -158,3 +158,36 @@ export type Nullable<T> = {
  * @returns 返回一个新的类型，K指定的属性值允许为 undefined，并保留原属性的必选或可选修饰
  */
 export type WithUndefinable<T, K extends keyof T> = Omit<T, K> & { [P in K]: Optional<T[P]> };
+
+/**
+ * 将交叉类型或映射类型展开为单个更易读的对象类型。
+ *
+ * 对普通对象类型而言，结果类型与原类型等价，但编辑器会展示解析后的对象结构
+ * （例如 `{ a: 1; b: 2 }`），而不是 `A & B`。
+ *
+ * @template T - 要展开的类型。
+ *
+ * @example
+ * type A = { name: string };
+ * type B = { age: number };
+ * type User = Simplify<A & B>;
+ * // 悬停提示 => { name: string; age: number }（而不是 A & B）
+ */
+export type Simplify<T> = { [K in keyof T]: T[K] } & {};
+
+/**
+ * 创建一个新类型，移除对象类型中所有属性的 readonly 修饰。
+ *
+ * @template T - 需要处理的原始对象类型。
+ * @returns 返回一个新的对象类型，其所有属性都可重新赋值。
+ *
+ * @example
+ * type ReadonlyUser = {
+ *   readonly id: number;
+ *   readonly name: string;
+ * };
+ *
+ * type User = Mutable<ReadonlyUser>;
+ * // 结果: { id: number; name: string }
+ */
+export type Mutable<T> = { -readonly [key in keyof T]: T[key] };
