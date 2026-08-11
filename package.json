@@ -73,5 +73,8 @@
     "lodash.isnil": "^4.0.0",
     "lodash.orderby": "^4.18.0",
     "react-fast-compare": "^3.2.2"
+  },
+  "volta": {
+    "node": "16.20.2"
   }
 }
