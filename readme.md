@@ -2,6 +2,7 @@
 
 <!-- markdownlint-configure-file { "MD033": { "allowed_elements": ["details", "summary", "code"] } } -->
 
+[![codecov](https://codecov.io/gh/mrdulin/dm-utils/graph/badge.svg)](https://codecov.io/gh/mrdulin/dm-utils)
 ![NPM Downloads](https://img.shields.io/npm/dw/%40d-matrix%2Futils)
 ![npm bundle size](https://img.shields.io/bundlephobia/min/%40d-matrix%2Futils)
 [![NPM version](https://img.shields.io/npm/v/@d-matrix/utils.svg?style=flat)](https://www.npmjs.com/package/@d-matrix/utils)
@@ -1354,11 +1355,11 @@ const option: echarts.EChartsOption = {
 
 ### scene
 
-提供多选默认项切换和带空值兜底的排序场景工具。
+提供多选默认项切换、带空值兜底的排序和按键防抖调度等场景工具。
 
-相关测试：[toggleSelectionValue.cy.ts](./tests/scene/toggleSelectionValue.cy.ts)、[sortRecordsBySortStateNilLast.cy.ts](./tests/scene/sortRecordsBySortStateNilLast.cy.ts)
+相关测试：[toggleSelectionValue.cy.ts](./tests/scene/toggleSelectionValue.cy.ts)、[sortRecordsBySortStateNilLast.cy.ts](./tests/scene/sortRecordsBySortStateNilLast.cy.ts)、[keyedDebounceScheduler.cy.ts](./tests/scene/keyedDebounceScheduler.cy.ts)
 
-相关源码：[d3LeanLabeler.ts](./src/scene/d3LeanLabeler.ts)
+相关源码：[keyedDebounceScheduler.ts](./src/scene/keyedDebounceScheduler.ts)、[d3LeanLabeler.ts](./src/scene/d3LeanLabeler.ts)
 
 <details>
 <summary><code>toggleSelectionValue&lt;T extends string | number&gt;(params: { selectedValues: T[] | undefined; toggledValue: T; selected: boolean; defaultValue: T; isDefaultSelected: (value: T[] | undefined) =&gt; boolean; }): T[]</code></summary>
@@ -1386,6 +1387,56 @@ scene.toggleSelectionValue({
   defaultValue,
   isDefaultSelected,
 }); // ['all']
+```
+
+</details>
+
+<details>
+<summary><code>createKeyedDebounceScheduler&lt;TKey&gt;(delay: number): KeyedDebounceScheduler&lt;TKey&gt;</code></summary>
+
+创建按键管理的防抖调度器。同一个键重复调度时只执行最后一次回调，不同键的回调互不影响。
+
+```ts
+import { scene } from '@d-matrix/utils';
+
+const scheduler = scene.createKeyedDebounceScheduler<string>(300);
+const fetchContacts = (groupId: string) => {
+  console.log(`获取分组 ${groupId} 下的联系人`);
+};
+
+scheduler.schedule('record-1', () => {
+  fetchContacts('record-1');
+});
+
+scheduler.cancel('record-1');
+scheduler.dispose();
+```
+
+`dispose()` 用于在组件卸载或页面离开时结束调度器的生命周期：
+
+- 会取消所有 key 对应的待执行定时器，因此这些回调不会再执行；
+- 已经执行完成的回调不受影响；
+- 调用后调度器不可恢复，再次调用 `schedule()` 只会直接忽略，不会创建新的定时器；
+- 重复调用 `dispose()` 是安全的，不会产生额外副作用。
+
+如果只是想取消某个分组当前尚未执行的任务，应使用 `cancel(key)`；取消后调度器仍可继续调用 `schedule()`：
+
+```ts
+scheduler.cancel('record-1');
+scheduler.schedule('record-1', () => {
+  fetchContacts('record-1');
+});
+```
+
+如果已经调用 `dispose()`，原调度器就不能再次复用。后续仍需要调度任务时，必须重新创建实例：
+
+```ts
+scheduler.dispose();
+
+const nextScheduler = scene.createKeyedDebounceScheduler<string>(300);
+nextScheduler.schedule('record-1', () => {
+  fetchContacts('record-1');
+});
 ```
 
 </details>
