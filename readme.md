@@ -52,9 +52,10 @@ import React from 'react';
 import { react } from '@d-matrix/utils';
 
 export function ResponsivePanel() {
-  const isDesktop = react.useMediaQuery('(min-width: 1024px)');
+  const isDesktopViewport = react.useMediaQuery('(min-width: 1024px)');
+  const isMobileViewport = react.useMediaQuery('(max-width: 767px)');
 
-  return <div>{isDesktop ? 'desktop' : 'mobile'}</div>;
+  return <div>{isDesktopViewport ? 'desktop' : isMobileViewport ? 'mobile' : 'tablet'}</div>;
 }
 ```
 
@@ -292,9 +293,15 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentPropsWithRef<'in
 import { useMediaQuery } from '@d-matrix/utils/react';
 
 export default function Component() {
-  const matches = useMediaQuery('(min-width: 768px)');
+  const isViewportAtLeast768PixelsWide = useMediaQuery('(min-width: 768px)');
+  const isViewportAtMost767PixelsWide = useMediaQuery('(max-width: 767px)');
 
-  return <div>{`The viewport is ${matches ? 'at least' : 'less than'} 768 pixels wide`}</div>;
+  return (
+    <div>
+      <div>{`The viewport is at least 768 pixels wide: ${isViewportAtLeast768PixelsWide}`}</div>
+      <div>{`The viewport is at most 767 pixels wide: ${isViewportAtMost767PixelsWide}`}</div>
+    </div>
+  );
 }
 ```
 

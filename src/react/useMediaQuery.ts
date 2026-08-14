@@ -4,12 +4,12 @@ import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect';
 
 type UseMediaQueryOptions = {
   /**
-   * The default value to return if the hook is being run on the server.
+   * Hook 在服务端运行时返回的默认值。
    * @default false
    */
   defaultValue?: boolean;
   /**
-   * If `true` (default), the hook will initialize reading the media query. In SSR, you should set it to `false`, returning `options.defaultValue` or `false` initially.
+   * 是否在初始化时读取媒体查询。SSR 场景下建议设为 `false`，首次渲染将返回 `defaultValue`。
    * @default true
    */
   initializeWithValue?: boolean;
@@ -17,7 +17,26 @@ type UseMediaQueryOptions = {
 
 const IS_SERVER = typeof window === 'undefined';
 
-export function useMediaQuery(query: string, { defaultValue = false, initializeWithValue = true }: UseMediaQueryOptions = {}): boolean {
+/**
+ * 判断当前视口是否匹配指定的媒体查询。
+ *
+ * @param query - 传给 `window.matchMedia` 的 CSS 媒体查询条件，不包含 `@media`，例如 `(min-width: 768px)` 或 `(max-width: 767px)`。
+ * @param [options] - Hook 的初始化配置。
+ * @param [options.defaultValue=false] - 服务端运行时返回的默认匹配结果。
+ * @param [options.initializeWithValue=true] - 是否在初始化时读取媒体查询；SSR 场景下建议设为 `false`。
+ *
+ * @example
+ * ```tsx
+ * const isViewportAtLeast768PixelsWide = useMediaQuery('(min-width: 768px)', {
+ *   defaultValue: false,
+ *   initializeWithValue: false,
+ * });
+ * const isViewportAtMost767PixelsWide = useMediaQuery('(max-width: 767px)');
+ * ```
+ */
+export function useMediaQuery(query: string, options: UseMediaQueryOptions = {}): boolean {
+  const { defaultValue = false, initializeWithValue = true } = options;
+
   const getMatches = (query: string): boolean => {
     if (IS_SERVER) {
       return defaultValue;
