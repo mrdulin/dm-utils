@@ -733,6 +733,26 @@ type User = Mutable<ReadonlyUser>; // { id: number; name: string }
 
 </details>
 
+<details>
+<summary><code>DeepStringLeafValues&lt;T&gt;</code></summary>
+
+递归提取对象中所有字符串属性值类型，并组成联合类型；非字符串叶子节点会被忽略。
+
+```ts
+type Bond = {
+  code: '240215';
+  issuer: {
+    name: '国家开发银行';
+    type: '政策性银行';
+  };
+  duration: number;
+};
+
+type BondText = DeepStringLeafValues<Bond>; // '240215' | '国家开发银行' | '政策性银行'
+```
+
+</details>
+
 ### algorithm
 
 收录树结构与二分相关的算法辅助能力。

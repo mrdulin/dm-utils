@@ -14,6 +14,7 @@ import type {
   WithUndefinable,
   Simplify,
   Mutable,
+  DeepStringLeafValues,
 } from '../src/types';
 import type { TextMeasurer, TextSize } from '../src/dom';
 
@@ -87,5 +88,17 @@ type MutableInput = {
 };
 
 expectTypeOf<{ a: number; b: string }>().branded.toEqualTypeOf<Mutable<MutableInput>>();
+
+type DeepStringLeafValuesInput = {
+  code: '240215';
+  issuer: {
+    name: '国家开发银行';
+    type: '政策性银行';
+  };
+  duration: number;
+  active: boolean;
+};
+
+expectTypeOf<'240215' | '国家开发银行' | '政策性银行'>().toEqualTypeOf<DeepStringLeafValues<DeepStringLeafValuesInput>>();
 
 expectTypeOf<ReturnType<TextMeasurer['measure']>>().toEqualTypeOf<TextSize>();

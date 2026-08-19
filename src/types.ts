@@ -191,3 +191,27 @@ export type Simplify<T> = { [K in keyof T]: T[K] } & {};
  * // 结果: { id: number; name: string }
  */
 export type Mutable<T> = { -readonly [key in keyof T]: T[key] };
+
+/**
+ * 递归提取对象类型中所有字符串属性值类型，并组成联合类型。
+ *
+ * 非字符串叶子节点会被忽略，嵌套对象会继续递归处理。
+ *
+ * @template T - 要提取字符串属性值的对象类型。
+ *
+ * @example
+ * ```typescript
+ * type Bond = {
+ *   code: '240215';
+ *   issuer: {
+ *     name: '国家开发银行';
+ *     type: '政策性银行';
+ *   };
+ *   duration: number;
+ * };
+ *
+ * type BondText = DeepStringLeafValues<Bond>;
+ * // '240215' | '国家开发银行' | '政策性银行'
+ * ```
+ */
+export type DeepStringLeafValues<T> = T extends string ? T : T extends Record<string, unknown> ? DeepStringLeafValues<T[keyof T]> : never;
